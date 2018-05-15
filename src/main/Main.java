@@ -42,14 +42,21 @@ public class Main {
 		Recette recette = new Recette();
 		Aliment aliment = new Aliment();
 		Engine engine = new Engine();
+		User user = new User();
 		
 //		recette.processInsertion(repo, vf, model, wcd, "./fichiers_test/recettes/");
 
-		String key = "crêPes";
-		JSONObject j = recette.setJson(repo, vf, model, key);
+//		String key = "crêPes";
+//		JSONObject j = recette.setJson(repo, vf, model, key);
 //		engine.getAllStatements(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		aliment.getAll(repo, vf, model);
+		
+//		user.addDataTestConnexion(repo, vf, model, wcd, "./fichiers_test/users/connexion.txt");
+//		user.getMDP(repo, vf, model);
+//		String result = user.checkConnexion(repo, vf, model, "toto", "toto");
+//		System.out.println(result);
+		
 	}
 
 }
