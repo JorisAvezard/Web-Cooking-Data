@@ -48,7 +48,7 @@ public class Main {
 
 //		String key = "crêPes";
 //		JSONObject j = recette.setJson(repo, vf, model, key);
-//		engine.getAllStatements(repo, vf, model, wcd);
+		engine.getAllStatements(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		aliment.getAll(repo, vf, model);
 		
@@ -56,7 +56,8 @@ public class Main {
 //		user.getMDP(repo, vf, model);
 //		String result = user.checkConnexion(repo, vf, model, "toto", "toto");
 //		System.out.println(result);
-		
+//		String result = user.processInscription(repo, vf, model, wcd, "Tata", "grr");
+//		System.out.println(result);
 	}
 
 }

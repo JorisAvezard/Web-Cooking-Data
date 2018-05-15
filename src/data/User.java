@@ -65,7 +65,7 @@ public class User {
 
 	public static void getMDP(Repository repo, ValueFactory vf, Model model) {
 		repo.initialize();
-//		List<String> liste = new ArrayList<String>();
+		// List<String> liste = new ArrayList<String>();
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
@@ -81,14 +81,14 @@ public class User {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
 					System.out.println(solution.getValue("ii").stringValue());
-//					liste.add(solution.getValue("ii").stringValue());
+					// liste.add(solution.getValue("ii").stringValue());
 				}
 			}
 		} finally {
 			repo.shutDown();
 		}
 
-//		return liste;
+		// return liste;
 	}
 
 	public static String checkConnexion(Repository repo, ValueFactory vf, Model model, String login_entry,
@@ -115,6 +115,59 @@ public class User {
 				return "echec";
 			}
 
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public static String checkLoginAlreadyExists(Repository repo, ValueFactory vf, Model model, String login_entry) {
+		repo.initialize();
+		String login_stored = "";
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?i \n";
+			queryString += "WHERE { \n";
+			queryString += "wcd:" + login_entry + " rdf:type foaf:Person. \n";
+			queryString += "wcd:" + login_entry + " foaf:name ?i. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					login_stored = solution.getValue("i").stringValue();
+				}
+			}
+			if (login_entry.equals(login_stored)) {
+				return "yes";
+			} else {
+				return "no";
+			}
+
+		}
+	}
+
+	public static String processInscription(Repository repo, ValueFactory vf, Model model, String wcd,
+			String login_entry, String mdp_entry) {
+		repo.initialize();
+
+		if (checkLoginAlreadyExists(repo, vf, model, login_entry).equals("yes")) {
+			return "Le login est déjà pris.";
+		} else if ((mdp_entry.equals(null)) || (mdp_entry.equals(""))) {
+			return "Le mot de passe ne doit pas être vide";
+		}
+		IRI user_resource = vf.createIRI(wcd, login_entry);
+		IRI iri_mdp = vf.createIRI(wcd, "a_pour_mdp");
+
+		model.add(user_resource, RDF.TYPE, FOAF.PERSON);
+		model.add(user_resource, FOAF.NAME, vf.createLiteral(login_entry));
+		model.add(user_resource, iri_mdp, vf.createLiteral(mdp_entry));
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+			return "Insertion finie";
 		} finally {
 			repo.shutDown();
 		}
