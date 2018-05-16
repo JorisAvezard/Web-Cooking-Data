@@ -27,6 +27,8 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryResult;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.Sail;
+import org.eclipse.rdf4j.sail.lucene.LuceneSail;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import com.google.common.cache.CacheBuilder;
 import org.json.simple.JSONObject;
@@ -34,11 +36,22 @@ import org.json.simple.JSONObject;
 public class Main {
 
 	public static void main(String[] args) {
+		// Initialisation des variables propre à la base RDF
 		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
+		String lucene_index = "./lucene/";
+		NativeStore ns = new NativeStore(dataDir);
+		Repository repo = new SailRepository(ns);
 		ValueFactory vf = SimpleValueFactory.getInstance();
 		Model model = new TreeModel();
 		String wcd = "http://m2bigcookingdata.org/";
+
+		//Initialisation des variables propre à Lucene
+//		Sail baseSail = ns;
+//		LuceneSail lucenesail = new LuceneSail();
+//		lucenesail.setParameter(LuceneSail.LUCENE_DIR_KEY, lucene_index);
+//		lucenesail.setBaseSail(ns);
+//		SailRepository repo_lucene = new SailRepository(lucenesail);
+		
 		Recette recette = new Recette();
 		Aliment aliment = new Aliment();
 		Engine engine = new Engine();
@@ -48,7 +61,7 @@ public class Main {
 
 //		String key = "crêPes";
 //		JSONObject j = recette.setJson(repo, vf, model, key);
-		engine.getAllStatements(repo, vf, model, wcd);
+//		engine.getAllStatements(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		aliment.getAll(repo, vf, model);
 		
@@ -58,6 +71,10 @@ public class Main {
 //		System.out.println(result);
 //		String result = user.processInscription(repo, vf, model, wcd, "Tata", "grr");
 //		System.out.println(result);
+		List<String> result = recette.getNamesRecettesByKeyWord(repo, vf, model, "Chocolat");
+		for(int i=0; i<result.size();i++){
+			System.out.println(result.get(i));
+		}
 	}
 
 }
