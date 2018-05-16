@@ -592,28 +592,37 @@ public class Recette {
 		return result;
 	}
 	
-	public static List<String> getNamesRecettesByKeyWord(Repository repo, ValueFactory vf, Model model, String key) {
+	public static List<String> getNamesRecettesByKeyWord(Repository repo, ValueFactory vf, Model model, List<String> key_words) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
-		key = engine.lowerCaseAll(key);
+		int i =0;
+		String key = "";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
-			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-			queryString += "SELECT ?ii \n";
-			queryString += "WHERE { \n";
-			queryString += "    ?i rdf:type wcd:Recette. \n";
-			queryString += "    ?i foaf:name ?ii. \n";
-			queryString += "   FILTER regex(?ii, \""+key+"\", \"i\") \n";
-			queryString += "}";
-			TupleQuery query = conn.prepareTupleQuery(queryString);
-			try (TupleQueryResult result = query.evaluate()) {
-				while (result.hasNext()) {
-					BindingSet solution = result.next();
-					liste.add(solution.getValue("ii").stringValue());
-//					System.out.println(solution.getValue("i").stringValue());
+			for(i=0;i<key_words.size();i++){
+				key = engine.lowerCaseAll(key_words.get(i));
+				
+				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+				queryString += "SELECT ?ii \n";
+				queryString += "WHERE { \n";
+				queryString += "    ?i rdf:type wcd:Recette. \n";
+				queryString += "    ?i foaf:name ?ii. \n";
+				queryString += "   FILTER regex(?ii, \""+key+"\", \"i\") \n";
+//				queryString += "   OPTIONAL { FILTER regex(?ii, \""+key+"\", \"i\")}. \n";
+//				queryString += "   OPTIONAL { FILTER regex(?ii, \""+key2+"\", \"i\")}. \n";
+				queryString += "}";
+				TupleQuery query = conn.prepareTupleQuery(queryString);
+				try (TupleQueryResult result = query.evaluate()) {
+					while (result.hasNext()) {
+						BindingSet solution = result.next();
+						if(!liste.contains(solution.getValue("ii").stringValue())){
+							liste.add(solution.getValue("ii").stringValue());
+						}
+//						System.out.println(solution.getValue("i").stringValue());
+					}
 				}
 			}
 		} finally {

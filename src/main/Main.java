@@ -71,7 +71,10 @@ public class Main {
 //		System.out.println(result);
 //		String result = user.processInscription(repo, vf, model, wcd, "Tata", "grr");
 //		System.out.println(result);
-		List<String> result = recette.getNamesRecettesByKeyWord(repo, vf, model, "Chocolat");
+		List<String> test = new ArrayList<String>();
+		test.add("lait");
+		test.add("cr");
+		List<String> result = recette.getNamesRecettesByKeyWord(repo, vf, model, test);
 		for(int i=0; i<result.size();i++){
 			System.out.println(result.get(i));
 		}
