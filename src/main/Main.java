@@ -38,7 +38,6 @@ public class Main {
 	public static void main(String[] args) {
 		// Initialisation des variables propre à la base RDF
 		File dataDir = new File("./db/");
-		String lucene_index = "./lucene/";
 		NativeStore ns = new NativeStore(dataDir);
 		Repository repo = new SailRepository(ns);
 		ValueFactory vf = SimpleValueFactory.getInstance();
@@ -46,6 +45,7 @@ public class Main {
 		String wcd = "http://m2bigcookingdata.org/";
 
 		//Initialisation des variables propre à Lucene
+//		String lucene_index = "./lucene/";
 //		Sail baseSail = ns;
 //		LuceneSail lucenesail = new LuceneSail();
 //		lucenesail.setParameter(LuceneSail.LUCENE_DIR_KEY, lucene_index);
@@ -75,7 +75,7 @@ public class Main {
 //		test.add("lait");
 //		test.add("cr");
 //		List<String> result = recette.getNamesRecettesByKeyWord(repo, vf, model, test);
-		List<String> result = recette.getNamesRecettesByCategory(repo, vf, model, "d");
+		List<String> result = recette.getNamesRecettesByNote(repo, vf, model, 1);
 		for(int i=0; i<result.size();i++){
 			System.out.println(result.get(i));
 		}

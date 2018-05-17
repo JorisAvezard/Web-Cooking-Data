@@ -71,6 +71,36 @@ public class Recette {
 		model.add(recette_nom, note_iri, vf.createLiteral("0"));
 	}
 	
+	public static void addNoteTest(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String rec_nom = getNameFromPath(fileName);
+		String key_iri = engine.formatCaseResource(rec_nom);
+		IRI recette_nom = vf.createIRI(wcd, key_iri);
+		IRI note_iri = vf.createIRI(wcd, "a_pour_note");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+			while ((line = bufferedReader.readLine()) != null) {
+				model.add(recette_nom, note_iri, vf.createLiteral(Float.valueOf(line)));
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
 	public static void addCategorie(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -401,7 +431,8 @@ public class Recette {
 			if (engine.goodFile(fichier)) {
 				 key = getNameFromFile(fichier);
 				 addTypeAndName(vf, model, wcd, key);
-				 addNote(vf, model, wcd, key);
+//				 addNote(vf, model, wcd, key);
+				 addNoteTest(repo, vf, model, wcd, path + key + "-note.txt");
 				 addCategorie(repo, vf, model, wcd, path + key + "-catégorie.txt");
 				 addDifficulte(repo, vf, model, wcd, path + key + "-difficulté.txt");
 				 addIngredients(repo, vf, model, wcd, path + key + "-ingrédient.txt");
@@ -721,6 +752,38 @@ public class Recette {
 				queryString += "    ?i wcd:a_pour_catégorie ?cat. \n";
 				queryString += "   FILTER regex(?cat, \""+key+"\", \"i\") \n";
 				queryString += "}";
+				TupleQuery query = conn.prepareTupleQuery(queryString);
+				try (TupleQueryResult result = query.evaluate()) {
+					while (result.hasNext()) {
+						BindingSet solution = result.next();
+							liste.add(solution.getValue("ii").stringValue());
+					}
+				}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+	}
+	
+	public static List<String> getNamesRecettesByNote(Repository repo, ValueFactory vf, Model model, float note) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+		Engine engine = new Engine();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+				
+				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+				queryString += "SELECT ?ii \n";
+				queryString += "WHERE { \n";
+				queryString += "    ?i rdf:type wcd:Recette. \n";
+				queryString += "    ?i foaf:name ?ii. \n";
+				queryString += "    ?i wcd:a_pour_note ?note. \n";
+				queryString += "   FILTER (?note >= "+note+") \n";
+				queryString += "}";
+				queryString += "ORDER BY DESC(?note)";
 				TupleQuery query = conn.prepareTupleQuery(queryString);
 				try (TupleQueryResult result = query.evaluate()) {
 					while (result.hasNext()) {

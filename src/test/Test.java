@@ -1,5 +1,8 @@
 package test;
 
+import data.*;
+import engine.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,71 +12,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.impl.TreeModel;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
+
 public class Test {
-	
-	public static String lowerCaseString(String value) {
-		char[] array = value.toCharArray();
-		int i = 0;
-		
-		for(i=0; i<array.length;i++){
-			array[i] = Character.toLowerCase(array[i]);
-		}
-
-		return new String(array);
-	}
-
-	public static void readFile(String fileName) {
-
-		String line = null;
-		int i = 0;
-
-		try {
-			FileReader fileReader = new FileReader(fileName);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-			while ((line = bufferedReader.readLine()) != null) {
-				if(i==0){
-					int j = 0;
-					line = line.replace(' ', '_');
-					String[] line_split = line.split(";");
-					for (j=0;j<line_split.length;j++){
-						System.out.println("Indice "+j+" : "+ line_split[j]);
-					}
-				}
-				i++;
-			}
-			bufferedReader.close();
-		} catch (FileNotFoundException ex) {
-			System.out.println("Unable to open file '" + fileName + "'");
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-	}
-
-	public static void readFile2(String fileName) {
-
-		try {
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName),""));
-
-			String str;
-
-			while ((str = in.readLine()) != null) {
-				System.out.println(str);
-			}
-
-			in.close();
-		} catch (UnsupportedEncodingException e) {
-			System.out.println(e.getMessage());
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
 
 	public static void main(String[] args) {
-		readFile("./fichiers_test/aliment_attributes.csv");
+		// Initialisation des variables propre à la base RDF
+		File dataDir = new File("./db_test/");
+		NativeStore ns = new NativeStore(dataDir);
+		Repository repo = new SailRepository(ns);
+		ValueFactory vf = SimpleValueFactory.getInstance();
+		Model model = new TreeModel();
+		String wcd = "http://m2bigcookingdatatest.org/";
+		
+		Recette recette = new Recette();
+		Aliment aliment = new Aliment();
+		Engine engine = new Engine();
+		User user = new User();
+		
+		recette.processInsertion(repo, vf, model, wcd, "./fichiers_test/recettes/");
+
 	}
 
 }
