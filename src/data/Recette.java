@@ -798,6 +798,36 @@ public class Recette {
 		return liste;
 	}
 	
-	
+	public static List<String> getNamesRecettesByDifficulte(Repository repo, ValueFactory vf, Model model, String key) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+		Engine engine = new Engine();
+		key = engine.lowerCaseAll(key);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+				
+				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+				queryString += "SELECT ?ii \n";
+				queryString += "WHERE { \n";
+				queryString += "    ?i rdf:type wcd:Recette. \n";
+				queryString += "    ?i foaf:name ?ii. \n";
+				queryString += "    ?i wcd:a_pour_difficulté ?dif. \n";
+				queryString += "   FILTER regex(?dif, \""+key+"\", \"i\") \n";
+				queryString += "}";
+				TupleQuery query = conn.prepareTupleQuery(queryString);
+				try (TupleQueryResult result = query.evaluate()) {
+					while (result.hasNext()) {
+						BindingSet solution = result.next();
+							liste.add(solution.getValue("ii").stringValue());
+					}
+				}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+	}
 
 }
