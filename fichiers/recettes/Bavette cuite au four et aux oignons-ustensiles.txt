@@ -1,0 +1,6 @@
+1 four
+1 cocotte
+1 pinceau
+1 fouet
+1 poêle
+1 casserole

@@ -1,0 +1,7 @@
+1 four
+1 poêle
+1 couvercle
+1 couteau
+1 casserole
+1 mixeur
+1 plat à gratin

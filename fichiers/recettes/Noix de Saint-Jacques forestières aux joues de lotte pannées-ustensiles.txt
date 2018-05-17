@@ -1,0 +1,5 @@
+1 saladier
+1 friteuse
+1 poêle
+1 pinceau
+1 fouet

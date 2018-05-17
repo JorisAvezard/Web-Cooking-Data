@@ -1,0 +1,6 @@
+1 four
+1 sauteuse
+1 saladier
+1 chinois
+1 poêle
+1 fouet

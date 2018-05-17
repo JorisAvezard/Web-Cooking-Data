@@ -1,0 +1,5 @@
+Etape 1 Les quantités permettent de faire un pain de 750g.
+Etape 2 Mettez les ingrédients dans l'ordre suivant dans la cuve de la machine : eau, sel, lait en poudre, farine T55, farine complète.
+Etape 3 Lancez le programme pour pain complet, avec l'option "croûte moyenne".
+Etape 4 Au bip ajoutez les olives et le thym.
+Etape 5 Démoulez le pain à la fin du programme et laissez-le refroidir sur une grille.

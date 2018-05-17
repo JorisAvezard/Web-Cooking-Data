@@ -1,0 +1,6 @@
+1 pinceau
+1 bol
+1 couteau
+1 poêle
+1 four
+1 papier cuisson

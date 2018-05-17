@@ -1,0 +1,7 @@
+1 four
+1 congélateur
+1 casserole
+1 chinois
+1 fouet
+1 planche
+1 couteau

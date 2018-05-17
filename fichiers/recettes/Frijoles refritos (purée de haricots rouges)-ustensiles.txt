@@ -1,0 +1,5 @@
+1 casserole
+1 couvercle
+1 saladier
+1 friteuse
+1 poêle

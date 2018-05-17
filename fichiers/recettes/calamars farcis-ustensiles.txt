@@ -1,0 +1,10 @@
+1 couteau
+1 four
+1 râpe
+1 fourchette
+1 fouet
+1 poêle
+1 pinceau
+1 cocotte
+1 casserole
+1 spatule

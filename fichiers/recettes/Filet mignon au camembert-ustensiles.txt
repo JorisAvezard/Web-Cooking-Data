@@ -1,0 +1,5 @@
+1 sauteuse
+1 pinceau
+1 couteau
+1 poêle
+1 couvercle

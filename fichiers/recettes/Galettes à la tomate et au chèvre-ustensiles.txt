@@ -1,0 +1,5 @@
+1 four
+1 micro-ondes
+1 couvercle
+1 couteau
+1 fouet

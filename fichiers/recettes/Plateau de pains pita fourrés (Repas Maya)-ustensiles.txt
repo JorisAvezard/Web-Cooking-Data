@@ -1,0 +1,9 @@
+1 four
+1 saladier
+1 poêle
+1 fourchette
+1 mixeur
+1 couvercle
+1 grille
+1 grille pain
+1 bol

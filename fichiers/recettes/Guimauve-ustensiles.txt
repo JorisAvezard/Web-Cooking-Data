@@ -1,0 +1,10 @@
+1 ciseaux
+1 bol
+1 couvercle
+1 couteau
+1 casserole
+1 cuillère en bois
+1 saladier
+1 fouet
+1 pinceau
+1 spatule

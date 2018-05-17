@@ -1,0 +1,6 @@
+1 passoire
+1 four
+1 pinceau
+1 poêle
+1 couvercle
+1 aluminium

@@ -1,0 +1,6 @@
+1 four
+1 poêle
+1 râpe
+1 fouet
+1 couvercle
+1 spatule

@@ -1,0 +1,6 @@
+1 four
+1 saladier
+1 fouet
+1 batteur électrique
+1 poêle
+1 pinceau

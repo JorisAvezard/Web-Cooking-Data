@@ -1,0 +1,5 @@
+1 grille
+1 grille pain
+1 couteau
+1 four
+1 poêle

@@ -1,0 +1,11 @@
+1 four
+1 grille
+1 râpe
+1 saladier
+1 fourchette
+1 cuillère en bois
+1 bol
+1 pinceau
+1 couvercle
+1 couteau
+1 rouleau à pâtisserie

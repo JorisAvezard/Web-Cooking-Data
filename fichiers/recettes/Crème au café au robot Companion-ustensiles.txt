@@ -1,0 +1,4 @@
+1 robot
+1 bol
+1 couvercle
+1 saladier

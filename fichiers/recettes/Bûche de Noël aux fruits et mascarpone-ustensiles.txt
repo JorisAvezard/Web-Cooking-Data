@@ -1,0 +1,10 @@
+1 four
+1 saladier
+1 fouet
+1 cuillère en bois
+1 mixeur
+1 bol
+1 pinceau
+1 couteau
+1 spatule
+1 fourchette

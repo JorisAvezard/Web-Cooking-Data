@@ -1,0 +1,9 @@
+1 four
+1 sauteuse
+1 couteau
+1 couvercle
+1 friteuse
+1 poêle
+1 râpe
+1 tamis
+1 chinois

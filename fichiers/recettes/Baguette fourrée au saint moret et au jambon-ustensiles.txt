@@ -1,0 +1,6 @@
+1 four
+1 casserole
+1 cuillère en bois
+1 couteau
+1 saladier
+1 aluminium

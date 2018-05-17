@@ -1,0 +1,5 @@
+1 four
+1 fourchette
+1 rouleau à pâtisserie
+1 poêle
+1 fouet

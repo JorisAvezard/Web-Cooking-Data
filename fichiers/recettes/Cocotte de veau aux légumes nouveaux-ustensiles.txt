@@ -1,0 +1,6 @@
+1 cocotte
+1 four
+1 saladier
+1 poêle
+1 couteau
+1 couvercle

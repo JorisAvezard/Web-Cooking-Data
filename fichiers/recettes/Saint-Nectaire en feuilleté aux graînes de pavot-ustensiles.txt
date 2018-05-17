@@ -1,0 +1,6 @@
+1 four
+1 couteau
+1 papier cuisson
+1 rouleau à pâtisserie
+1 fouet
+1 pinceau

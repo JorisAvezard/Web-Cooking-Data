@@ -1,0 +1,8 @@
+1 four
+1 passoire
+1 fourchette
+1 couteau
+1 casserole
+1 fouet
+1 mixeur
+1 cuillère en bois

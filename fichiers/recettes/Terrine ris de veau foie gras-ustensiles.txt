@@ -1,0 +1,6 @@
+1 four
+1 aluminium
+1 couvercle
+1 presse agrume
+1 saladier
+1 couteau

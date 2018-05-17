@@ -1,0 +1,4 @@
+Etape 1 Dans la machine à pain, introduire dans l'ordre : la levure, l'eau tiède, la farine, le lait, le sel, le sucre et le beurre détaillé en dés directement au sortir du frigo.
+Etape 2 Lancer le programme pain, croûte au choix pour une durée de 3h20 environ.
+Etape 3 Au bout de cinq à dix minutes maximum, vérifier l'élasticité du pâton qui doit devenir une belle boule dodue et élastique telle un chewing-gum mâché.
+Etape 4 Si le pâton est moulignasse ajouter un peu de farine, si le pâton s'émiette ou s'effrite ajouter un peu d'eau.

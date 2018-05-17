@@ -1,0 +1,5 @@
+1 four
+1 cocotte
+1 couteau
+1 couvercle
+1 plat à gratin

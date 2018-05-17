@@ -1,0 +1,6 @@
+1 ciseaux
+1 couteau
+1 casserole
+1 poêle
+1 friteuse
+1 cocotte

@@ -1,0 +1,6 @@
+1 four
+1 couteau
+1 économe
+1 casserole
+1 poêle
+1 pinceau

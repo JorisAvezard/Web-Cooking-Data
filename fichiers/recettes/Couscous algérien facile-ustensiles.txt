@@ -1,0 +1,9 @@
+1 grille
+1 bol
+1 louche
+1 pinceau
+1 poêle
+1 micro-ondes
+1 saladier
+1 couvercle
+1 four

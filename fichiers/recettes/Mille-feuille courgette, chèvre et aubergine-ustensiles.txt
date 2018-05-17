@@ -1,0 +1,9 @@
+1 four
+1 couteau
+1 grille
+1 poêle
+1 saladier
+1 pinceau
+1 papier sulfurisé
+1 râpe
+1 couvercle
