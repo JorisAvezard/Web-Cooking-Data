@@ -1,26 +1,47 @@
 package engine;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.impl.TreeModel;
+import org.eclipse.rdf4j.model.vocabulary.DC;
+import org.eclipse.rdf4j.model.vocabulary.FOAF;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryResult;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
+import com.google.common.cache.CacheBuilder;
+import org.json.simple.JSONObject;
 
 public class Engine {
-	
+
 	public Engine() {
 
 	}
 	
-	public String upperCaseFirst(String value) {
+	public static String upperCaseFirst(String value) {
 		char[] array = value.toCharArray();
 		array[0] = Character.toUpperCase(array[0]);
 
 		return new String(array);
 	}
 	
-	public String lowerCaseAll(String value) {
+	public static String lowerCaseAll(String value) {
 		char[] array = value.toCharArray();
 		int i = 0;
 		
@@ -31,7 +52,7 @@ public class Engine {
 		return new String(array);
 	}
 	
-	public String formatCaseResource(String entry){
+	public static String formatCaseResource(String entry){
 		String result = null;
 		
 		result = lowerCaseAll(entry);
@@ -42,7 +63,7 @@ public class Engine {
 		return result;
 	}
 	
-	public String formatCaseLitteral(String entry){
+	public static String formatCaseLitteral(String entry){
 		String result = null;
 		
 		result = lowerCaseAll(entry);
@@ -51,7 +72,7 @@ public class Engine {
 		return result;
 	}
 	
-	public boolean goodFile(String fichier) {
+	public static boolean goodFile(String fichier) {
 		char[] array = fichier.toCharArray();
 		if (array[0] == '.') {
 			return false;
@@ -61,7 +82,7 @@ public class Engine {
 	}
 	
 	// Affiche tous les statements de la base
-	public void getAllStatements(Repository repo, ValueFactory vf, Model model, String wcd) {
+	public static void getAllStatements(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
 		try (RepositoryConnection conn = repo.getConnection()) {
 			// let's check that our data is actually in the database
@@ -76,4 +97,5 @@ public class Engine {
 		}
 	}
 
+	
 }

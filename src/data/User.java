@@ -1,16 +1,16 @@
 package data;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.ValueFactory;
-import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
-import org.eclipse.rdf4j.model.impl.TreeModel;
+import org.eclipse.rdf4j.model.vocabulary.DC;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.query.BindingSet;
@@ -18,16 +18,16 @@ import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
+
+import engine.Engine;
 
 public class User {
-	
+
 	public User() {
 
 	}
 
-	public void addDataTestConnexion(Repository repo, ValueFactory vf, Model model, String wcd,
+	public static void addDataTestConnexion(Repository repo, ValueFactory vf, Model model, String wcd,
 			String fileName) {
 		repo.initialize();
 
@@ -91,12 +91,8 @@ public class User {
 		// return liste;
 	}
 
-	@SuppressWarnings("unused")
-	public String checkConnexion(String login_entry,String password_entry) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
-		ValueFactory vf = SimpleValueFactory.getInstance();
-		Model model = new TreeModel();
+	public static String checkConnexion(Repository repo, ValueFactory vf, Model model, String login_entry,
+			String password_entry) {
 		repo.initialize();
 		String mdp_true = "";
 
@@ -124,7 +120,7 @@ public class User {
 		}
 	}
 
-	public String checkLoginAlreadyExists(Repository repo, ValueFactory vf, Model model, String login_entry) {
+	public static String checkLoginAlreadyExists(Repository repo, ValueFactory vf, Model model, String login_entry) {
 		repo.initialize();
 		String login_stored = "";
 
@@ -153,18 +149,14 @@ public class User {
 		}
 	}
 
-	public String processInscription(String login_entry, String mdp_entry) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
-		ValueFactory vf = SimpleValueFactory.getInstance();
-		Model model = new TreeModel();
-		String wcd = "http://m2bigcookingdata.org/";
+	public static String processInscription(Repository repo, ValueFactory vf, Model model, String wcd,
+			String login_entry, String mdp_entry) {
 		repo.initialize();
 
 		if (checkLoginAlreadyExists(repo, vf, model, login_entry).equals("yes")) {
-			return "Le login est déjà pris.";
+			return "Le login est dÃ©jÃ  pris.";
 		} else if ((mdp_entry.equals(null)) || (mdp_entry.equals(""))) {
-			return "Le mot de passe ne doit pas être vide";
+			return "Le mot de passe ne doit pas Ãªtre vide";
 		}
 		IRI user_resource = vf.createIRI(wcd, login_entry);
 		IRI iri_mdp = vf.createIRI(wcd, "a_pour_mdp");
@@ -180,5 +172,13 @@ public class User {
 			repo.shutDown();
 		}
 	}
+	
+//	public static void addAlimentGardeManger(ValueFactory vf, Model model, String wcd, String login, String aliment) {
+//		Engine engine = new Engine();
+//		String key_iri = engine.formatCaseResource(key);
+//		IRI recette_nom = vf.createIRI(wcd, key_iri);
+//		IRI note_iri = vf.createIRI(wcd, "a_pour_note");
+//		model.add(recette_nom, note_iri, vf.createLiteral(Float.valueOf("0")));
+//	}
 
 }

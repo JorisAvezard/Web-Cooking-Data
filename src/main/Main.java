@@ -61,7 +61,7 @@ public class Main {
 
 //		String key = "crêPes";
 //		JSONObject j = recette.setJson(repo, vf, model, key);
-//		engine.getAllStatements(repo, vf, model, wcd);
+		engine.getAllStatements(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		aliment.getAll(repo, vf, model);
 		
@@ -75,10 +75,10 @@ public class Main {
 //		test.add("lait");
 //		test.add("cr");
 //		List<String> result = recette.getNamesRecettesByKeyWord(repo, vf, model, test);
-		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
-		for(int i=0; i<result.size();i++){
-			System.out.println(result.get(i));
-		}
+//		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
+//		for(int i=0; i<result.size();i++){
+//			System.out.println(result.get(i));
+//		}
 	}
 
 }
