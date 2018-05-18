@@ -12,10 +12,7 @@ import java.util.List;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
-import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
-import org.eclipse.rdf4j.model.impl.TreeModel;
 import org.eclipse.rdf4j.model.vocabulary.DC;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
@@ -24,10 +21,8 @@ import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.RepositoryResult;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
-import com.google.common.cache.CacheBuilder;
 import org.json.simple.JSONObject;
 
 public class Recette {
@@ -36,7 +31,7 @@ public class Recette {
 
 	}
 	
-	public static String getNameFromFile(String fichier) {
+	public String getNameFromFile(String fichier) {
 		String[] tmp2 = fichier.split(".txt");
 		String[] tmp3 = tmp2[0].split("-");
 
@@ -44,7 +39,7 @@ public class Recette {
 	}
 
 
-	public static String getNameFromPath(String fileName) {
+	public String getNameFromPath(String fileName) {
 		String[] tmp = fileName.split("/");
 		String[] tmp2 = tmp[tmp.length - 1].split(".txt");
 		String[] tmp3 = tmp2[0].split("-");
@@ -53,7 +48,7 @@ public class Recette {
 	}
 
 	// ajoute le nom et le type "Recette" de la recette dans la base
-	public static void addTypeAndName(ValueFactory vf, Model model, String wcd, String key) {
+	public void addTypeAndName(ValueFactory vf, Model model, String wcd, String key) {
 		Engine engine = new Engine();
 		String key_iri = engine.formatCaseResource(key);
 		String rec_nom_litteral = engine.formatCaseLitteral(key);
@@ -63,7 +58,7 @@ public class Recette {
 		model.add(recette_nom, FOAF.NAME, vf.createLiteral(rec_nom_litteral));
 	}
 	
-	public static void addNote(ValueFactory vf, Model model, String wcd, String key) {
+	public void addNote(ValueFactory vf, Model model, String wcd, String key) {
 		Engine engine = new Engine();
 		String key_iri = engine.formatCaseResource(key);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
@@ -71,7 +66,7 @@ public class Recette {
 		model.add(recette_nom, note_iri, vf.createLiteral(Float.valueOf("0")));
 	}
 	
-	public static void addNoteTest(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	public void addNoteTest(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
@@ -101,13 +96,13 @@ public class Recette {
 		}
 	}
 	
-	public static void addCategorie(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	public void addCategorie(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI cat_iri = vf.createIRI(wcd, "a_pour_catÃ©gorie");
+		IRI cat_iri = vf.createIRI(wcd, "a_pour_catégorie");
 
 		String line = null;
 		try {
@@ -131,13 +126,13 @@ public class Recette {
 		}
 	}
 	
-	public static void addDifficulte(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	public void addDifficulte(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI dif_iri = vf.createIRI(wcd, "a_pour_difficultÃ©");
+		IRI dif_iri = vf.createIRI(wcd, "a_pour_difficulté");
 
 		String line = null;
 		try {
@@ -161,15 +156,15 @@ public class Recette {
 		}
 	}
 	
-	// ajoute les ingrÃ©dients d'une recette
-	public static void addIngredients(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	// ajoute les ingrédients d'une recette
+	public void addIngredients(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI data_predicate = vf.createIRI(wcd, "a_pour_ingrÃ©dient");
-		IRI data_type = vf.createIRI(wcd, "IngrÃ©dient");
+		IRI data_predicate = vf.createIRI(wcd, "a_pour_ingrédient");
+		IRI data_type = vf.createIRI(wcd, "Ingrédient");
 		IRI ing_desc = vf.createIRI(wcd, "description");
 
 		String line = null;
@@ -200,7 +195,7 @@ public class Recette {
 	}
 
 	// ajoute l'auteur de la recette
-	public static void addAuteur(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	public void addAuteur(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
@@ -233,8 +228,8 @@ public class Recette {
 		}
 	}
 
-	// ajoute les diffÃ©rentes Ã©tapes d'une recette
-	public static void addEtapes(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	// ajoute les différentes étapes d'une recette
+	public void addEtapes(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
@@ -248,7 +243,7 @@ public class Recette {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
-				IRI data_predicate = vf.createIRI(wcd, "a_pour_Ã©tape_" + Integer.toString(ind));
+				IRI data_predicate = vf.createIRI(wcd, "a_pour_étape_" + Integer.toString(ind));
 				model.add(recette_nom, data_predicate, vf.createLiteral(line));
 				ind++;
 			}
@@ -267,7 +262,7 @@ public class Recette {
 	}
 
 	// ajoute les ustensiles d'une recette
-	public static void addUstensiles(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	public void addUstensiles(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
@@ -298,7 +293,7 @@ public class Recette {
 	}
 
 	// ajoute le temps total d'une recette
-	public static void addTempsTotal(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	public void addTempsTotal(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
@@ -328,14 +323,14 @@ public class Recette {
 		}
 	}
 
-	// ajoute le temps de prÃ©paration d'une recette
-	public static void addTempsPreparation(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	// ajoute le temps de préparation d'une recette
+	public void addTempsPreparation(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI data_predicate = vf.createIRI(wcd, "temps_prÃ©paration");
+		IRI data_predicate = vf.createIRI(wcd, "temps_préparation");
 
 		String line = null;
 		try {
@@ -360,7 +355,7 @@ public class Recette {
 	}
 
 	// ajoute le temps de cuisson d'une recette
-	public static void addTempsCuisson(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	public void addTempsCuisson(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
@@ -391,7 +386,7 @@ public class Recette {
 	}
 
 	// ajoute le nb de personnes d'une recette
-	public static void addNbPersonnes(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	public void addNbPersonnes(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
@@ -422,7 +417,7 @@ public class Recette {
 	}
 
 	// ajoute le nb de personnes d'une recette
-	public static void processInsertion(Repository repo, ValueFactory vf, Model model, String wcd, String path) {
+	public void processInsertion(Repository repo, ValueFactory vf, Model model, String wcd, String path) {
 		Engine engine = new Engine();
 		String key = "";
 		File folder = new File(path); //./fichiers_test/recettes/
@@ -448,8 +443,8 @@ public class Recette {
 		System.out.println("End");
 	}
 
-	// retourne les ingrÃ©dients Ã©tant donnÃ© une recette
-	public static List<String> getIngredients(Repository repo, ValueFactory vf, Model model, String key) {
+	// retourne les ingrédients étant donné une recette
+	public List<String> getIngredients(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -457,7 +452,7 @@ public class Recette {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 			queryString += "SELECT ?ii \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:a_pour_ingrÃ©dient ?i. \n";
+			queryString += "    wcd:" + key + " wcd:a_pour_ingrédient ?i. \n";
 			queryString += "    ?i wcd:description ?ii. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
@@ -475,8 +470,8 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne pour combien de personnes est destinÃ©e une recette
-	public static List<String> getNbPersonnes(Repository repo, ValueFactory vf, Model model, String key) {
+	// retourne pour combien de personnes est destinée une recette
+	public List<String> getNbPersonnes(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -501,8 +496,8 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne les Ã©tapes Ã©tant donnÃ© une recette
-	public static List<String> getEtapes(Repository repo, ValueFactory vf, Model model, String key) {
+	// retourne les étapes étant donné une recette
+	public List<String> getEtapes(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		int indice = 1;
@@ -514,7 +509,7 @@ public class Recette {
 				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 				queryString += "SELECT ?i \n";
 				queryString += "WHERE { \n";
-				queryString += "    wcd:" + key + " wcd:a_pour_Ã©tape_" + indice + " ?i. \n";
+				queryString += "    wcd:" + key + " wcd:a_pour_étape_" + indice + " ?i. \n";
 				queryString += "}";
 				TupleQuery query = conn.prepareTupleQuery(queryString);
 				try (TupleQueryResult result = query.evaluate()) {
@@ -538,8 +533,8 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne l'auteur Ã©tant donnÃ© une recette
-	public static List<String> getAuteur(Repository repo, ValueFactory vf, Model model, String key) {
+	// retourne l'auteur étant donné une recette
+	public List<String> getAuteur(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -567,8 +562,8 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne l'auteur Ã©tant donnÃ© une recette
-	public static List<String> getTempsTotal(Repository repo, ValueFactory vf, Model model, String key) {
+	// retourne l'auteur étant donné une recette
+	public List<String> getTempsTotal(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -592,8 +587,8 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne l'auteur Ã©tant donnÃ© une recette
-	public static List<String> getTempsCuisson(Repository repo, ValueFactory vf, Model model, String key) {
+	// retourne l'auteur étant donné une recette
+	public List<String> getTempsCuisson(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -617,8 +612,8 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne l'auteur Ã©tant donnÃ© une recette
-	public static List<String> getTempsPreparation(Repository repo, ValueFactory vf, Model model, String key) {
+	// retourne l'auteur étant donné une recette
+	public List<String> getTempsPreparation(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -626,7 +621,7 @@ public class Recette {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 			queryString += "SELECT ?i \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:temps_prÃ©paration ?i. \n";
+			queryString += "    wcd:" + key + " wcd:temps_préparation ?i. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
@@ -642,8 +637,8 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne les ingrÃ©dients Ã©tant donnÃ© une recette
-	public static List<String> getUstensiles(Repository repo, ValueFactory vf, Model model, String key) {
+	// retourne les ingrédients étant donné une recette
+	public List<String> getUstensiles(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -667,7 +662,8 @@ public class Recette {
 		return liste;
 	}
 
-	public static JSONObject setJson(Repository repo, ValueFactory vf, Model model, String key) {
+	@SuppressWarnings("unchecked")
+	public JSONObject setJson(Repository repo, ValueFactory vf, Model model, String key) {
 		JSONObject result = new JSONObject();
 		Engine engine = new Engine();
 		String key_iri = engine.formatCaseResource(key);
@@ -680,13 +676,13 @@ public class Recette {
 		List<String> tc_val = getTempsCuisson(repo, vf, model, key_iri);
 		List<String> tp_val = getTempsPreparation(repo, vf, model, key_iri);
 		List<String> ust_val = getUstensiles(repo, vf, model, key_iri);
-		result.put("ingrÃ©dients", ing_val);
+		result.put("ingrédients", ing_val);
 		result.put("nb personnes", nbper_val);
-		result.put("Ã©tapes", et_val);
+		result.put("étapes", et_val);
 		result.put("auteur", aut_val);
 		result.put("temps total", tt_val);
 		result.put("temps cuisson", tc_val);
-		result.put("temps prÃ©paration", tp_val);
+		result.put("temps préparation", tp_val);
 		result.put("ustensiles", ust_val);
 
 		System.out.print(result);
@@ -694,7 +690,9 @@ public class Recette {
 		return result;
 	}
 	
-	public static List<String> getNamesRecettesByKeyWord(Repository repo, ValueFactory vf, Model model, List<String> key_words) {
+	public List<String> getNamesRecettesByKeyWord(List<String> key_words) {
+		File dataDir = new File("./db/");
+		Repository repo = new SailRepository(new NativeStore(dataDir));
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
@@ -734,7 +732,7 @@ public class Recette {
 		return liste;
 	}
 	
-	public static List<String> getNamesRecettesByCategory(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getNamesRecettesByCategory(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
@@ -749,7 +747,7 @@ public class Recette {
 				queryString += "WHERE { \n";
 				queryString += "    ?i rdf:type wcd:Recette. \n";
 				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "    ?i wcd:a_pour_catÃ©gorie ?cat. \n";
+				queryString += "    ?i wcd:a_pour_catégorie ?cat. \n";
 				queryString += "   FILTER regex(?cat, \""+key+"\", \"i\") \n";
 				queryString += "}";
 				TupleQuery query = conn.prepareTupleQuery(queryString);
@@ -766,10 +764,9 @@ public class Recette {
 		return liste;
 	}
 	
-	public static List<String> getNamesRecettesByNote(Repository repo, ValueFactory vf, Model model, float note) {
+	public List<String> getNamesRecettesByNote(Repository repo, ValueFactory vf, Model model, float note) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
-		Engine engine = new Engine();
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 				
@@ -798,7 +795,7 @@ public class Recette {
 		return liste;
 	}
 	
-	public static List<String> getNamesRecettesByDifficulte(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getNamesRecettesByDifficulte(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
@@ -813,7 +810,7 @@ public class Recette {
 				queryString += "WHERE { \n";
 				queryString += "    ?i rdf:type wcd:Recette. \n";
 				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "    ?i wcd:a_pour_difficultÃ© ?dif. \n";
+				queryString += "    ?i wcd:a_pour_difficulté ?dif. \n";
 				queryString += "   FILTER regex(?dif, \""+key+"\", \"i\") \n";
 				queryString += "}";
 				TupleQuery query = conn.prepareTupleQuery(queryString);

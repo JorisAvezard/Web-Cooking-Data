@@ -36,7 +36,7 @@ public class Aliment {
 		IRI property_glucide = vf.createIRI(wcd, "Glucides_g/100g");
 		IRI property_lipide = vf.createIRI(wcd, "Lipides_g/100g");
 		IRI property_sucre = vf.createIRI(wcd, "Sucres_g/100g");
-		IRI property_cholestérol = vf.createIRI(wcd, "Cholestérol_mg/100g");
+		IRI property_cholesterol = vf.createIRI(wcd, "Cholestérol_mg/100g");
 		IRI property_fer = vf.createIRI(wcd, "Fer_mg/100g");
 		IRI property_vitamineD = vf.createIRI(wcd, "Vitamine_D_µg/100g");
 		IRI property_vitamineE = vf.createIRI(wcd, "Vitamine_E_mg/100g");
@@ -72,7 +72,7 @@ public class Aliment {
 				model.add(aliment_resource, property_glucide, vf.createLiteral(line_split[4]));
 				model.add(aliment_resource, property_lipide, vf.createLiteral(line_split[5]));
 				model.add(aliment_resource, property_sucre, vf.createLiteral(line_split[6]));
-				model.add(aliment_resource, property_cholestérol, vf.createLiteral(line_split[7]));
+				model.add(aliment_resource, property_cholesterol, vf.createLiteral(line_split[7]));
 				model.add(aliment_resource, property_fer, vf.createLiteral(line_split[8]));
 				model.add(aliment_resource, property_vitamineD, vf.createLiteral(line_split[9]));
 				model.add(aliment_resource, property_vitamineE, vf.createLiteral(line_split[10]));
