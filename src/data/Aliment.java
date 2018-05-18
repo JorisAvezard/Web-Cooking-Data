@@ -1,7 +1,5 @@
 package data;
 
-import engine.Engine;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,27 +16,29 @@ import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
-public class Aliment {
+import engine.Engine;
 
+public class Aliment {
+	
 	public Aliment() {
 
 	}
 
-	// InsÃ¨re les donnÃ©es de type Aliment dans la base depuis le fichier csv
-	public static void addAll(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	// Insère les données de type Aliment dans la base depuis le fichier csv
+	public void addAll(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 
 		IRI aliment_type_litteral = vf.createIRI(wcd, "Aliment");
 		IRI property_energy_j = vf.createIRI(wcd, "Energie_kJ/100g");
 		IRI property_energy_cal = vf.createIRI(wcd, "Energie_kcal/100g");
-		IRI property_proteine = vf.createIRI(wcd, "ProtÃ©ines_g/100g");
+		IRI property_proteine = vf.createIRI(wcd, "Protéines_g/100g");
 		IRI property_glucide = vf.createIRI(wcd, "Glucides_g/100g");
 		IRI property_lipide = vf.createIRI(wcd, "Lipides_g/100g");
 		IRI property_sucre = vf.createIRI(wcd, "Sucres_g/100g");
-		IRI property_cholestÃ©rol = vf.createIRI(wcd, "CholestÃ©rol_mg/100g");
+		IRI property_cholestérol = vf.createIRI(wcd, "Cholestérol_mg/100g");
 		IRI property_fer = vf.createIRI(wcd, "Fer_mg/100g");
-		IRI property_vitamineD = vf.createIRI(wcd, "Vitamine_D_Âµg/100g");
+		IRI property_vitamineD = vf.createIRI(wcd, "Vitamine_D_µg/100g");
 		IRI property_vitamineE = vf.createIRI(wcd, "Vitamine_E_mg/100g");
 		IRI property_vitamineC = vf.createIRI(wcd, "Vitamine_C_mg/100g");
 		IRI property_vitamineB1 = vf.createIRI(wcd, "Vitamine_B1_mg/100g");
@@ -46,8 +46,8 @@ public class Aliment {
 		IRI property_vitamineB3 = vf.createIRI(wcd, "Vitamine_B3_mg/100g");
 		IRI property_vitamineB5 = vf.createIRI(wcd, "Vitamine_B5_mg/100g");
 		IRI property_vitamineB6 = vf.createIRI(wcd, "Vitamine_B6_mg/100g");
-		IRI property_vitamineB9 = vf.createIRI(wcd, "Vitamine_B9_Âµg/100g");
-		IRI property_vitamineB12 = vf.createIRI(wcd, "Vitamine_B12_Âµg/100g");
+		IRI property_vitamineB9 = vf.createIRI(wcd, "Vitamine_B9_µg/100g");
+		IRI property_vitamineB12 = vf.createIRI(wcd, "Vitamine_B12_µg/100g");
 
 		String line = null;
 		try {
@@ -72,7 +72,7 @@ public class Aliment {
 				model.add(aliment_resource, property_glucide, vf.createLiteral(line_split[4]));
 				model.add(aliment_resource, property_lipide, vf.createLiteral(line_split[5]));
 				model.add(aliment_resource, property_sucre, vf.createLiteral(line_split[6]));
-				model.add(aliment_resource, property_cholestÃ©rol, vf.createLiteral(line_split[7]));
+				model.add(aliment_resource, property_cholestérol, vf.createLiteral(line_split[7]));
 				model.add(aliment_resource, property_fer, vf.createLiteral(line_split[8]));
 				model.add(aliment_resource, property_vitamineD, vf.createLiteral(line_split[9]));
 				model.add(aliment_resource, property_vitamineE, vf.createLiteral(line_split[10]));
@@ -102,7 +102,7 @@ public class Aliment {
 	}
 
 	// retourne les aliments contenus dans la base
-	public static void getAll(Repository repo, ValueFactory vf, Model model) {
+	public void getAll(Repository repo, ValueFactory vf, Model model) {
 		repo.initialize();
 
 		try (RepositoryConnection conn = repo.getConnection()) {
@@ -128,4 +128,5 @@ public class Aliment {
 		}
 
 	}
+
 }
