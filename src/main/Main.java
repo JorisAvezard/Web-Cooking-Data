@@ -61,9 +61,11 @@ public class Main {
 
 //		String key = "crêPes";
 //		JSONObject j = recette.setJson(repo, vf, model, key);
-		engine.getAllStatements(repo, vf, model, wcd);
+//		engine.getAllStatements(repo, vf, model, wcd);
+//		engine.getAllStatementsIRI(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		aliment.getAll(repo, vf, model);
+		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "totO", "Pistache");
 		
 //		user.addDataTestConnexion(repo, vf, model, wcd, "./fichiers_test/users/connexion.txt");
 //		user.getMDP(repo, vf, model);
@@ -76,9 +78,11 @@ public class Main {
 //		test.add("cr");
 //		List<String> result = recette.getNamesRecettesByKeyWord(repo, vf, model, test);
 //		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
-//		for(int i=0; i<result.size();i++){
-//			System.out.println(result.get(i));
-//		}
+//		List<String> result = aliment.getAll(repo, vf, model);
+		List<String> result = user.getAlimentsFromGardeManger(repo, vf, model, "toto");
+		for(int i=0; i<result.size();i++){
+			System.out.println(result.get(i));
+		}
 	}
 
 }

@@ -1,0 +1,5 @@
+user1;Melon
+user1;Lentille
+user1;Levure alimentaire
+user2;Ketchup
+user2;Gruyère

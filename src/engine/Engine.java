@@ -1,5 +1,6 @@
 package engine;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
@@ -60,6 +61,12 @@ public class Engine {
 		}
 	}
 	
+	public String getValueFromPreparationAndCuissonRecetteFile(String line){
+		String[] line_split = line.split(": ");
+		
+		return line_split[line_split.length - 1];
+	}
+	
 	// Affiche tous les statements de la base
 	public void getAllStatements(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
@@ -75,6 +82,23 @@ public class Engine {
 			repo.shutDown();
 		}
 	}
+	
+	public void getAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
+		repo.initialize();
+		IRI garde_manger_iri = vf.createIRI(wcd, "contenu_garde_manger");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			// let's check that our data is actually in the database
+			try (RepositoryResult<Statement> result = conn.getStatements(null, garde_manger_iri, null);) {
+				while (result.hasNext()) {
+					Statement st = result.next();
+					System.out.println(st);
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+	}
+
 
 	
 }

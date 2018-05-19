@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
@@ -24,7 +26,7 @@ public class Aliment {
 
 	}
 
-	// Insère les données de type Aliment dans la base depuis le fichier csv
+	// Insere les donnees de type Aliment dans la base depuis le fichier csv
 	public static void addAll(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -32,11 +34,11 @@ public class Aliment {
 		IRI aliment_type_litteral = vf.createIRI(wcd, "Aliment");
 		IRI property_energy_j = vf.createIRI(wcd, "Energie_kJ/100g");
 		IRI property_energy_cal = vf.createIRI(wcd, "Energie_kcal/100g");
-		IRI property_proteine = vf.createIRI(wcd, "Protéines_g/100g");
+		IRI property_proteine = vf.createIRI(wcd, "Proteines_g/100g");
 		IRI property_glucide = vf.createIRI(wcd, "Glucides_g/100g");
 		IRI property_lipide = vf.createIRI(wcd, "Lipides_g/100g");
 		IRI property_sucre = vf.createIRI(wcd, "Sucres_g/100g");
-		IRI property_cholesterol = vf.createIRI(wcd, "Cholestérol_mg/100g");
+		IRI property_cholesterol = vf.createIRI(wcd, "Cholesterol_mg/100g");
 		IRI property_fer = vf.createIRI(wcd, "Fer_mg/100g");
 		IRI property_vitamineD = vf.createIRI(wcd, "Vitamine_D_µg/100g");
 		IRI property_vitamineE = vf.createIRI(wcd, "Vitamine_E_mg/100g");
@@ -102,8 +104,9 @@ public class Aliment {
 	}
 
 	// retourne les aliments contenus dans la base
-	public static void getAll(Repository repo, ValueFactory vf, Model model) {
+	public static List<String> getAll(Repository repo, ValueFactory vf, Model model) {
 		repo.initialize();
+		List<String> liste = new ArrayList<String>();
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
@@ -123,9 +126,11 @@ public class Aliment {
 				}
 			}
 		} finally {
-			System.out.println("Succes");
+//			System.out.println("Succes");
 			repo.shutDown();
 		}
+		
+		return liste;
 
 	}
 }
