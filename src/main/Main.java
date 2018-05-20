@@ -40,9 +40,9 @@ public class Main {
 		File dataDir = new File("./db/");
 		NativeStore ns = new NativeStore(dataDir);
 		Repository repo = new SailRepository(ns);
-		ValueFactory vf = SimpleValueFactory.getInstance();
-		Model model = new TreeModel();
-		String wcd = "http://m2bigcookingdata.org/";
+//		ValueFactory vf = SimpleValueFactory.getInstance();
+//		Model model = new TreeModel();
+//		String wcd = "http://m2bigcookingdata.org/";
 
 		//Initialisation des variables propre à Lucene
 //		String lucene_index = "./lucene/";
@@ -65,7 +65,7 @@ public class Main {
 //		engine.getAllStatementsIRI(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		aliment.getAll(repo, vf, model);
-		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "totO", "Pistache");
+//		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "totO", "Pistache");
 		
 //		user.addDataTestConnexion(repo, vf, model, wcd, "./fichiers_test/users/connexion.txt");
 //		user.getMDP(repo, vf, model);
@@ -73,13 +73,13 @@ public class Main {
 //		System.out.println(result);
 //		String result = user.processInscription(repo, vf, model, wcd, "Tata", "grr");
 //		System.out.println(result);
-//		List<String> test = new ArrayList<String>();
-//		test.add("lait");
+		List<String> test = new ArrayList<String>();
+		test.add("Mousse");
 //		test.add("cr");
-//		List<String> result = recette.getNamesRecettesByKeyWord(repo, vf, model, test);
+		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
 //		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
 //		List<String> result = aliment.getAll(repo, vf, model);
-		List<String> result = user.getAlimentsFromGardeManger(repo, vf, model, "toto");
+//		List<String> result = user.getAlimentsFromGardeManger(repo, vf, model, "toto");
 		for(int i=0; i<result.size();i++){
 			System.out.println(result.get(i));
 		}

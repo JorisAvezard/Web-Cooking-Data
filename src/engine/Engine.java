@@ -4,6 +4,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryResult;
@@ -85,10 +86,10 @@ public class Engine {
 	
 	public void getAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
-		IRI garde_manger_iri = vf.createIRI(wcd, "contenu_garde_manger");
+		IRI garde_manger_iri = vf.createIRI(wcd, "Recette");
 		try (RepositoryConnection conn = repo.getConnection()) {
 			// let's check that our data is actually in the database
-			try (RepositoryResult<Statement> result = conn.getStatements(null, garde_manger_iri, null);) {
+			try (RepositoryResult<Statement> result = conn.getStatements(null, RDF.TYPE, garde_manger_iri);) {
 				while (result.hasNext()) {
 					Statement st = result.next();
 					System.out.println(st);

@@ -704,9 +704,7 @@ public class Recette {
 		return result;
 	}
 	
-	public List<String> getNamesRecettesByKeyWord(List<String> key_words) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
+	public List<String> getNamesRecettesByKeyWord(Repository repo, List<String> key_words) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
@@ -714,9 +712,9 @@ public class Recette {
 		String key = "";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
+			System.out.println("AVANT REQUETE - " + key_words);
 			for(i=0;i<key_words.size();i++){
 				key = engine.lowerCaseAll(key_words.get(i));
-				
 				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
@@ -742,7 +740,7 @@ public class Recette {
 		} finally {
 			repo.shutDown();
 		}
-
+		System.out.println(liste);
 		return liste;
 	}
 	

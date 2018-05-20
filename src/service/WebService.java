@@ -1,5 +1,6 @@
 package service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 
 import data.Reponse;
 import data.ListeRecette;
@@ -19,6 +24,10 @@ public class WebService {
 	
 	public User user = new User();
 	public Recette recette = new Recette();
+	File dataDir = new File("./db/");
+	NativeStore ns = new NativeStore(dataDir);
+	Repository repo = new SailRepository(ns);
+	
 	@GET
 	@Path("/coucou/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -68,25 +77,44 @@ public class WebService {
 		return data;
 	}
 	
-	@GET
+/*	@GET
 	@Path("/recetteParNom/{expr}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListeRecette rechercheRecetteParNom(@PathParam(value="expr") String expression) {
 		String fields[];
 		List<String> list = new ArrayList<String>();
 		List<String> result = new ArrayList<String>();
-		fields = expression.split(" ");
+		fields = expression.split("_");
 		for(int i=0; i<fields.length; i++) {
 			if(fields[i].length() > 2) {
-				list.add(fields[i].trim());
+				list.add(fields[i]);
 			}
 		}
+		
 		if(list.size()>0) {
 			result = recette.getNamesRecettesByKeyWord(list);
 		}
 		ListeRecette listRecette = new ListeRecette();
 		listRecette.setRecettes(result);
-		System.out.println("[RECHERCHE RECETTE PAR NOM]");
+		System.out.println("[RECHERCHE RECETTE PAR NOM] " + listRecette.getRecettes().toString());
+		return listRecette;
+	}
+*/	
+	@GET
+	@Path("/recetteParNom/{expr}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListeRecette rechercheRecetteParNom(@PathParam(value="expr") String expression) {
+		List<String> test = new ArrayList<String>();
+		test.add("Mousse");
+		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
+		
+		for(int i=0; i<result.size();i++){
+			System.out.println(result.get(i));
+		}
+		
+		ListeRecette listRecette = new ListeRecette();
+		listRecette.setRecettes(result);
+		System.out.println("[RECHERCHE RECETTE PAR NOM] " + listRecette.getRecettes().toString());
 		return listRecette;
 	}
 	
