@@ -1,0 +1,79 @@
+0;FEMME;114;dattes;diabete;1105
+1;FEMME;51;lait;refus gastrique;1915
+2;HOMME;132;aucune;diabete;1081
+3;HOMME;81;arachide;diabete;1218
+4;HOMME;65;carottes;hypertension;1884
+5;HOMME;91;avocat;refus gastrique;1458
+6;HOMME;58;cerises;cœur;2406
+7;FEMME;148;aucune;refus gastrique;1282
+8;FEMME;138;dattes;hypertension;2414
+9;FEMME;148;carottes;hypertension;2270
+10;HOMME;35;arachide;aucune;1827
+11;FEMME;88;lait;aucune;1172
+12;HOMME;141;cerises;aucune;1520
+13;HOMME;145;noisettes;aucune;1179
+14;HOMME;76;Crustacés;aucune;2344
+15;FEMME;60;fruits sec;cœur;1282
+16;FEMME;109;pomme;hypertension;1374
+17;FEMME;48;carottes;aucune;1233
+18;HOMME;114;pomme de terre;refus gastrique;1875
+19;HOMME;118;Crustacés;aucune;1626
+20;FEMME;116;fruits sec;cœur;2395
+21;HOMME;103;aucune;hypertension;1321
+22;HOMME;40;avocat;diabete;1913
+23;FEMME;67;pomme de terre;diabete;1093
+24;HOMME;34;orange;hypertension;2246
+25;FEMME;120;pomme;diabete;1429
+26;FEMME;127;cerises;hypertension;1607
+27;FEMME;148;choux;diabete;2390
+28;HOMME;52;pomme;hypertension;1629
+29;HOMME;115;dattes;refus gastrique;2392
+30;FEMME;35;avocat;aucune;1666
+31;FEMME;108;pomme de terre;refus gastrique;1291
+32;HOMME;149;pomme;hypertension;1838
+33;FEMME;88;dattes;diabete;1882
+34;FEMME;39;orange;aucune;1759
+35;HOMME;85;pomme;refus gastrique;1170
+36;HOMME;101;pomme;hypertension;1294
+37;HOMME;50;arachide;cœur;2135
+38;FEMME;115;pomme;hypertension;2180
+39;HOMME;140;Gluten;aucune;2273
+1;FEMME;72;aucune;aucune;1636
+2;HOMME;77;cacahuète;refus gastrique;1707
+3;FEMME;127;carottes;diabete;1863
+4;FEMME;88;dattes;aucune;1785
+5;HOMME;97;fruits sec;aucune;1491
+6;FEMME;126;lait;hypertension;1573
+7;HOMME;42;cerises;refus gastrique;1351
+8;FEMME;145;dattes;aucune;2490
+9;HOMME;70;aucune;refus gastrique;1221
+10;HOMME;138;pomme de terre;hypertension;1681
+11;HOMME;115;orange;aucune;1825
+12;FEMME;133;avocat;aucune;1565
+13;HOMME;81;lait;aucune;1197
+14;HOMME;47;arachide;cœur;1687
+15;HOMME;138;abricots;hypertension;2091
+16;FEMME;147;pomme de terre;aucune;1870
+17;HOMME;55;aucune;hypertension;1400
+18;FEMME;124;arachide;refus gastrique;1845
+19;HOMME;41;Gluten;refus gastrique;1443
+20;HOMME;147;fruits sec;aucune;1887
+21;HOMME;95;aucune;diabete;1429
+22;HOMME;128;cacahuète;hypertension;1790
+23;HOMME;125;soja;refus gastrique;1167
+24;HOMME;81;lait;refus gastrique;1116
+25;HOMME;109;aucune;hypertension;1634
+26;HOMME;118;Oeufs;cœur;2220
+27;HOMME;88;arachide;diabete;2017
+28;FEMME;69;arachide;aucune;1933
+29;FEMME;126;noisettes;diabete;1482
+30;HOMME;87;Gluten;diabete;2027
+31;FEMME;149;carottes;hypertension;1329
+32;HOMME;111;pomme de terre;diabete;1931
+33;HOMME;35;choux;refus gastrique;1549
+34;FEMME;89;Oeufs;refus gastrique;1110
+35;HOMME;75;Crustacés;diabete;2461
+36;FEMME;59;dattes;diabete;2338
+37;HOMME;149;orange;aucune;1077
+38;FEMME;93;Crustacés;aucune;1878
+39;FEMME;90;arachide;aucune;1198
