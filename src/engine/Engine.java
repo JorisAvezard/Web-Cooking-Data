@@ -83,9 +83,9 @@ public class Engine {
 		}
 	}
 	
-	public void getAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
+	public void getAllStatementsSpecificIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
-		IRI garde_manger_iri = vf.createIRI(wcd, "contenu_garde_manger");
+		IRI garde_manger_iri = vf.createIRI(wcd, "aliment_respectif");
 		try (RepositoryConnection conn = repo.getConnection()) {
 			// let's check that our data is actually in the database
 			try (RepositoryResult<Statement> result = conn.getStatements(null, garde_manger_iri, null);) {

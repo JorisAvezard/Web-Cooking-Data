@@ -231,5 +231,43 @@ public class User {
 		return liste;
 
 	}
+	
+	public List<String> getRecettesByAlimentsFromGardeManger(String login) {
+		File dataDir = new File("./db/");
+		Repository repo = new SailRepository(new NativeStore(dataDir));
+		repo.initialize();
+		List<String> resultat = new ArrayList<String>();
+		List<String> liste_rec = new ArrayList<String>();
+		Recette recette = new Recette();
+		int i=0;
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?aliment_name \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:"+formatCaseResource(login)+" wcd:contenu_garde_manger ?aliment. \n";
+			queryString += "    ?aliment foaf:name ?aliment_name. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+//					 System.out.println(solution.getValue("aliment_name").stringValue());
+					liste_rec = recette.getNamesRecettesByAliments(repo, solution.getValue("aliment_name").stringValue());
+					for(i=0;i<liste_rec.size();i++){
+						if(!resultat.contains(liste_rec.get(i)));
+						resultat.add(liste_rec.get(i));
+					}
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return resultat;
+
+	}
 
 }

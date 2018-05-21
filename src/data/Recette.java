@@ -1,6 +1,7 @@
 package data;
 
 import engine.Engine;
+import engine.Extraction;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,14 +31,13 @@ public class Recette {
 	public Recette() {
 
 	}
-	
+
 	public String getNameFromFile(String fichier) {
 		String[] tmp2 = fichier.split(".txt");
 		String[] tmp3 = tmp2[0].split("-");
 
 		return tmp3[0];
 	}
-
 
 	public String getNameFromPath(String fileName) {
 		String[] tmp = fileName.split("/");
@@ -57,14 +57,14 @@ public class Recette {
 		IRI recette_objet = vf.createIRI(wcd, "Recette");
 		model.add(recette_nom, RDF.TYPE, recette_objet);
 		model.add(recette_nom, FOAF.NAME, vf.createLiteral(rec_nom_litteral));
-		
+
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
 		} finally {
 			repo.shutDown();
 		}
 	}
-	
+
 	public void addNote(Repository repo, ValueFactory vf, Model model, String wcd, String key) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -72,14 +72,14 @@ public class Recette {
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
 		IRI note_iri = vf.createIRI(wcd, "a_pour_note");
 		model.add(recette_nom, note_iri, vf.createLiteral(Float.valueOf("0")));
-		
+
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
 		} finally {
 			repo.shutDown();
 		}
 	}
-	
+
 	public void addNoteTest(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -109,7 +109,7 @@ public class Recette {
 			repo.shutDown();
 		}
 	}
-	
+
 	public void addCategorie(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -139,7 +139,7 @@ public class Recette {
 			repo.shutDown();
 		}
 	}
-	
+
 	public void addDifficulte(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -169,17 +169,19 @@ public class Recette {
 			repo.shutDown();
 		}
 	}
-	
+
 	// ajoute les ingredients d'une recette
 	public void addIngredients(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
+		Extraction extraction = new Extraction();
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
 		IRI data_predicate = vf.createIRI(wcd, "a_pour_ingredient");
 		IRI data_type = vf.createIRI(wcd, "Ingredient");
 		IRI ing_desc = vf.createIRI(wcd, "description");
+		IRI link_ing_ali = vf.createIRI(wcd, "aliment_respectif");
 
 		String line = null;
 		try {
@@ -193,6 +195,14 @@ public class Recette {
 				model.add(recette_nom, data_predicate, ing);
 				String ing_desc_value = engine.formatCaseLitteral(line);
 				model.add(ing, ing_desc, vf.createLiteral(ing_desc_value));
+
+				String aliment_respectif = extraction.getAlimentFromIngredient(repo, line);
+				// System.out.println("aliment_respectif :"+ aliment_respectif);
+				if (!aliment_respectif.equals("")) {
+					aliment_respectif = engine.formatCaseResource(aliment_respectif);
+					IRI aliment_resource = vf.createIRI(wcd, aliment_respectif);
+					model.add(ing, link_ing_ali, aliment_resource);
+				}
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -352,7 +362,8 @@ public class Recette {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
-				model.add(recette_nom, data_predicate, vf.createLiteral(engine.getValueFromPreparationAndCuissonRecetteFile(line)));
+				model.add(recette_nom, data_predicate,
+						vf.createLiteral(engine.getValueFromPreparationAndCuissonRecetteFile(line)));
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -383,7 +394,8 @@ public class Recette {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
-				model.add(recette_nom, data_predicate, vf.createLiteral(engine.getValueFromPreparationAndCuissonRecetteFile(line)));
+				model.add(recette_nom, data_predicate,
+						vf.createLiteral(engine.getValueFromPreparationAndCuissonRecetteFile(line)));
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -434,24 +446,24 @@ public class Recette {
 	public void processInsertion(Repository repo, ValueFactory vf, Model model, String wcd, String path) {
 		Engine engine = new Engine();
 		String key = "";
-		File folder = new File(path); //./fichiers_test/recettes/
+		File folder = new File(path); // ./fichiers_test/recettes/
 		for (File fileEntry : folder.listFiles()) {
 			String fichier = fileEntry.getName();
 			if (engine.goodFile(fichier)) {
-				 key = getNameFromFile(fichier);
-				 addTypeAndName(repo, vf, model, wcd, key);
-				 addNote(repo, vf, model, wcd, key);
-//				 addNoteTest(repo, vf, model, wcd, path + key + "-note.txt");
-				 addCategorie(repo, vf, model, wcd, path + key + "-categorie.txt");
-				 addDifficulte(repo, vf, model, wcd, path + key + "-difficulte.txt");
-				 addIngredients(repo, vf, model, wcd, path + key + "-ingredients.txt");
-				 addAuteur(repo, vf, model, wcd, path + key + "-auteur.txt");
-				 addEtapes(repo, vf, model, wcd, path + key + "-etapes.txt");
-				 addUstensiles(repo, vf, model, wcd, path + key + "-ustensiles.txt");
-				 addTempsTotal(repo, vf, model, wcd, path + key + "-tempsTotal.txt");
-				 addTempsPreparation(repo, vf, model, wcd, path + key + "-preparation.txt");
-				 addTempsCuisson(repo, vf, model, wcd, path + key + "-cuisson.txt");
-				 addNbPersonnes(repo, vf, model, wcd, path + key + "-nbPersonne.txt");
+				key = getNameFromFile(fichier);
+				addTypeAndName(repo, vf, model, wcd, key);
+				addNote(repo, vf, model, wcd, key);
+				// addNoteTest(repo, vf, model, wcd, path + key + "-note.txt");
+				addCategorie(repo, vf, model, wcd, path + key + "-categorie.txt");
+				addDifficulte(repo, vf, model, wcd, path + key + "-difficulte.txt");
+				addIngredients(repo, vf, model, wcd, path + key + "-ingredients.txt");
+				addAuteur(repo, vf, model, wcd, path + key + "-auteur.txt");
+				addEtapes(repo, vf, model, wcd, path + key + "-etapes.txt");
+				addUstensiles(repo, vf, model, wcd, path + key + "-ustensiles.txt");
+				addTempsTotal(repo, vf, model, wcd, path + key + "-tempsTotal.txt");
+				addTempsPreparation(repo, vf, model, wcd, path + key + "-preparation.txt");
+				addTempsCuisson(repo, vf, model, wcd, path + key + "-cuisson.txt");
+				addNbPersonnes(repo, vf, model, wcd, path + key + "-nbPersonne.txt");
 			}
 		}
 		System.out.println("End");
@@ -703,20 +715,20 @@ public class Recette {
 
 		return result;
 	}
-	
+
 	public List<String> getNamesRecettesByKeyWord(List<String> key_words) {
 		File dataDir = new File("./db/");
 		Repository repo = new SailRepository(new NativeStore(dataDir));
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
-		int i =0;
+		int i = 0;
 		String key = "";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-			for(i=0;i<key_words.size();i++){
+			for (i = 0; i < key_words.size(); i++) {
 				key = engine.lowerCaseAll(key_words.get(i));
-				
+
 				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
@@ -724,18 +736,20 @@ public class Recette {
 				queryString += "WHERE { \n";
 				queryString += "    ?i rdf:type wcd:Recette. \n";
 				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "   FILTER regex(?ii, \""+key+"\", \"i\") \n";
-//				queryString += "   OPTIONAL { FILTER regex(?ii, \""+key+"\", \"i\")}. \n";
-//				queryString += "   OPTIONAL { FILTER regex(?ii, \""+key2+"\", \"i\")}. \n";
+				queryString += "   FILTER regex(?ii, \"" + key + "\", \"i\") \n";
+				// queryString += " OPTIONAL { FILTER regex(?ii, \""+key+"\",
+				// \"i\")}. \n";
+				// queryString += " OPTIONAL { FILTER regex(?ii, \""+key2+"\",
+				// \"i\")}. \n";
 				queryString += "}";
 				TupleQuery query = conn.prepareTupleQuery(queryString);
 				try (TupleQueryResult result = query.evaluate()) {
 					while (result.hasNext()) {
 						BindingSet solution = result.next();
-						if(!liste.contains(solution.getValue("ii").stringValue())){
+						if (!liste.contains(solution.getValue("ii").stringValue())) {
 							liste.add(solution.getValue("ii").stringValue());
 						}
-//						System.out.println(solution.getValue("i").stringValue());
+						// System.out.println(solution.getValue("i").stringValue());
 					}
 				}
 			}
@@ -745,7 +759,38 @@ public class Recette {
 
 		return liste;
 	}
-	
+
+	public List<String> getNamesRecettesByAliments(Repository repo, String key) {
+		List<String> liste = new ArrayList<String>();
+		Engine engine = new Engine();
+		key = engine.formatCaseResource(key);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_resource rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_resource foaf:name ?recette_nom. \n";
+			queryString += "    ?recette_resource wcd:a_pour_ingredient ?ingredient. \n";
+			queryString += "    ?ingredient wcd:aliment_respectif wcd:" + key + ". \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					if (!liste.contains(solution.getValue("recette_nom").stringValue())) {
+						liste.add(solution.getValue("recette_nom").stringValue());
+					}
+					// System.out.println(solution.getValue("i").stringValue());
+				}
+			}
+		}
+
+		return liste;
+	}
+
 	public List<String> getNamesRecettesByCategory(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -753,62 +798,62 @@ public class Recette {
 		key = engine.lowerCaseAll(key);
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-				
-				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
-				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-				queryString += "SELECT ?ii \n";
-				queryString += "WHERE { \n";
-				queryString += "    ?i rdf:type wcd:Recette. \n";
-				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "    ?i wcd:a_pour_categorie ?cat. \n";
-				queryString += "   FILTER regex(?cat, \""+key+"\", \"i\") \n";
-				queryString += "}";
-				TupleQuery query = conn.prepareTupleQuery(queryString);
-				try (TupleQueryResult result = query.evaluate()) {
-					while (result.hasNext()) {
-						BindingSet solution = result.next();
-							liste.add(solution.getValue("ii").stringValue());
-					}
+
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?ii \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?i rdf:type wcd:Recette. \n";
+			queryString += "    ?i foaf:name ?ii. \n";
+			queryString += "    ?i wcd:a_pour_categorie ?cat. \n";
+			queryString += "   FILTER regex(?cat, \"" + key + "\", \"i\") \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("ii").stringValue());
 				}
+			}
 		} finally {
 			repo.shutDown();
 		}
 
 		return liste;
 	}
-	
+
 	public List<String> getNamesRecettesByNote(Repository repo, ValueFactory vf, Model model, float note) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-				
-				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
-				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-				queryString += "SELECT ?ii \n";
-				queryString += "WHERE { \n";
-				queryString += "    ?i rdf:type wcd:Recette. \n";
-				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "    ?i wcd:a_pour_note ?note. \n";
-				queryString += "   FILTER (?note >= "+note+") \n";
-				queryString += "}";
-				queryString += "ORDER BY DESC(?note)";
-				TupleQuery query = conn.prepareTupleQuery(queryString);
-				try (TupleQueryResult result = query.evaluate()) {
-					while (result.hasNext()) {
-						BindingSet solution = result.next();
-							liste.add(solution.getValue("ii").stringValue());
-					}
+
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?ii \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?i rdf:type wcd:Recette. \n";
+			queryString += "    ?i foaf:name ?ii. \n";
+			queryString += "    ?i wcd:a_pour_note ?note. \n";
+			queryString += "   FILTER (?note >= " + note + ") \n";
+			queryString += "}";
+			queryString += "ORDER BY DESC(?note)";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("ii").stringValue());
 				}
+			}
 		} finally {
 			repo.shutDown();
 		}
 
 		return liste;
 	}
-	
+
 	public List<String> getNamesRecettesByDifficulte(Repository repo, ValueFactory vf, Model model, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -816,24 +861,24 @@ public class Recette {
 		key = engine.lowerCaseAll(key);
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-				
-				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
-				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-				queryString += "SELECT ?ii \n";
-				queryString += "WHERE { \n";
-				queryString += "    ?i rdf:type wcd:Recette. \n";
-				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "    ?i wcd:a_pour_difficulte ?dif. \n";
-				queryString += "   FILTER regex(?dif, \""+key+"\", \"i\") \n";
-				queryString += "}";
-				TupleQuery query = conn.prepareTupleQuery(queryString);
-				try (TupleQueryResult result = query.evaluate()) {
-					while (result.hasNext()) {
-						BindingSet solution = result.next();
-							liste.add(solution.getValue("ii").stringValue());
-					}
+
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?ii \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?i rdf:type wcd:Recette. \n";
+			queryString += "    ?i foaf:name ?ii. \n";
+			queryString += "    ?i wcd:a_pour_difficulte ?dif. \n";
+			queryString += "   FILTER regex(?dif, \"" + key + "\", \"i\") \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("ii").stringValue());
 				}
+			}
 		} finally {
 			repo.shutDown();
 		}

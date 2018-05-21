@@ -56,16 +56,17 @@ public class Main {
 		Aliment aliment = new Aliment();
 		Engine engine = new Engine();
 		User user = new User();
+		Extraction ex = new Extraction();
 		
 //		recette.processInsertion(repo, vf, model, wcd, "./fichiers_test/recettes/");
 
 //		String key = "crêPes";
 //		JSONObject j = recette.setJson(repo, vf, model, key);
 //		engine.getAllStatements(repo, vf, model, wcd);
-//		engine.getAllStatementsIRI(repo, vf, model, wcd);
+//		engine.getAllStatementsSpecificIRI(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		aliment.getAll(repo, vf, model);
-		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "totO", "Pistache");
+		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user2", "Écrevisse");
 		
 //		user.addDataTestConnexion(repo, vf, model, wcd, "./fichiers_test/users/connexion.txt");
 //		user.getMDP(repo, vf, model);
@@ -79,10 +80,12 @@ public class Main {
 //		List<String> result = recette.getNamesRecettesByKeyWord(repo, vf, model, test);
 //		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
 //		List<String> result = aliment.getAll(repo, vf, model);
-		List<String> result = user.getAlimentsFromGardeManger(repo, vf, model, "toto");
+//		List<String> result = user.getAlimentsFromGardeManger(repo, vf, model, "user1");
+		List<String> result = user.getRecettesByAlimentsFromGardeManger("user2");
 		for(int i=0; i<result.size();i++){
 			System.out.println(result.get(i));
 		}
+//		ex.motsClesParLigne("./fichiers_test/recettes\"Tajine\" de calamars et crevettes-ingredients.txt");
 	}
 
 }

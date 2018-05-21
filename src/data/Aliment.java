@@ -3,6 +3,7 @@ package data;
 import engine.Engine;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,6 +20,8 @@ import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 
 public class Aliment {
 
@@ -133,4 +136,32 @@ public class Aliment {
 		return liste;
 
 	}
+	
+	public List<String> getAlimentsWithKeyWord(Repository repo, String key) {
+		File dataDir = new File("./db/");
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?aliment_name \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?aliment_resource rdf:type wcd:Aliment. \n";
+			queryString += "    ?aliment_resource foaf:name ?aliment_name. \n";
+			queryString += "   FILTER regex(?aliment_name, \"" + key + "\", \"i\") \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("aliment_name").stringValue());
+				}
+			}
+		} 
+
+		return liste;
+
+	}
+
 }
