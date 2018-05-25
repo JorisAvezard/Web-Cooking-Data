@@ -30,7 +30,7 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.Sail;
 import org.eclipse.rdf4j.sail.lucene.LuceneSail;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
-import com.google.common.cache.CacheBuilder;
+//import com.google.common.cache.CacheBuilder;
 import org.json.simple.JSONObject;
 
 public class Main {

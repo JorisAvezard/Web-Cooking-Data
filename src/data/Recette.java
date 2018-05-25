@@ -21,8 +21,6 @@ import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import org.json.simple.JSONObject;
 
 public class Recette {
@@ -458,7 +456,7 @@ public class Recette {
 	}
 
 	// retourne les ingredients etant donne une recette
-	public List<String> getIngredients(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getIngredients(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -485,7 +483,7 @@ public class Recette {
 	}
 
 	// retourne pour combien de personnes est destinee une recette
-	public List<String> getNbPersonnes(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getNbPersonnes(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -511,7 +509,7 @@ public class Recette {
 	}
 
 	// retourne les etapes etant donne une recette
-	public List<String> getEtapes(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getEtapes(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		int indice = 1;
@@ -548,7 +546,7 @@ public class Recette {
 	}
 
 	// retourne l'auteur etant donne une recette
-	public List<String> getAuteur(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getAuteur(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -577,7 +575,7 @@ public class Recette {
 	}
 
 	// retourne l'auteur etant donne une recette
-	public List<String> getTempsTotal(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getTempsTotal(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -602,7 +600,7 @@ public class Recette {
 	}
 
 	// retourne l'auteur etant donne une recette
-	public List<String> getTempsCuisson(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getTempsCuisson(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -627,7 +625,7 @@ public class Recette {
 	}
 
 	// retourne l'auteur etant donne une recette
-	public List<String> getTempsPreparation(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getTempsPreparation(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -652,7 +650,7 @@ public class Recette {
 	}
 
 	// retourne les ingredients etant donne une recette
-	public List<String> getUstensiles(Repository repo, ValueFactory vf, Model model, String key) {
+	public List<String> getUstensiles(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -682,14 +680,14 @@ public class Recette {
 		Engine engine = new Engine();
 		String key_iri = engine.formatCaseResource(key);
 
-		List<String> ing_val = getIngredients(repo, vf, model, key_iri);
-		List<String> nbper_val = getNbPersonnes(repo, vf, model, key_iri);
-		List<String> et_val = getEtapes(repo, vf, model, key_iri);
-		List<String> aut_val = getAuteur(repo, vf, model, key_iri);
-		List<String> tt_val = getTempsTotal(repo, vf, model, key_iri);
-		List<String> tc_val = getTempsCuisson(repo, vf, model, key_iri);
-		List<String> tp_val = getTempsPreparation(repo, vf, model, key_iri);
-		List<String> ust_val = getUstensiles(repo, vf, model, key_iri);
+		List<String> ing_val = getIngredients(repo, key_iri);
+		List<String> nbper_val = getNbPersonnes(repo, key_iri);
+		List<String> et_val = getEtapes(repo, key_iri);
+		List<String> aut_val = getAuteur(repo, key_iri);
+		List<String> tt_val = getTempsTotal(repo, key_iri);
+		List<String> tc_val = getTempsCuisson(repo, key_iri);
+		List<String> tp_val = getTempsPreparation(repo, key_iri);
+		List<String> ust_val = getUstensiles(repo, key_iri);
 		result.put("ingredients", ing_val);
 		result.put("nb personnes", nbper_val);
 		result.put("etapes", et_val);
@@ -744,9 +742,7 @@ public class Recette {
 		return liste;
 	}
 	
-	public List<String> getNamesRecettesByCategory(String key) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
+	public List<String> getNamesRecettesByCategory(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
@@ -778,9 +774,7 @@ public class Recette {
 		return liste;
 	}
 	
-	public List<String> getNamesRecettesByNote(float note) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
+	public List<String> getNamesRecettesByNote(Repository repo, float note) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -811,9 +805,7 @@ public class Recette {
 		return liste;
 	}
 	
-	public List<String> getNamesRecettesByDifficulte(String key) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
+	public List<String> getNamesRecettesByDifficulte(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
@@ -840,6 +832,37 @@ public class Recette {
 				}
 		} finally {
 			repo.shutDown();
+		}
+
+		return liste;
+	}
+	
+	public List<String> getNamesRecettesByAliments(Repository repo, String key) {
+		List<String> liste = new ArrayList<String>();
+		Engine engine = new Engine();
+		key = engine.formatCaseResource(key);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_resource rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_resource foaf:name ?recette_nom. \n";
+			queryString += "    ?recette_resource wcd:a_pour_ingredient ?ingredient. \n";
+			queryString += "    ?ingredient wcd:aliment_respectif wcd:" + key + ". \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					if (!liste.contains(solution.getValue("recette_nom").stringValue())) {
+						liste.add(solution.getValue("recette_nom").stringValue());
+					}
+					// System.out.println(solution.getValue("i").stringValue());
+				}
+			}
 		}
 
 		return liste;

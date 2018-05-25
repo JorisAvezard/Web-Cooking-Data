@@ -137,9 +137,7 @@ public class Aliment {
 
 	}
 
-	public List<String> getAlimentsWithKeyWord(String key) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
+	public List<String> getAlimentsWithKeyWord(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		try (RepositoryConnection conn = repo.getConnection()) {

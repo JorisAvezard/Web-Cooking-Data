@@ -203,7 +203,7 @@ public class User {
 		}
 	}
 
-	public List<String> getAlimentsFromGardeManger(Repository repo, ValueFactory vf, Model model, String login) {
+	public List<String> getAlimentsFromGardeManger(Repository repo, String login) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
