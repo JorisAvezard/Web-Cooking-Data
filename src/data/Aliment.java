@@ -107,7 +107,7 @@ public class Aliment {
 	}
 
 	// retourne les aliments contenus dans la base
-	public static List<String> getAll(Repository repo, ValueFactory vf, Model model) {
+	public List<String> getAll(Repository repo) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 

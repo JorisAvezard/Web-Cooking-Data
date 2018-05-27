@@ -19,6 +19,8 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 
 import data.Reponse;
+import data.Aliment;
+import data.AlimentWS;
 import data.GardeManger;
 import data.ListeRecette;
 import data.Recette;
@@ -30,6 +32,7 @@ public class WebService {
 	
 	public User user = new User();
 	public Recette recette = new Recette();
+	public Aliment aliment = new Aliment();
 	File dataDir = new File("./db/");
 	NativeStore ns = new NativeStore(dataDir);
 	Repository repo = new SailRepository(ns);
@@ -176,5 +179,15 @@ public class WebService {
 		GardeManger gardeManger = new GardeManger(contenu);
 		System.out.println("[RECUPERATION DONNEES GARDE MANGER] DE "+ login +" : \n"+ gardeManger.toString());
 		return gardeManger;
+	}
+	
+	@GET
+	@Path("/alimentBase")
+	@Produces(MediaType.APPLICATION_JSON)
+	public AlimentWS addAlimentGardeManger () {
+		List<String> data = aliment.getAll(repo);
+		AlimentWS reponse = new AlimentWS(data);
+		System.out.println("[RECUPERATION DONNEES ALIMENTS ("+ data +")]");
+		return reponse;
 	}
 }
