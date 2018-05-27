@@ -1,16 +1,25 @@
 package test;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
+
 import data.Aliment;
 
 public class Extraction {
 
+	File dataDir = new File("./db/");
+	NativeStore ns = new NativeStore(dataDir);
+	Repository repo = new SailRepository(ns);
+	
 	public String enleve_parentheses(String expression) {
 		int p_ouvr = -1;
 		int p_ferm = -1;
@@ -83,7 +92,7 @@ public class Extraction {
 				//pour chaque mot, on cherche en base ce que l'on trouve et on le stocke
 				for(int j=0; j<list.size(); j++) {
 					List<String> tmp = new ArrayList<String>();
-					tmp = aliment.getAlimentsWithKeyWord(list.get(j));
+					tmp = aliment.getAlimentsWithKeyWord(repo, list.get(j));
 					for(int k=0; k<tmp.size(); k++) {
 						content.add(tmp.get(k));
 					}

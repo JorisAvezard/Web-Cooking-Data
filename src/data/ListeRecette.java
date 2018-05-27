@@ -8,7 +8,6 @@ public class ListeRecette {
 	public List<String> recettes = new ArrayList<String>();
 	
 	public ListeRecette() {
-		
 	}
 	
 	public void addRecette(String recette) {

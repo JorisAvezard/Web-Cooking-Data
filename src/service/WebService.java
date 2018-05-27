@@ -90,16 +90,15 @@ public class WebService {
 	@Path("/recetteParNom/{expr}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListeRecette rechercheRecetteParNom(@PathParam(value="expr") String expression) {
-		List<String> test = new ArrayList<String>();
-		test.add("Mousse");
-		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
+		List<String> list = new ArrayList<String>();
+		list.add(expression);
+		List<String> result = recette.getNamesRecettesByKeyWord(repo, list);
 		
 		for(int i=0; i<result.size();i++){
 			System.out.println(result.get(i));
 		}
 		
 		ListeRecette listRecette = new ListeRecette();
-		listRecette.setRecettes(result);
 		System.out.println("[RECHERCHE RECETTE PAR NOM] " + listRecette.getRecettes().toString());
 		return listRecette;
 	}
@@ -145,7 +144,15 @@ public class WebService {
 	@Path("/recette/{expr}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public RecetteCuisine recette (@PathParam(value="expr") String nomRecette) {
-		RecetteCuisine recetteCuisine = new RecetteCuisine(nomRecette, repo);
+		List<String> ingredients = recette.getIngredients(repo, nomRecette);
+		List<String> personnes = recette.getNbPersonnes(repo, nomRecette);
+		List<String> etapes = recette.getEtapes(repo, nomRecette);
+		List<String> auteur = recette.getEtapes(repo, nomRecette);
+		List<String> tempsTotal = recette.getTempsTotal(repo, nomRecette);
+		List<String> tempsCuisson = recette.getTempsCuisson(repo, nomRecette);
+		List<String> tempsPreparation = recette.getTempsPreparation(repo, nomRecette);
+		List<String> ustensiles = recette.getUstensiles(repo, nomRecette);
+		RecetteCuisine recetteCuisine = new RecetteCuisine(nomRecette, ingredients, personnes, etapes, auteur, tempsTotal, tempsCuisson, tempsPreparation, ustensiles);
 		System.out.println("[RECUPERATION DONNEES RECETTE ("+ nomRecette +")]");
 		return recetteCuisine;
 	}
@@ -165,7 +172,8 @@ public class WebService {
 	@Path("/contenuGardeManger/{login}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public GardeManger addAlimentGardeManger (@PathParam(value="login") String login) {
-		GardeManger gardeManger = new GardeManger(repo, login);
+		List<String> contenu = user.getAlimentsFromGardeManger(repo, login);
+		GardeManger gardeManger = new GardeManger(contenu);
 		System.out.println("[RECUPERATION DONNEES GARDE MANGER] DE "+ login +" : \n"+ gardeManger.toString());
 		return gardeManger;
 	}
