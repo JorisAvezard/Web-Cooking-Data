@@ -2,11 +2,16 @@ package data;
 
 import engine.Engine;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -713,6 +718,14 @@ public class Recette {
 			System.out.println("AVANT REQUETE - " + key_words);
 			for(i=0;i<key_words.size();i++){
 				key = engine.lowerCaseAll(key_words.get(i));
+				
+				byte[] byteData = key.getBytes();
+				System.out.print("[BYTE] -> ");
+				for(int b=0; b<byteData.length; b++) {
+					System.out.print(byteData[b] + " ");
+				}
+				System.out.println("");
+				
 				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";

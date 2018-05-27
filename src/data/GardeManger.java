@@ -8,11 +8,9 @@ import org.eclipse.rdf4j.repository.Repository;
 public class GardeManger {
 
 	public List<String> contenu = new ArrayList<String>();
-	User user = new User();
-	Repository repo;
 	
-	public GardeManger(Repository repo, String login) {
-		contenu = user.getAlimentsFromGardeManger(repo, login);
+	public GardeManger(List<String> contenu) {
+		this.contenu = contenu;
 	}
 
 	@Override
