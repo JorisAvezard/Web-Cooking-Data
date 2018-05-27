@@ -23,14 +23,52 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tw_foods"
+        android:id="@+id/tw_foods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mes provisions"
+        android:textStyle="bold"
+        android:gravity="left"
+        android:textSize="20dp"
+        android:textColor="#960504" />
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:isScrollContainer="true"
+            android:overScrollMode="always"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:id="@+id/layoutOfDynamicFood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/tw_selection_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mes provisions"
-            android:textStyle="bold"
-            android:gravity="left"
-            android:textSize="20dp"
-            android:textColor="#960504" />
+            android:id="@+id/spinner" />
+
+        <Button
+            android:id="@+id/bu_add_gm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ajouter"
+            android:layout_gravity="right"
+            android:textColor="#960504"
+            />
+
     </LinearLayout>
 
     <android.support.design.widget.NavigationView

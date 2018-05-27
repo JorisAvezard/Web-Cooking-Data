@@ -20,6 +20,7 @@ import com.example.joris.webcookingdatawcd.R;
 import com.example.joris.webcookingdatawcd.online.MainActivityOnline;
 import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
 import com.example.joris.webcookingdatawcd.window.PopConnectionActivity;
+import com.example.joris.webcookingdatawcd.window.PopInscriptionActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -30,7 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ConnectionActivity extends AppCompatActivity
+public class InscriptionActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     SendRequest request = new SendRequest();
@@ -39,7 +40,7 @@ public class ConnectionActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connection);
+        setContentView(R.layout.activity_inscription);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,32 +54,28 @@ public class ConnectionActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Button bu_connection = (Button) findViewById(R.id.bu_connection);
-        bu_connection.setOnClickListener(new View.OnClickListener() {
+        Button bu_inscription = (Button) findViewById(R.id.bu_inscription);
+        bu_inscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //startActivity(new Intent(ConnectionActivity.this,MainActivityOnline.class));
-                EditText et_login = (EditText) findViewById(R.id.et_login);
-                String login = et_login.getText().toString().toLowerCase();
-                EditText et_password = (EditText) findViewById(R.id.et_password);
-                String password = et_password.getText().toString();
+                EditText et_login_inscription = (EditText) findViewById(R.id.et_login_inscription);
+                String login = et_login_inscription.getText().toString();
+                EditText et_password_inscription = (EditText) findViewById(R.id.et_password_inscription);
+                String password = et_password_inscription.getText().toString();
+                EditText et_confirm_inscription = (EditText) findViewById(R.id.et_confirm_inscription);
+                String confirm = et_confirm_inscription.getText().toString();
                 MyAsynTask myAsyncTask = new MyAsynTask();
                 if(login.equals("")) {
-                    startActivity(new Intent(ConnectionActivity.this,PopConnectionActivity.class));
+                    startActivity(new Intent(InscriptionActivity.this,PopInscriptionActivity.class));
                 } else if (password.equals("")) {
-                    startActivity(new Intent(ConnectionActivity.this,PopConnectionActivity.class));
+                    startActivity(new Intent(InscriptionActivity.this,PopInscriptionActivity.class));
                 }
-                else {
-                    myAsyncTask.execute(login, password);
+                else if(confirm.equals(password)) {
+                    myAsyncTask.execute(login, password, confirm);
+                } else {
+                    startActivity(new Intent(InscriptionActivity.this,PopInscriptionActivity.class));
                 }
-            }
-        });
-
-        Button bu_isRegister = (Button) findViewById(R.id.bu_isRegister);
-        bu_isRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ConnectionActivity.this,InscriptionActivity.class));
             }
         });
 
@@ -92,14 +89,11 @@ public class ConnectionActivity extends AppCompatActivity
             String password = data[1];
             Data object = null;
             try {
-                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/connexion/" + login + "/" + password);
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/inscription/" + login + "/" + password);
                 InputStream inputStream = request.sendRequest(url);
-                String result = "";
-
                 if (inputStream != null) {
                     InputStreamReader reader = new InputStreamReader(inputStream);
                     object = gson.fromJson(reader, Data.class);
-                    object.setLogin(login);
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -117,14 +111,14 @@ public class ConnectionActivity extends AppCompatActivity
         protected void onPostExecute(Data data) {
             if(data != null) {
                 if (data.getData().equals("yes")) {
-                    Intent intent = new Intent(ConnectionActivity.this, MainActivityOnline.class);
-                    intent.putExtra("login", data.getLogin());
-                    startActivity(intent);
-                } else {
-                    startActivity(new Intent(ConnectionActivity.this, PopConnectionActivity.class));
+                    startActivity(new Intent(InscriptionActivity.this, ConnectionActivity.class));
+                } else if (data.getData().equals("login pris")) {
+                    startActivity(new Intent(InscriptionActivity.this, PopInscriptionActivity.class));
+                } else if (data.getData().equals("no")) {
+                    startActivity(new Intent(InscriptionActivity.this, PopInscriptionActivity.class));
                 }
             } else {
-                startActivity(new Intent(ConnectionActivity.this, PopConnectionActivity.class));
+                startActivity(new Intent(InscriptionActivity.this, PopInscriptionActivity.class));
             }
         }
     }
@@ -167,11 +161,11 @@ public class ConnectionActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_receipe) {
-            startActivity(new Intent(ConnectionActivity.this,ResearchActivity.class));
+            startActivity(new Intent(InscriptionActivity.this,ResearchActivity.class));
         } else if (id == R.id.nav_home) {
-            startActivity(new Intent(ConnectionActivity.this,MainActivity.class));
+            startActivity(new Intent(InscriptionActivity.this,MainActivity.class));
         } else if (id == R.id.nav_connection) {
-            startActivity(new Intent(ConnectionActivity.this,ConnectionActivity.class));
+            startActivity(new Intent(InscriptionActivity.this,ConnectionActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

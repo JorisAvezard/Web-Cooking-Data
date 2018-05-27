@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.joris.webcookingdatawcd.R;
 import com.example.joris.webcookingdatawcd.offline.MainActivity;
@@ -25,13 +27,20 @@ public class MainActivityOnline extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        Intent intent = getIntent();
+        String login = intent.getStringExtra("login");
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView tw = (TextView) header.findViewById(R.id.nav_header);
+        tw.setText("Connecté : " + login);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -71,16 +80,26 @@ public class MainActivityOnline extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent intent = getIntent();
+        String login = intent.getStringExtra("login");
         if (id == R.id.nav_receipe) {
-            startActivity(new Intent(MainActivityOnline.this,ResearchActivityOnline.class));
+            Intent nextIntent = new Intent(MainActivityOnline.this,ResearchActivityOnline.class);
+            nextIntent.putExtra("login", login);
+            startActivity(nextIntent);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_home) {
-            startActivity(new Intent(MainActivityOnline.this,MainActivityOnline.class));
+            Intent nextIntent = new Intent(MainActivityOnline.this,MainActivityOnline.class);
+            nextIntent.putExtra("login", login);
+            startActivity(nextIntent);
         } else if (id == R.id.nav_content) {
-            startActivity(new Intent(MainActivityOnline.this,FoodActivityOnline.class));
+            Intent nextIntent = new Intent(MainActivityOnline.this,FoodActivityOnline.class);
+            nextIntent.putExtra("login", login);
+            startActivity(nextIntent);
         } else if (id == R.id.nav_deconnection) {
-            startActivity(new Intent(MainActivityOnline.this,MainActivity.class));
+            Intent nextIntent = new Intent(MainActivityOnline.this,MainActivity.class);
+            nextIntent.putExtra("login", login);
+            startActivity(nextIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.joris.webcookingdatawcd">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,9 +27,11 @@
         </activity>
         <activity android:name=".offline.ConnectionActivity"
             android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".offline.InscriptionActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".offline.ResearchActivity"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".offline.ReceipeActivity"
+        <activity android:name=".offline.RecipeActivity"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".online.MainActivityOnline"
             android:windowSoftInputMode="stateHidden"/>
@@ -32,6 +39,11 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".online.FoodActivityOnline"
             android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:name=".window.PopConnectionActivity"
+            android:theme="@style/AppTheme.CustomTheme"/>
+        <activity android:name=".window.PopInscriptionActivity"
+            android:theme="@style/AppTheme.CustomTheme"/>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.example.joris.webcookingdatawcd.offline;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,11 +10,25 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.joris.webcookingdatawcd.object.Data;
 import com.example.joris.webcookingdatawcd.R;
+import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    SendRequest request = new SendRequest();
+    Gson gson = new GsonBuilder().create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +45,44 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Button bu_hello = (Button) findViewById(R.id.bu_hello);
+        bu_hello.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyAsynTask myAsyncTask = new MyAsynTask();
+                myAsyncTask.execute();
+            }
+        });
+    }
+
+    public class MyAsynTask extends AsyncTask<Void, Integer, Data> {
+
+        @Override
+        protected Data doInBackground(Void... data) {
+            Data object = null;
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/coucou/Joris");
+                InputStream inputStream = request.sendRequest(url);
+                if (inputStream != null) {
+                    InputStreamReader reader = new InputStreamReader(inputStream);
+                    object = gson.fromJson(reader, Data.class);
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        protected void onPostExecute(Data data) {
+            TextView tw_hellow = (TextView) findViewById(R.id.tw_hello);
+            if(data != null)
+                tw_hellow.setText(data.getData()+"");
+            else
+                tw_hellow.setText("null");
+        }
     }
 
     @Override
