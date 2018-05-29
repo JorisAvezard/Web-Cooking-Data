@@ -104,6 +104,18 @@ public class Engine {
 			repo.shutDown();
 		}
 	}
+	
+	public void removeAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
+		repo.initialize();
+		IRI sujet_iri = vf.createIRI(wcd, "user1");
+		IRI predicat_iri = vf.createIRI(wcd, "nombre_aliments_garde_manger");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(sujet_iri, null, null);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
 
 	public void writeFile(List<String> entry) {
 		String fileName = "all_recettes.csv";

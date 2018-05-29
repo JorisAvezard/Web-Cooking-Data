@@ -65,9 +65,11 @@ public class Main {
 //		JSONObject j = recette.setJson(repo, vf, model, key);
 //		engine.getAllStatements(repo, vf, model, wcd);
 //		engine.getAllStatementsIRI(repo, vf, model, wcd);
+//		engine.removeAllStatementsIRI(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		aliment.getAll(repo, vf, model);
-		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user2", "miel",200);
+//		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user3", "agneau",750);
+//		user.removeAlimentInGardeManger(repo, vf, model, wcd, "user3", "agneau");
 		
 //		user.addDataTestConnexion(repo, vf, model, wcd, "./fichiers_test/users/connexion.txt");
 //		user.getMDP(repo, vf, model);
@@ -81,11 +83,8 @@ public class Main {
 //		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
 //		List<String> result = aliment.getAll(repo, vf, model);
 //		List<String> result = user.getAlimentsFromGardeManger(repo, "user1");
-		List <String> result = user.getAlimentsWithQuantityFromGardeManger(repo, "user1");
-		for(int i=0; i<result.size();i++){
-			System.out.println(result.get(i));
-		}
-		
+		List <String> result = user.getAlimentsWithQuantityFromGardeManger(repo, "user2");
+		System.out.println(result);
 //		List<String> result = recette.getAllNamesRecettes(repo);
 //		engine.writeFile(result);
 		
