@@ -70,6 +70,7 @@ public class Main {
 //		aliment.getAll(repo, vf, model);
 //		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user3", "agneau",750);
 //		user.removeAlimentInGardeManger(repo, vf, model, wcd, "user3", "agneau");
+		user.updateAlimentQuantityInGardeManger(repo, vf, model, wcd, "user2", "agneau", 750);
 		
 //		user.addDataTestConnexion(repo, vf, model, wcd, "./fichiers_test/users/connexion.txt");
 //		user.getMDP(repo, vf, model);

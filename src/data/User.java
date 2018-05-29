@@ -38,9 +38,9 @@ public class User {
 		return result;
 	}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 	Methodes sur l'inscription et connexion
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methodes sur l'inscription et connexion
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public void addDataTestConnexion(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 
@@ -178,12 +178,14 @@ public class User {
 		}
 		IRI user_resource = vf.createIRI(wcd, formatCaseResource(login_entry));
 		IRI iri_mdp = vf.createIRI(wcd, "a_pour_mdp");
-//		IRI iri_garde_manger = vf.createIRI(wcd, "nombre_aliments_garde_manger");
+		// IRI iri_garde_manger = vf.createIRI(wcd,
+		// "nombre_aliments_garde_manger");
 
 		model.add(user_resource, RDF.TYPE, FOAF.PERSON);
 		model.add(user_resource, FOAF.NAME, vf.createLiteral(login_entry));
 		model.add(user_resource, iri_mdp, vf.createLiteral(mdp_entry));
-//		model.add(user_resource, iri_garde_manger, vf.createLiteral(Integer.valueOf("0")));
+		// model.add(user_resource, iri_garde_manger,
+		// vf.createLiteral(Integer.valueOf("0")));
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
@@ -193,106 +195,132 @@ public class User {
 		}
 	}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 	Methodes sur le garde-manger
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-//	public int getNumberAlimentsInGardeManger(Repository repo, String login) {
-//		int total = 0;
-//
-//		try (RepositoryConnection conn = repo.getConnection()) {
-//			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-//			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
-//			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-//			queryString += "SELECT ?nombre \n";
-//			queryString += "WHERE { \n";
-//			queryString += "    wcd:" + formatCaseResource(login) + " wcd:nombre_aliments_garde_manger ?nombre. \n";
-//			queryString += "}";
-//			TupleQuery query = conn.prepareTupleQuery(queryString);
-//			try (TupleQueryResult result = query.evaluate()) {
-//				while (result.hasNext()) {
-//					BindingSet solution = result.next();
-//					total = Integer.valueOf(solution.getValue("nombre").stringValue());
-//				}
-//			}
-//		}
-//
-//		return total;
-//		
-//	}
-	
-//	public void updateNumberAlimentsInGardeManger(Repository repo, ValueFactory vf, Model model, String wcd, String login) {
-//		Engine engine = new Engine();
-//		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
-//		
-//		int nombre_courant = getNumberAlimentsInGardeManger(repo, login);
-//		int nouveau_nombre = nombre_courant-1;
-//	
-//		String aliment_resource = engine.formatCaseResource(aliment);
-//		IRI aliment_iri = vf.createIRI(wcd, aliment_resource);
-//		IRI nb_ali_gm_iri = vf.createIRI(wcd, "nombre_aliments_garde_manger");
-//		model.add(login_iri, garde_manger_iri, aliment_iri);
-//		model.add(aliment_iri, aliment_quantite_iri, vf.createLiteral(quantite));
-//		
-//		try (RepositoryConnection conn = repo.getConnection()) {
-//			conn.remove(login_iri, nb_ali_gm_iri, null);
-//			
-//			conn.add(model);
-//		}	
-//		
-//		repo.initialize();
-//		IRI garde_manger_iri = vf.createIRI(wcd, "contenu_garde_manger");
-//		try (RepositoryConnection conn = repo.getConnection()) {
-//			// let's check that our data is actually in the database
-//			try (RepositoryResult<Statement> result = conn.getStatements(null, garde_manger_iri, null);) {
-//				while (result.hasNext()) {
-//					Statement st = result.next();
-//					System.out.println(st);
-//				}
-//			}
-//		} finally {
-//			repo.shutDown();
-//		}
-//	}
-	
-	public void addAlimentIntoGardeManger(Repository repo, ValueFactory vf, Model model, String wcd, String login, String aliment, float quantite) {
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methodes sur le garde-manger
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// public int getNumberAlimentsInGardeManger(Repository repo, String login)
+	// {
+	// int total = 0;
+	//
+	// try (RepositoryConnection conn = repo.getConnection()) {
+	// String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+	// queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+	// queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+	// queryString += "SELECT ?nombre \n";
+	// queryString += "WHERE { \n";
+	// queryString += " wcd:" + formatCaseResource(login) + "
+	// wcd:nombre_aliments_garde_manger ?nombre. \n";
+	// queryString += "}";
+	// TupleQuery query = conn.prepareTupleQuery(queryString);
+	// try (TupleQueryResult result = query.evaluate()) {
+	// while (result.hasNext()) {
+	// BindingSet solution = result.next();
+	// total = Integer.valueOf(solution.getValue("nombre").stringValue());
+	// }
+	// }
+	// }
+	//
+	// return total;
+	//
+	// }
+
+	// public void updateNumberAlimentsInGardeManger(Repository repo,
+	// ValueFactory vf, Model model, String wcd, String login) {
+	// Engine engine = new Engine();
+	// IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+	//
+	// int nombre_courant = getNumberAlimentsInGardeManger(repo, login);
+	// int nouveau_nombre = nombre_courant-1;
+	//
+	// String aliment_resource = engine.formatCaseResource(aliment);
+	// IRI aliment_iri = vf.createIRI(wcd, aliment_resource);
+	// IRI nb_ali_gm_iri = vf.createIRI(wcd, "nombre_aliments_garde_manger");
+	// model.add(login_iri, garde_manger_iri, aliment_iri);
+	// model.add(aliment_iri, aliment_quantite_iri, vf.createLiteral(quantite));
+	//
+	// try (RepositoryConnection conn = repo.getConnection()) {
+	// conn.remove(login_iri, nb_ali_gm_iri, null);
+	//
+	// conn.add(model);
+	// }
+	//
+	// repo.initialize();
+	// IRI garde_manger_iri = vf.createIRI(wcd, "contenu_garde_manger");
+	// try (RepositoryConnection conn = repo.getConnection()) {
+	// // let's check that our data is actually in the database
+	// try (RepositoryResult<Statement> result = conn.getStatements(null,
+	// garde_manger_iri, null);) {
+	// while (result.hasNext()) {
+	// Statement st = result.next();
+	// System.out.println(st);
+	// }
+	// }
+	// } finally {
+	// repo.shutDown();
+	// }
+	// }
+
+	public void addAlimentIntoGardeManger(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String aliment, float quantite) {
 		repo.initialize();
 		Engine engine = new Engine();
-		
+
 		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
 		String aliment_resource = engine.formatCaseResource(aliment);
 		IRI aliment_iri = vf.createIRI(wcd, aliment_resource);
 		IRI garde_manger_iri = vf.createIRI(wcd, "contenu_garde_manger");
-//		IRI nb_ali_gm_iri = vf.createIRI(wcd, "nombre_aliments_garde_manger");
-		IRI new_ali_gm_iri = vf.createIRI(wcd, formatCaseResource(login)+"_GM_"+aliment_resource);
+		// IRI nb_ali_gm_iri = vf.createIRI(wcd,
+		// "nombre_aliments_garde_manger");
+		IRI new_ali_gm_iri = vf.createIRI(wcd, formatCaseResource(login) + "_GM_" + aliment_resource);
 		IRI aliment_quantite_iri = vf.createIRI(wcd, "quantite_aliment_GM");
 		IRI aliment_gm_iri = vf.createIRI(wcd, "aliment_GM");
-		
+
 		try (RepositoryConnection conn = repo.getConnection()) {
-//			conn.remove(login_iri, nb_ali_gm_iri, null);
-			
-//			model.add(login_iri, nb_ali_gm_iri, vf.createLiteral(nouveau_nombre));
+			// conn.remove(login_iri, nb_ali_gm_iri, null);
+
+			// model.add(login_iri, nb_ali_gm_iri,
+			// vf.createLiteral(nouveau_nombre));
 			model.add(login_iri, garde_manger_iri, new_ali_gm_iri);
 			model.add(new_ali_gm_iri, aliment_gm_iri, aliment_iri);
 			model.add(new_ali_gm_iri, aliment_quantite_iri, vf.createLiteral(quantite));
-			
+
 			conn.add(model);
 		} finally {
 			repo.shutDown();
 		}
 	}
 
-	public void removeAlimentInGardeManger(Repository repo, ValueFactory vf, Model model, String wcd, String login, String aliment) {
+	public void removeAlimentInGardeManger(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String aliment) {
 		repo.initialize();
 		Engine engine = new Engine();
-		
+
 		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
 		String aliment_resource = engine.formatCaseResource(aliment);
 		IRI garde_manger_iri = vf.createIRI(wcd, "contenu_garde_manger");
-		IRI ali_gm_iri = vf.createIRI(wcd, formatCaseResource(login)+"_GM_"+aliment_resource);
+		IRI ali_gm_iri = vf.createIRI(wcd, formatCaseResource(login) + "_GM_" + aliment_resource);
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.remove(login_iri, garde_manger_iri, ali_gm_iri);
 			conn.remove(ali_gm_iri, null, null);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public void updateAlimentQuantityInGardeManger(Repository repo, ValueFactory vf, Model model, String wcd,
+			String login, String aliment, float quantity) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String aliment_resource = engine.formatCaseResource(aliment);
+		IRI ali_gm_iri = vf.createIRI(wcd, formatCaseResource(login) + "_GM_" + aliment_resource);
+		IRI predicat_iri = vf.createIRI(wcd, "quantite_aliment_GM");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(ali_gm_iri, predicat_iri, null);
+			model.add(ali_gm_iri, predicat_iri, vf.createLiteral(quantity));
+			conn.add(model);
 		} finally {
 			repo.shutDown();
 		}
@@ -327,7 +355,7 @@ public class User {
 		return liste;
 
 	}
-	
+
 	public List<String> getAlimentsWithQuantityFromGardeManger(Repository repo, String login) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -361,7 +389,7 @@ public class User {
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// 	Methodes sur le profil
+	// Methodes sur le profil
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void addMaladie(Repository repo, ValueFactory vf, Model model, String wcd, String key) {
@@ -373,7 +401,7 @@ public class User {
 		IRI recette_objet = vf.createIRI(wcd, "Recette");
 		model.add(recette_nom, RDF.TYPE, recette_objet);
 		model.add(recette_nom, FOAF.NAME, vf.createLiteral(rec_nom_litteral));
-		
+
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
 		} finally {
