@@ -1,0 +1,76 @@
+1;Achard de crevettes
+1;Advocaat (crème alcoolisée)
+1;50 25 20
+1;"tajine" de calamars et crevettes
+2;50 25 20
+2;Agneau au miel de gingembre
+2;'the' tarte au citron meringuée
+2;12 petits fondants au chocolat
+3;"chococroc" aux deux chocolats
+3;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+3;"chococroc" aux deux chocolats
+3;'brownies' au chocolat blanc et noix de coco
+4;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+4;'the' tarte au citron meringuée
+4;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+4;"tajine" de calamars et crevettes
+5;Achard de crevettes
+5;Achard de crevettes
+5;'brownies' au chocolat blanc et noix de coco
+5;'the' tarte au citron meringuée
+6;Abricots rôtis au romarin et faisselle au caramel de lavande
+6;'the' tarte aux fraises
+6;Advocaat (crème alcoolisée)
+6;Accras d'écrevisses
+7;Accras d'écrevisses
+7;50 25 20
+7;50 25 20
+7;Achard de crevettes
+8;50 25 20
+8;"chococroc" aux deux chocolats
+8;Agneau au curry et au pamplemousse
+8;'brownies' au chocolat blanc et noix de coco
+9;50 25 20
+9;Achard de crevettes
+9;"tajine" de calamars et crevettes
+9;"chococroc" aux deux chocolats
+10;Abricots rôtis au romarin et faisselle au caramel de lavande
+10;Agneau au miel de gingembre
+10;"chococroc" aux deux chocolats
+10;'brownies' au chocolat blanc et noix de coco
+11;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+11;Accras d'écrevisses
+11;'the' tarte aux fraises
+11;Accras d'écrevisses
+12;Achard de crevettes
+12;'brownies' au chocolat blanc et noix de coco
+12;'brownies' au chocolat blanc et noix de coco
+12;Agneau au curry et au pamplemousse
+13;'the' tarte aux fraises
+13;Agneau au miel de gingembre
+13;'the' tarte aux fraises
+13;12 petits fondants au chocolat
+14;Achard de crevettes
+14;Advocaat (crème alcoolisée)
+14;Agneau au curry et au pamplemousse
+14;Agneau au curry et au pamplemousse
+15;'the' tarte aux fraises
+15;Agneau au miel de gingembre
+15;Advocaat (crème alcoolisée)
+15;"tajine" de calamars et crevettes
+16;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+16;Agneau au curry et au pamplemousse
+16;'the' tarte aux fraises
+16;'brownies' au chocolat blanc et noix de coco
+17;"tajine" de calamars et crevettes
+17;Accras d'écrevisses
+17;'the' tarte aux fraises
+17;Agneau au curry et au pamplemousse
+18;"tajine" de calamars et crevettes
+18;'the' tarte au citron meringuée
+18;'brownies' au chocolat blanc et noix de coco
+18;Agneau au miel de gingembre
+19;Agneau au curry et au pamplemousse
+19;Agneau au curry et au pamplemousse
+19;'brownies' au chocolat blanc et noix de coco
+19;"tajine" de calamars et crevettes

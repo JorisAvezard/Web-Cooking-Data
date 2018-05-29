@@ -1,0 +1,39 @@
+1;HOMME;72;aucune;aucune;2138;aucun
+2;HOMME;90;lait;aucune;2290;aucun
+3;HOMME;75;choux;cœur;1505;vegetarien
+4;FEMME;139;cacahuète;cœur;1906;vegetarien
+5;HOMME;82;Oeufs;aucune;2001;aucun
+6;HOMME;62;cacahuète;aucune;2110;vegetarien
+7;HOMME;88;orange;hypertension;1405;aucun
+8;FEMME;71;pomme;aucune;2292;aucun
+9;HOMME;42;Gluten;cœur;1277;vegetarien
+10;HOMME;56;dattes;diabete;1626;vegetarien
+11;FEMME;61;dattes;aucune;2145;vegetarien
+12;FEMME;66;orange;aucune;1525;aucun
+13;HOMME;58;soja;diabete;1541;aucun
+14;FEMME;48;orange;hypertension;2207;aucun
+15;HOMME;45;carottes;hypertension;1691;vegetarien
+16;FEMME;144;Crustacés;aucune;1453;aucun
+17;HOMME;123;lait;diabete;1389;aucun
+18;FEMME;67;aucune;aucune;1726;vegetarien
+19;FEMME;40;pomme de terre;cœur;2473;vegetarien
+20;FEMME;134;carottes;aucune;1770;aucun
+21;HOMME;74;soja;cœur;1171;aucun
+22;HOMME;31;aucune;aucune;1579;vegetarien
+23;HOMME;134;cerises;cœur;1653;aucun
+24;HOMME;54;Crustacés;cœur;2201;vegetarien
+25;HOMME;99;aucune;aucune;1106;vegetarien
+26;HOMME;92;aucune;aucune;2277;vegetarien
+27;HOMME;143;noisettes;refus gastrique;2391;vegetarien
+28;HOMME;95;lait;cœur;1970;aucun
+29;HOMME;122;avocat;aucune;1975;aucun
+30;FEMME;134;cerises;hypertension;2499;aucun
+31;FEMME;39;pomme;aucune;2224;aucun
+32;HOMME;98;soja;cœur;1902;vegetarien
+33;HOMME;89;cerises;aucune;1439;aucun
+34;FEMME;74;pomme de terre;aucune;1915;vegetarien
+35;HOMME;134;carottes;aucune;2060;aucun
+36;HOMME;52;pomme de terre;hypertension;1361;vegetarien
+37;HOMME;137;pomme de terre;aucune;1926;aucun
+38;FEMME;146;carottes;refus gastrique;2397;vegetarien
+39;HOMME;66;pomme de terre;hypertension;1656;vegetarien

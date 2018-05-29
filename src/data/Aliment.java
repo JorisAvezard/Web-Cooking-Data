@@ -129,18 +129,17 @@ public class Aliment {
 				}
 			}
 		} finally {
-//			System.out.println("Succes");
+			// System.out.println("Succes");
 			repo.shutDown();
 		}
-		
+
 		return liste;
 
 	}
-	
-	public List<String> getAlimentsWithKeyWord(Repository repo, String key) {
-		File dataDir = new File("./db/");
-		List<String> liste = new ArrayList<String>();
 
+	public List<String> getAlimentsWithKeyWord(Repository repo, String key) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
@@ -158,10 +157,9 @@ public class Aliment {
 					liste.add(solution.getValue("aliment_name").stringValue());
 				}
 			}
-		} 
-
+		} finally {
+			repo.shutDown();
+		}
 		return liste;
-
 	}
-
 }

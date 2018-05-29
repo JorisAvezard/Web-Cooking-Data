@@ -36,6 +36,9 @@ public class User {
 		return result;
 	}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 	Methodes sur l'inscription et connexion
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public void addDataTestConnexion(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 
@@ -173,10 +176,12 @@ public class User {
 		}
 		IRI user_resource = vf.createIRI(wcd, formatCaseResource(login_entry));
 		IRI iri_mdp = vf.createIRI(wcd, "a_pour_mdp");
+		IRI iri_garde_manger = vf.createIRI(wcd, "nombre_aliments_garde_manger");
 
 		model.add(user_resource, RDF.TYPE, FOAF.PERSON);
 		model.add(user_resource, FOAF.NAME, vf.createLiteral(login_entry));
 		model.add(user_resource, iri_mdp, vf.createLiteral(mdp_entry));
+		model.add(user_resource, iri_garde_manger, vf.createLiteral(Integer.valueOf("0")));
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
@@ -186,16 +191,50 @@ public class User {
 		}
 	}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 	Methodes sur le garde-manger
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public int getNumberAlimentsInGardeManger(Repository repo, String login) {
+		repo.initialize();
+		int total = 0;
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?nombre \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:nombre_aliments_garde_manger ?nombre. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					total = Integer.valueOf(solution.getValue("aliment_name").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return total;
+		
+	}
+
+	
 	public void addAlimentIntoGardeManger(Repository repo, ValueFactory vf, Model model, String wcd, String login,
-			String aliment) {
+			String aliment, float quantite) {
 		repo.initialize();
 		Engine engine = new Engine();
 		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
 		String aliment_resource = engine.formatCaseResource(aliment);
 		IRI aliment_iri = vf.createIRI(wcd, aliment_resource);
 		IRI garde_manger_iri = vf.createIRI(wcd, "contenu_garde_manger");
+		IRI aliment_quantite_iri = vf.createIRI(wcd, "aliment_quantite");
 		model.add(login_iri, garde_manger_iri, aliment_iri);
-		
+		model.add(aliment_iri, aliment_quantite_iri, vf.createLiteral(quantite));
+
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
 		} finally {
@@ -203,7 +242,7 @@ public class User {
 		}
 	}
 
-	public List<String> getAlimentsFromGardeManger(Repository repo, ValueFactory vf, Model model, String login) {
+	public List<String> getAlimentsFromGardeManger(Repository repo, String login) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -213,14 +252,14 @@ public class User {
 			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
 			queryString += "SELECT ?aliment_name \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:"+formatCaseResource(login)+" wcd:contenu_garde_manger ?aliment. \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:contenu_garde_manger ?aliment. \n";
 			queryString += "    ?aliment foaf:name ?aliment_name. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-//					 System.out.println(solution.getValue("aliment_name").stringValue());
+					// System.out.println(solution.getValue("aliment_name").stringValue());
 					liste.add(solution.getValue("aliment_name").stringValue());
 				}
 			}
@@ -232,42 +271,55 @@ public class User {
 
 	}
 	
-	public List<String> getRecettesByAlimentsFromGardeManger(String login) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
+	public List<String> getAlimentsWithQuantityFromGardeManger(Repository repo, String login) {
 		repo.initialize();
-		List<String> resultat = new ArrayList<String>();
-		List<String> liste_rec = new ArrayList<String>();
-		Recette recette = new Recette();
-		int i=0;
+		List<String> liste = new ArrayList<String>();
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-			queryString += "SELECT ?aliment_name \n";
+			queryString += "SELECT ?aliment_name ?quantity \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:"+formatCaseResource(login)+" wcd:contenu_garde_manger ?aliment. \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:contenu_garde_manger ?aliment. \n";
 			queryString += "    ?aliment foaf:name ?aliment_name. \n";
+			queryString += "    ?aliment wcd:aliment_quantite ?quantity. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-//					 System.out.println(solution.getValue("aliment_name").stringValue());
-					liste_rec = recette.getNamesRecettesByAliments(repo, solution.getValue("aliment_name").stringValue());
-					for(i=0;i<liste_rec.size();i++){
-						if(!resultat.contains(liste_rec.get(i)));
-						resultat.add(liste_rec.get(i));
-					}
+					// System.out.println(solution.getValue("aliment_name").stringValue());
+					liste.add(solution.getValue("aliment_name").stringValue());
+					liste.add(solution.getValue("quantity").stringValue());
 				}
 			}
 		} finally {
 			repo.shutDown();
 		}
 
-		return resultat;
+		return liste;
 
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 	Methodes sur le profil
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void addMaladie(Repository repo, ValueFactory vf, Model model, String wcd, String key) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = engine.formatCaseResource(key);
+		String rec_nom_litteral = engine.formatCaseLitteral(key);
+		IRI recette_nom = vf.createIRI(wcd, key_iri);
+		IRI recette_objet = vf.createIRI(wcd, "Recette");
+		model.add(recette_nom, RDF.TYPE, recette_objet);
+		model.add(recette_nom, FOAF.NAME, vf.createLiteral(rec_nom_litteral));
+		
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
 }

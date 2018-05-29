@@ -1,0 +1,156 @@
+1;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+1;Advocaat (crème alcoolisée)
+1;50 25 20
+1;12 petits fondants au chocolat
+2;"tajine" de calamars et crevettes
+2;Agneau au miel de gingembre
+2;'brownies' au chocolat blanc et noix de coco
+2;'brownies' au chocolat blanc et noix de coco
+3;Advocaat (crème alcoolisée)
+3;Agneau au curry et au pamplemousse
+3;'the' tarte aux fraises
+3;'the' tarte aux fraises
+4;Abricots rôtis au romarin et faisselle au caramel de lavande
+4;'brownies' au chocolat blanc et noix de coco
+4;Agneau au curry et au pamplemousse
+4;'the' tarte aux fraises
+5;"tajine" de calamars et crevettes
+5;'brownies' au chocolat blanc et noix de coco
+5;'the' tarte au citron meringuée
+5;12 petits fondants au chocolat
+6;Advocaat (crème alcoolisée)
+6;Accras d'écrevisses
+6;Agneau au curry et au pamplemousse
+6;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+7;50 25 20
+7;Abricots rôtis au romarin et faisselle au caramel de lavande
+7;"chococroc" aux deux chocolats
+7;Accras d'écrevisses
+8;12 petits fondants au chocolat
+8;Agneau au curry et au pamplemousse
+8;"chococroc" aux deux chocolats
+8;"chococroc" aux deux chocolats
+9;'brownies' au chocolat blanc et noix de coco
+9;Agneau au miel de gingembre
+9;12 petits fondants au chocolat
+9;Agneau au curry et au pamplemousse
+10;12 petits fondants au chocolat
+10;Advocaat (crème alcoolisée)
+10;50 25 20
+10;50 25 20
+11;12 petits fondants au chocolat
+11;'brownies' au chocolat blanc et noix de coco
+11;Agneau au curry et au pamplemousse
+11;'the' tarte aux fraises
+12;'the' tarte aux fraises
+12;50 25 20
+12;Achard de crevettes
+12;12 petits fondants au chocolat
+13;'the' tarte au citron meringuée
+13;'the' tarte aux fraises
+13;Agneau au curry et au pamplemousse
+13;'brownies' au chocolat blanc et noix de coco
+14;50 25 20
+14;Accras d'écrevisses
+14;Abricots rôtis au romarin et faisselle au caramel de lavande
+14;Advocaat (crème alcoolisée)
+15;Accras d'écrevisses
+15;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+15;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+15;Achard de crevettes
+16;Advocaat (crème alcoolisée)
+16;'brownies' au chocolat blanc et noix de coco
+16;'the' tarte aux fraises
+16;Accras d'écrevisses
+17;Achard de crevettes
+17;Accras d'écrevisses
+17;Achard de crevettes
+17;"tajine" de calamars et crevettes
+18;"chococroc" aux deux chocolats
+18;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+18;12 petits fondants au chocolat
+18;"chococroc" aux deux chocolats
+19;'the' tarte au citron meringuée
+19;"tajine" de calamars et crevettes
+19;Advocaat (crème alcoolisée)
+19;Achard de crevettes
+20;'brownies' au chocolat blanc et noix de coco
+20;Advocaat (crème alcoolisée)
+20;'the' tarte au citron meringuée
+20;Accras d'écrevisses
+21;50 25 20
+21;Advocaat (crème alcoolisée)
+21;'brownies' au chocolat blanc et noix de coco
+21;Abricots rôtis au romarin et faisselle au caramel de lavande
+22;'brownies' au chocolat blanc et noix de coco
+22;Agneau au curry et au pamplemousse
+22;'brownies' au chocolat blanc et noix de coco
+22;'the' tarte aux fraises
+23;'brownies' au chocolat blanc et noix de coco
+23;Accras d'écrevisses
+23;Advocaat (crème alcoolisée)
+23;Agneau au curry et au pamplemousse
+24;12 petits fondants au chocolat
+24;Agneau au curry et au pamplemousse
+24;'the' tarte aux fraises
+24;Achard de crevettes
+25;Abricots rôtis au romarin et faisselle au caramel de lavande
+25;12 petits fondants au chocolat
+25;Abricots rôtis au romarin et faisselle au caramel de lavande
+25;Accras d'écrevisses
+26;'the' tarte aux fraises
+26;"chococroc" aux deux chocolats
+26;"chococroc" aux deux chocolats
+26;Advocaat (crème alcoolisée)
+27;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+27;'the' tarte aux fraises
+27;50 25 20
+27;50 25 20
+28;Achard de crevettes
+28;Agneau au miel de gingembre
+28;Achard de crevettes
+28;Accras d'écrevisses
+29;"tajine" de calamars et crevettes
+29;'the' tarte aux fraises
+29;Advocaat (crème alcoolisée)
+29;12 petits fondants au chocolat
+30;'brownies' au chocolat blanc et noix de coco
+30;Achard de crevettes
+30;"tajine" de calamars et crevettes
+30;'the' tarte aux fraises
+31;'the' tarte au citron meringuée
+31;Abricots rôtis au romarin et faisselle au caramel de lavande
+31;'the' tarte au citron meringuée
+31;50 25 20
+32;"tajine" de calamars et crevettes
+32;12 petits fondants au chocolat
+32;Accras d'écrevisses
+32;Accras d'écrevisses
+33;Agneau au miel de gingembre
+33;Agneau au miel de gingembre
+33;'brownies' au chocolat blanc et noix de coco
+33;Abricots rôtis au romarin et faisselle au caramel de lavande
+34;Achard de crevettes
+34;Accras d'écrevisses
+34;Agneau au curry et au pamplemousse
+34;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+35;Agneau au miel de gingembre
+35;Accras d'écrevisses
+35;Achard de crevettes
+35;"tajine" de calamars et crevettes
+36;'brownies' au chocolat blanc et noix de coco
+36;"gâteau galette" aux pommes, noisettes, chocolat et brousse
+36;Abricots rôtis au romarin et faisselle au caramel de lavande
+36;Abricots rôtis au romarin et faisselle au caramel de lavande
+37;"chococroc" aux deux chocolats
+37;Agneau au miel de gingembre
+37;'brownies' au chocolat blanc et noix de coco
+37;Advocaat (crème alcoolisée)
+38;50 25 20
+38;'the' tarte aux fraises
+38;"tajine" de calamars et crevettes
+38;Accras d'écrevisses
+39;"chococroc" aux deux chocolats
+39;Agneau au miel de gingembre
+39;Agneau au miel de gingembre
+39;"tajine" de calamars et crevettes

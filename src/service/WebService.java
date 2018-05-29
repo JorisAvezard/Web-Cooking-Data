@@ -1,5 +1,6 @@
 package service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +10,19 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.impl.TreeModel;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
+
 import data.Reponse;
+import data.GardeManger;
 import data.ListeRecette;
 import data.Recette;
+import data.RecetteCuisine;
 import data.User;
 
 @Path("/service")
@@ -19,6 +30,13 @@ public class WebService {
 	
 	public User user = new User();
 	public Recette recette = new Recette();
+	File dataDir = new File("./db/");
+	NativeStore ns = new NativeStore(dataDir);
+	Repository repo = new SailRepository(ns);
+	ValueFactory vf = SimpleValueFactory.getInstance();
+	Model model = new TreeModel();
+	String wcd = "http://m2bigcookingdata.org/";
+	
 	@GET
 	@Path("/coucou/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -69,25 +87,86 @@ public class WebService {
 	}
 	
 	@GET
-	@Path("/rechercheRecette/{expr}")
+	@Path("/recetteParNom/{expr}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ListeRecette rechercheRecette(@PathParam(value="expr") String expression) {
-		String fields[];
-		List<String> list = new ArrayList<String>();
-		List<String> result = new ArrayList<String>();
-		fields = expression.split(" ");
-		for(int i=0; i<fields.length; i++) {
-			if(fields[i].length() > 2) {
-				list.add(fields[i].trim());
-			}
+	public ListeRecette rechercheRecetteParNom(@PathParam(value="expr") String expression) {
+		List<String> test = new ArrayList<String>();
+		test.add("Mousse");
+		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
+		
+		for(int i=0; i<result.size();i++){
+			System.out.println(result.get(i));
 		}
-		if(list.size()>0) {
-			result = recette.getNamesRecettesByKeyWord(list);
-		}
+		
 		ListeRecette listRecette = new ListeRecette();
 		listRecette.setRecettes(result);
-		System.out.println("[RECHERCHE RECETTE]");
+		System.out.println("[RECHERCHE RECETTE PAR NOM] " + listRecette.getRecettes().toString());
 		return listRecette;
 	}
-
+	
+	@GET
+	@Path("/recetteParDifficulte/{expr}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListeRecette rechercheRecetteParDifficulte(@PathParam(value="expr") String expression) {
+		List<String> result = new ArrayList<String>();
+		result = recette.getNamesRecettesByDifficulte(repo, expression);
+		ListeRecette listRecette = new ListeRecette();
+		listRecette.setRecettes(result);
+		System.out.println("[RECHERCHE RECETTE PAR DIFFICULTE]");
+		return listRecette;
+	}
+	
+	@GET
+	@Path("/recetteParNote/{expr}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListeRecette rechercheRecetteParNote(@PathParam(value="expr") String expression) {
+		float note = Float.parseFloat(expression);
+		List<String> result = new ArrayList<String>();
+		result = recette.getNamesRecettesByNote(repo, note);
+		ListeRecette listRecette = new ListeRecette();
+		listRecette.setRecettes(result);
+		System.out.println("[RECHERCHE RECETTE PAR NOTE]");
+		return listRecette;
+	}
+	
+	@GET
+	@Path("/recetteParCategorie/{expr}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListeRecette rechercheRecetteParCategorie(@PathParam(value="expr") String expression) {
+		List<String> result = new ArrayList<String>();
+		result = recette.getNamesRecettesByCategory(repo, expression);
+		ListeRecette listRecette = new ListeRecette();
+		listRecette.setRecettes(result);
+		System.out.println("[RECHERCHE RECETTE PAR CATEGORIE]");
+		return listRecette;
+	}
+	
+	@GET
+	@Path("/recette/{expr}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public RecetteCuisine recette (@PathParam(value="expr") String nomRecette) {
+		RecetteCuisine recetteCuisine = new RecetteCuisine(nomRecette, repo);
+		System.out.println("[RECUPERATION DONNEES RECETTE ("+ nomRecette +")]");
+		return recetteCuisine;
+	}
+/*	
+	@GET
+	@Path("/alimentGardeManger/{login}/{aliment}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Reponse addAlimentGardeManger (@PathParam(value="login") String login, @PathParam(value="aliment") String aliment) {
+		String data = user.addAlimentIntoGardeManger(repo, vf, model, wcd, login, aliment);
+		Reponse reponse = new Reponse(data);
+		System.out.println("[RECUPERATION DONNEES RECETTE ("+ data +")]");
+		return reponse;
+	}
+*/
+	
+	@GET
+	@Path("/contenuGardeManger/{login}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public GardeManger addAlimentGardeManger (@PathParam(value="login") String login) {
+		GardeManger gardeManger = new GardeManger(repo, login);
+		System.out.println("[RECUPERATION DONNEES GARDE MANGER] DE "+ login +" : \n"+ gardeManger.toString());
+		return gardeManger;
+	}
 }

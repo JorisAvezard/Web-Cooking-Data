@@ -2,6 +2,7 @@ package main;
 
 import data.*;
 import engine.*;
+import ia.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,12 +31,12 @@ import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.sail.Sail;
 import org.eclipse.rdf4j.sail.lucene.LuceneSail;
 import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
-import com.google.common.cache.CacheBuilder;
+//import com.google.common.cache.CacheBuilder;
 import org.json.simple.JSONObject;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// Initialisation des variables propre à la base RDF
 		File dataDir = new File("./db/");
 		NativeStore ns = new NativeStore(dataDir);
@@ -56,17 +57,17 @@ public class Main {
 		Aliment aliment = new Aliment();
 		Engine engine = new Engine();
 		User user = new User();
-		Extraction ex = new Extraction();
+		IA ia = new IA();
 		
 //		recette.processInsertion(repo, vf, model, wcd, "./fichiers_test/recettes/");
 
 //		String key = "crêPes";
 //		JSONObject j = recette.setJson(repo, vf, model, key);
 //		engine.getAllStatements(repo, vf, model, wcd);
-//		engine.getAllStatementsSpecificIRI(repo, vf, model, wcd);
+//		engine.getAllStatementsIRI(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		aliment.getAll(repo, vf, model);
-		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user2", "Écrevisse");
+		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user2", "miel",200);
 		
 //		user.addDataTestConnexion(repo, vf, model, wcd, "./fichiers_test/users/connexion.txt");
 //		user.getMDP(repo, vf, model);
@@ -75,17 +76,20 @@ public class Main {
 //		String result = user.processInscription(repo, vf, model, wcd, "Tata", "grr");
 //		System.out.println(result);
 //		List<String> test = new ArrayList<String>();
-//		test.add("lait");
-//		test.add("cr");
-//		List<String> result = recette.getNamesRecettesByKeyWord(repo, vf, model, test);
+//		test.add("agneau");
+//		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
 //		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
 //		List<String> result = aliment.getAll(repo, vf, model);
-//		List<String> result = user.getAlimentsFromGardeManger(repo, vf, model, "user1");
-		List<String> result = user.getRecettesByAlimentsFromGardeManger("user2");
+//		List<String> result = user.getAlimentsFromGardeManger(repo, "user1");
+		List <String> result = user.getAlimentsWithQuantityFromGardeManger(repo, "user1");
 		for(int i=0; i<result.size();i++){
 			System.out.println(result.get(i));
 		}
-//		ex.motsClesParLigne("./fichiers_test/recettes\"Tajine\" de calamars et crevettes-ingredients.txt");
+		
+//		List<String> result = recette.getAllNamesRecettes(repo);
+//		engine.writeFile(result);
+		
+//		ia.processCluster();
 	}
 
 }
