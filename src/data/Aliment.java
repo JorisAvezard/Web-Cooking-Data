@@ -107,7 +107,7 @@ public class Aliment {
 	}
 
 	// retourne les aliments contenus dans la base
-	public static List<String> getAll(Repository repo, ValueFactory vf, Model model) {
+	public static List<String> getAll(Repository repo) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -124,12 +124,10 @@ public class Aliment {
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					System.out.println(solution.getValue("ii").stringValue());
-					// liste.add(solution.getValue("i").stringValue());
+					liste.add(solution.getValue("ii").stringValue());
 				}
 			}
 		} finally {
-			// System.out.println("Succes");
 			repo.shutDown();
 		}
 

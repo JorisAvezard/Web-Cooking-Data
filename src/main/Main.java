@@ -96,6 +96,9 @@ public class Main {
 //		user.addRegimeAlimentaire(repo, vf, model, wcd, "user1", "Végétarien");
 //		user.removeRegimeAlimentaire(repo, vf, model, wcd,  "user1", "Végétarien");
 //		List<String> result = user.getUserRegimeAlimentaire(repo, "user1");
+//		user.addAllergie(repo, vf, model, wcd, "user1", "Poire");
+//		user.removeAllergie(repo, vf, model, wcd, "user1", "Poire");
+//		List<String> result = user.getUserAllergie(repo, "user1");
 //		System.out.println(result);
 		
 //		ia.processCluster();

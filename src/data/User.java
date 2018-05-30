@@ -629,5 +629,63 @@ public class User {
 
 	}
 	
+	// Allergie = Aliment
+	public void addAllergie(Repository repo, ValueFactory vf, Model model, String wcd, String login, String allergie){
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String allergie_formate = engine.formatCaseResource(allergie);
+		IRI allergie_iri = vf.createIRI(wcd, allergie_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_allergie");
+		model.add(login_iri, predicat_iri, allergie_iri);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void removeAllergie(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String allergie) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String allergie_formate = engine.formatCaseResource(allergie);
+		IRI allergie_iri = vf.createIRI(wcd, allergie_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_allergie");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, allergie_iri);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public List<String> getUserAllergie(Repository repo, String login) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?allergie \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_allergie ?allergie_iri. \n";
+			queryString += "    ?allergie_iri foaf:name ?allergie. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("allergie").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+	
 	
 }
