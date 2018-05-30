@@ -88,9 +88,14 @@ public class Main {
 		
 //		user.insertAllDataMaladieIntoDB(repo, vf, model, wcd, "./fichiers_test/users/maladies.txt");
 //		user.addMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
-//		List<String> result = user.getAllMaladieFromDB(repo);
+//		List<String> result = user.getAllRegimeAlimentaireFromDB(repo);
 //		user.removeMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
 //		List<String> result = user.getUserMaladie(repo, "user1");
+//		user.insertAllDataRegimeAlimentaireIntoDB(repo, vf, model, wcd, "./fichiers_test/users/regimes.txt");
+//		List<String> result = user.getAllRegimeAlimentaireFromDB(repo);
+//		user.addRegimeAlimentaire(repo, vf, model, wcd, "user1", "Végétarien");
+//		user.removeRegimeAlimentaire(repo, vf, model, wcd,  "user1", "Végétarien");
+//		List<String> result = user.getUserRegimeAlimentaire(repo, "user1");
 //		System.out.println(result);
 		
 //		ia.processCluster();

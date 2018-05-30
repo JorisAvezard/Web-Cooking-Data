@@ -91,7 +91,7 @@ public class Engine {
 
 	public void getAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
-		IRI garde_manger_iri = vf.createIRI(wcd, "a_pour_categorie");
+		IRI garde_manger_iri = vf.createIRI(wcd, "a_pour_maladie");
 		try (RepositoryConnection conn = repo.getConnection()) {
 			// let's check that our data is actually in the database
 			try (RepositoryResult<Statement> result = conn.getStatements(null, garde_manger_iri, null);) {
@@ -107,10 +107,10 @@ public class Engine {
 	
 	public void removeAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
-		IRI sujet_iri = vf.createIRI(wcd, "Diabétique");
-		IRI predicat_iri = vf.createIRI(wcd, "nombre_aliments_garde_manger");
+		IRI sujet_iri = vf.createIRI(wcd, "user1");
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_maladie");
 		try (RepositoryConnection conn = repo.getConnection()) {
-			conn.remove(sujet_iri, null, null);
+			conn.remove(sujet_iri, predicat_iri, null);
 		} finally {
 			repo.shutDown();
 		}

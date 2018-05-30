@@ -45,7 +45,6 @@ public class User {
 		repo.initialize();
 		Engine engine = new Engine();
 		String key_iri = "";
-		IRI maladie_desc_iri = vf.createIRI(wcd, "maladie_description");
 		IRI maladie_type = vf.createIRI(wcd, "Maladie");
 
 		String line = null;
@@ -58,7 +57,39 @@ public class User {
 				key_iri = engine.formatCaseResource(line);
 				IRI maladie_iri = vf.createIRI(wcd, key_iri);
 				model.add(maladie_iri, RDF.TYPE, maladie_type);
-				model.add(maladie_iri, maladie_desc_iri, vf.createLiteral(line));
+				model.add(maladie_iri, FOAF.NAME, vf.createLiteral(line));
+			}
+			System.out.println("Success");
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataRegimeAlimentaireIntoDB(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI regime_type = vf.createIRI(wcd, "RegimeAlimentaire");
+
+		String line = null;
+		try {
+			// ./fichiers_test/donnees_nutritionnelles.csv
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI regime_iri = vf.createIRI(wcd, key_iri);
+				model.add(regime_iri, RDF.TYPE, regime_type);
+				model.add(regime_iri, FOAF.NAME, vf.createLiteral(line));
 			}
 			System.out.println("Success");
 			bufferedReader.close();
@@ -435,10 +466,11 @@ public class User {
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
 			queryString += "SELECT ?maladie \n";
 			queryString += "WHERE { \n";
 			queryString += "    ?maladie_iri rdf:type wcd:Maladie. \n";
-			queryString += "    ?maladie_iri wcd:maladie_description ?maladie. \n";
+			queryString += "    ?maladie_iri foaf:name ?maladie. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
@@ -459,10 +491,11 @@ public class User {
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
 			queryString += "SELECT ?maladie \n";
 			queryString += "WHERE { \n";
 			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_maladie ?maladie_iri. \n";
-			queryString += "    ?maladie_iri wcd:maladie_description ?maladie. \n";
+			queryString += "    ?maladie_iri foaf:name ?maladie. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
@@ -510,8 +543,91 @@ public class User {
 			repo.shutDown();
 		}
 	}
+	
+	public List<String> getAllRegimeAlimentaireFromDB(Repository repo) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?regime \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?regime_iri rdf:type wcd:RegimeAlimentaire. \n";
+			queryString += "    ?regime_iri foaf:name ?regime. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("regime").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
 
 	public void addRegimeAlimentaire(Repository repo, ValueFactory vf, Model model, String wcd, String login, String regime){
-		
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String regime_formate = engine.formatCaseResource(regime);
+		IRI regime_iri = vf.createIRI(wcd, regime_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_regime_alimentaire");
+		model.add(login_iri, predicat_iri, regime_iri);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
 	}
+	
+	public void removeRegimeAlimentaire(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String regime) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String regime_formate = engine.formatCaseResource(regime);
+		IRI regime_iri = vf.createIRI(wcd, regime_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_regime_alimentaire");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, regime_iri);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public List<String> getUserRegimeAlimentaire(Repository repo, String login) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?regime \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_regime_alimentaire ?regime_iri. \n";
+			queryString += "    ?regime_iri foaf:name ?regime. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("regime").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+
+	}
+	
+	
 }
