@@ -812,5 +812,54 @@ public class User {
 		}
 		return liste;
 	}
+	
+	public void addBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd, String login, double bc) {
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_besoin_calorique");
+		model.add(login_iri, predicat_iri, vf.createLiteral(bc));
 
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public void removeBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd, String login) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_besoin_calorique");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public double getUserBesoinCalorique(Repository repo, String login) {
+		repo.initialize();
+		double resultat = 0;
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "SELECT ?bc \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_besoin_calorique ?bc. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					resultat = Double.valueOf(solution.getValue("bc").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return resultat;
+	}
 }

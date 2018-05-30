@@ -106,6 +106,9 @@ public class Main {
 //		user.addGenre(repo, vf, model, wcd, "user1", "Femme");
 //		user.removeGenre(repo, vf, model, wcd, "user1");
 //		List<String> result = user.getUserGenre(repo, "user1");
+//		user.addBesoinCalorique(repo, vf, model, wcd, "user1", 1750.5);
+//		user.removeBesoinCalorique(repo, vf, model, wcd, "user1");
+//		double result = user.getUserBesoinCalorique(repo, "user1");
 //		System.out.println(result);
 		
 		
