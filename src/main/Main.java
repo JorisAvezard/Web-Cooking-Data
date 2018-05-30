@@ -99,6 +99,9 @@ public class Main {
 //		user.addAllergie(repo, vf, model, wcd, "user1", "Poire");
 //		user.removeAllergie(repo, vf, model, wcd, "user1", "Poire");
 //		List<String> result = user.getUserAllergie(repo, "user1");
+//		user.addAge(repo, vf, model, wcd, "user1", 23);
+//		user.removeAge(repo, vf, model, wcd, "user1");
+//		int result = user.getUserAge(repo, "user1");
 //		System.out.println(result);
 		
 //		ia.processCluster();

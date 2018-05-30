@@ -72,8 +72,9 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
-	public void insertAllDataRegimeAlimentaireIntoDB(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+
+	public void insertAllDataRegimeAlimentaireIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String key_iri = "";
@@ -484,7 +485,7 @@ public class User {
 		}
 		return liste;
 	}
-	
+
 	public List<String> getUserMaladie(Repository repo, String login) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -528,8 +529,7 @@ public class User {
 		}
 	}
 
-	public void removeMaladie(Repository repo, ValueFactory vf, Model model, String wcd, String login,
-			String maladie) {
+	public void removeMaladie(Repository repo, ValueFactory vf, Model model, String wcd, String login, String maladie) {
 		repo.initialize();
 		Engine engine = new Engine();
 
@@ -543,7 +543,7 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
+
 	public List<String> getAllRegimeAlimentaireFromDB(Repository repo) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -570,7 +570,8 @@ public class User {
 		return liste;
 	}
 
-	public void addRegimeAlimentaire(Repository repo, ValueFactory vf, Model model, String wcd, String login, String regime){
+	public void addRegimeAlimentaire(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String regime) {
 		repo.initialize();
 		Engine engine = new Engine();
 		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
@@ -585,7 +586,7 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
+
 	public void removeRegimeAlimentaire(Repository repo, ValueFactory vf, Model model, String wcd, String login,
 			String regime) {
 		repo.initialize();
@@ -601,7 +602,7 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
+
 	public List<String> getUserRegimeAlimentaire(Repository repo, String login) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -628,9 +629,9 @@ public class User {
 		return liste;
 
 	}
-	
+
 	// Allergie = Aliment
-	public void addAllergie(Repository repo, ValueFactory vf, Model model, String wcd, String login, String allergie){
+	public void addAllergie(Repository repo, ValueFactory vf, Model model, String wcd, String login, String allergie) {
 		repo.initialize();
 		Engine engine = new Engine();
 		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
@@ -645,7 +646,7 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
+
 	public void removeAllergie(Repository repo, ValueFactory vf, Model model, String wcd, String login,
 			String allergie) {
 		repo.initialize();
@@ -661,7 +662,7 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
+
 	public List<String> getUserAllergie(Repository repo, String login) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -686,6 +687,55 @@ public class User {
 		}
 		return liste;
 	}
-	
-	
+
+	public void addAge(Repository repo, ValueFactory vf, Model model, String wcd, String login, int age) {
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_age");
+		model.add(login_iri, predicat_iri, vf.createLiteral(age));
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public void removeAge(Repository repo, ValueFactory vf, Model model, String wcd, String login) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_age");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public int getUserAge(Repository repo, String login) {
+		repo.initialize();
+		int resultat = 0;
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "SELECT ?age \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_age ?age. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					resultat = Integer.valueOf(solution.getValue("age").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return resultat;
+	}
+
 }
