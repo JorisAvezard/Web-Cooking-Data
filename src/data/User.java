@@ -565,6 +565,24 @@ public class User {
 			repo.shutDown();
 		}
 	}
+	
+	public void updateMaladie(Repository repo, ValueFactory vf, Model model, String wcd,
+			String login, String maladie) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String maladie_formate = engine.formatCaseResource(maladie);
+		IRI maladie_iri = vf.createIRI(wcd, maladie_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_maladie");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+			model.add(login_iri, predicat_iri, maladie_iri);
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
 
 	public List<String> getAllRegimeAlimentaireFromDB(Repository repo) {
 		repo.initialize();
@@ -620,6 +638,24 @@ public class User {
 		IRI predicat_iri = vf.createIRI(wcd, "a_pour_regime_alimentaire");
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.remove(login_iri, predicat_iri, regime_iri);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void updateRegimeAlimentaire(Repository repo, ValueFactory vf, Model model, String wcd,
+			String login, String regime) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String regime_formate = engine.formatCaseResource(regime);
+		IRI regime_iri = vf.createIRI(wcd, regime_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_regime_alimentaire");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+			model.add(login_iri, predicat_iri, regime_iri);
+			conn.add(model);
 		} finally {
 			repo.shutDown();
 		}
@@ -684,6 +720,24 @@ public class User {
 			repo.shutDown();
 		}
 	}
+	
+	public void updateAllergie(Repository repo, ValueFactory vf, Model model, String wcd,
+			String login, String allergie) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String allergie_formate = engine.formatCaseResource(allergie);
+		IRI allergie_iri = vf.createIRI(wcd, allergie_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_allergie");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+			model.add(login_iri, predicat_iri, allergie_iri);
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
 
 	public List<String> getUserAllergie(Repository repo, String login) {
 		repo.initialize();
@@ -732,6 +786,22 @@ public class User {
 		IRI predicat_iri = vf.createIRI(wcd, "a_pour_age");
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.remove(login_iri, predicat_iri, null);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void updateAge(Repository repo, ValueFactory vf, Model model, String wcd,
+			String login, int age) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_age");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+			model.add(login_iri, predicat_iri, vf.createLiteral(age));
+			conn.add(model);
 		} finally {
 			repo.shutDown();
 		}
@@ -787,6 +857,24 @@ public class User {
 			repo.shutDown();
 		}
 	}
+	
+	public void updateGenre(Repository repo, ValueFactory vf, Model model, String wcd,
+			String login, String genre) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String genre_formate = engine.formatCaseResource(genre);
+		IRI genre_iri = vf.createIRI(wcd, genre_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_genre");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+			model.add(login_iri, predicat_iri, genre_iri);
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
 
 	public List<String> getUserGenre(Repository repo, String login) {
 		repo.initialize();
@@ -835,6 +923,22 @@ public class User {
 		IRI predicat_iri = vf.createIRI(wcd, "a_pour_besoin_calorique");
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.remove(login_iri, predicat_iri, null);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void updateBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd,
+			String login, double bc) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_besoin_calorique");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+			model.add(login_iri, predicat_iri, vf.createLiteral(bc));
+			conn.add(model);
 		} finally {
 			repo.shutDown();
 		}

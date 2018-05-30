@@ -87,8 +87,10 @@ public class Main {
 //		engine.writeFile(result);
 		
 //		user.insertAllDataMaladieIntoDB(repo, vf, model, wcd, "./fichiers_test/users/maladies.txt");
+//		List<String> result = user.getAllMaladieFromDB(repo);
 //		user.addMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
 //		List<String> result = user.getAllRegimeAlimentaireFromDB(repo);
+//		user.updateMaladie(repo, vf, model, wcd, "user1", "Diabétique"); // [Cholestérol, Diabétique]
 //		user.removeMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
 //		List<String> result = user.getUserMaladie(repo, "user1");
 //		user.insertAllDataRegimeAlimentaireIntoDB(repo, vf, model, wcd, "./fichiers_test/users/regimes.txt");
@@ -107,6 +109,7 @@ public class Main {
 //		user.removeGenre(repo, vf, model, wcd, "user1");
 //		List<String> result = user.getUserGenre(repo, "user1");
 //		user.addBesoinCalorique(repo, vf, model, wcd, "user1", 1750.5);
+//		user.updateBesoinCalorique(repo, vf, model, wcd, "user1", 2400);
 //		user.removeBesoinCalorique(repo, vf, model, wcd, "user1");
 //		double result = user.getUserBesoinCalorique(repo, "user1");
 //		System.out.println(result);
