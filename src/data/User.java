@@ -352,7 +352,7 @@ public class User {
 	// }
 
 	public void addAlimentIntoGardeManger(Repository repo, ValueFactory vf, Model model, String wcd, String login,
-			String aliment, float quantite) {
+			String aliment, double quantite) {
 		repo.initialize();
 		Engine engine = new Engine();
 
@@ -399,7 +399,7 @@ public class User {
 	}
 
 	public void updateAlimentQuantityInGardeManger(Repository repo, ValueFactory vf, Model model, String wcd,
-			String login, String aliment, float quantity) {
+			String login, String aliment, double quantity) {
 		repo.initialize();
 		Engine engine = new Engine();
 

@@ -69,7 +69,7 @@ public class Recette {
 		String key_iri = engine.formatCaseResource(key);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
 		IRI note_iri = vf.createIRI(wcd, "a_pour_note");
-		model.add(recette_nom, note_iri, vf.createLiteral(Float.valueOf("0")));
+		model.add(recette_nom, note_iri, vf.createLiteral(Double.valueOf("0")));
 		
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
@@ -92,7 +92,7 @@ public class Recette {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
-				model.add(recette_nom, note_iri, vf.createLiteral(Float.valueOf(line)));
+				model.add(recette_nom, note_iri, vf.createLiteral(Double.valueOf(line)));
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -845,7 +845,7 @@ public class Recette {
 		return liste;
 	}
 	
-	public List<String> getNamesRecettesByNote(Repository repo, float note) {
+	public List<String> getNamesRecettesByNote(Repository repo, double note) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
