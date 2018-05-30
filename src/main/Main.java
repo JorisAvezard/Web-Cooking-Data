@@ -102,7 +102,16 @@ public class Main {
 //		user.addAge(repo, vf, model, wcd, "user1", 23);
 //		user.removeAge(repo, vf, model, wcd, "user1");
 //		int result = user.getUserAge(repo, "user1");
+//		user.insertAllDataGenreIntoDB(repo, vf, model, wcd);
+//		user.addGenre(repo, vf, model, wcd, "user1", "Femme");
+//		user.removeGenre(repo, vf, model, wcd, "user1");
+//		List<String> result = user.getUserGenre(repo, "user1");
 //		System.out.println(result);
+		
+		
+		
+		
+		
 		
 //		ia.processCluster();
 	}

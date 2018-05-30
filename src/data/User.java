@@ -105,6 +105,28 @@ public class User {
 			repo.shutDown();
 		}
 	}
+	
+	public void insertAllDataGenreIntoDB(Repository repo, ValueFactory vf, Model model, String wcd) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI genre_type = vf.createIRI(wcd, "Genre");
+		IRI genre_iri = null;
+		List<String> genres =  new ArrayList<String>();
+		genres.add("Femme");
+		genres.add("Homme");
+		
+		for(int i=0;i<genres.size();i++){
+			genre_iri = vf.createIRI(wcd, genres.get(i));
+			model.add(genre_iri, RDF.TYPE, genre_type);
+			model.add(genre_iri, FOAF.NAME, vf.createLiteral(genres.get(i)));
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methodes sur l'inscription et connexion
@@ -736,6 +758,59 @@ public class User {
 			repo.shutDown();
 		}
 		return resultat;
+	}
+	
+	public void addGenre(Repository repo, ValueFactory vf, Model model, String wcd, String login, String genre) {
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String genre_formate = engine.formatCaseResource(genre);
+		IRI genre_iri = vf.createIRI(wcd, genre_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_genre");
+		model.add(login_iri, predicat_iri, genre_iri);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public void removeGenre(Repository repo, ValueFactory vf, Model model, String wcd, String login) {
+		repo.initialize();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_genre");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public List<String> getUserGenre(Repository repo, String login) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?genre \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_genre ?genre_iri. \n";
+			queryString += "    ?genre_iri foaf:name ?genre. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("genre").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
 	}
 
 }
