@@ -70,24 +70,28 @@ public class Main {
 //		aliment.getAll(repo, vf, model);
 //		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user3", "agneau",750);
 //		user.removeAlimentInGardeManger(repo, vf, model, wcd, "user3", "agneau");
-		user.updateAlimentQuantityInGardeManger(repo, vf, model, wcd, "user2", "agneau", 750);
+//		user.updateAlimentQuantityInGardeManger(repo, vf, model, wcd, "user2", "agneau", 750);
 		
 //		user.addDataTestConnexion(repo, vf, model, wcd, "./fichiers_test/users/connexion.txt");
 //		user.getMDP(repo, vf, model);
 //		String result = user.checkConnexion(repo, vf, model, "toto", "toto");
-//		System.out.println(result);
 //		String result = user.processInscription(repo, vf, model, wcd, "Tata", "grr");
-//		System.out.println(result);
 //		List<String> test = new ArrayList<String>();
 //		test.add("agneau");
 //		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
 //		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
 //		List<String> result = aliment.getAll(repo, vf, model);
 //		List<String> result = user.getAlimentsFromGardeManger(repo, "user1");
-		List <String> result = user.getAlimentsWithQuantityFromGardeManger(repo, "user2");
-		System.out.println(result);
+//		List <String> result = user.getAlimentsWithQuantityFromGardeManger(repo, "user2");
 //		List<String> result = recette.getAllNamesRecettes(repo);
 //		engine.writeFile(result);
+		
+//		user.insertAllDataMaladieIntoDB(repo, vf, model, wcd, "./fichiers_test/users/maladies.txt");
+//		user.addMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
+//		List<String> result = user.getAllMaladieFromDB(repo);
+//		user.removeMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
+//		List<String> result = user.getUserMaladie(repo, "user1");
+//		System.out.println(result);
 		
 //		ia.processCluster();
 	}
