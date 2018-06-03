@@ -105,18 +105,18 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
+
 	public void insertAllDataGenreIntoDB(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String key_iri = "";
 		IRI genre_type = vf.createIRI(wcd, "Genre");
 		IRI genre_iri = null;
-		List<String> genres =  new ArrayList<String>();
+		List<String> genres = new ArrayList<String>();
 		genres.add("Femme");
 		genres.add("Homme");
-		
-		for(int i=0;i<genres.size();i++){
+
+		for (int i = 0; i < genres.size(); i++) {
 			genre_iri = vf.createIRI(wcd, genres.get(i));
 			model.add(genre_iri, RDF.TYPE, genre_type);
 			model.add(genre_iri, FOAF.NAME, vf.createLiteral(genres.get(i)));
@@ -565,9 +565,8 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
-	public void updateMaladie(Repository repo, ValueFactory vf, Model model, String wcd,
-			String login, String maladie) {
+
+	public void updateMaladie(Repository repo, ValueFactory vf, Model model, String wcd, String login, String maladie) {
 		repo.initialize();
 		Engine engine = new Engine();
 
@@ -642,9 +641,9 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
-	public void updateRegimeAlimentaire(Repository repo, ValueFactory vf, Model model, String wcd,
-			String login, String regime) {
+
+	public void updateRegimeAlimentaire(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String regime) {
 		repo.initialize();
 		Engine engine = new Engine();
 
@@ -720,9 +719,9 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
-	public void updateAllergie(Repository repo, ValueFactory vf, Model model, String wcd,
-			String login, String allergie) {
+
+	public void updateAllergie(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String allergie) {
 		repo.initialize();
 		Engine engine = new Engine();
 
@@ -790,9 +789,8 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
-	public void updateAge(Repository repo, ValueFactory vf, Model model, String wcd,
-			String login, int age) {
+
+	public void updateAge(Repository repo, ValueFactory vf, Model model, String wcd, String login, int age) {
 		repo.initialize();
 		Engine engine = new Engine();
 
@@ -829,7 +827,7 @@ public class User {
 		}
 		return resultat;
 	}
-	
+
 	public void addGenre(Repository repo, ValueFactory vf, Model model, String wcd, String login, String genre) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -857,9 +855,8 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
-	public void updateGenre(Repository repo, ValueFactory vf, Model model, String wcd,
-			String login, String genre) {
+
+	public void updateGenre(Repository repo, ValueFactory vf, Model model, String wcd, String login, String genre) {
 		repo.initialize();
 		Engine engine = new Engine();
 
@@ -900,7 +897,7 @@ public class User {
 		}
 		return liste;
 	}
-	
+
 	public void addBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd, String login, double bc) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -927,9 +924,9 @@ public class User {
 			repo.shutDown();
 		}
 	}
-	
-	public void updateBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd,
-			String login, double bc) {
+
+	public void updateBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			double bc) {
 		repo.initialize();
 		Engine engine = new Engine();
 
@@ -966,4 +963,184 @@ public class User {
 		}
 		return resultat;
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methodes sur l'historique
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void addConsulteRecette(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String recette) {
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String recette_formate = engine.formatCaseResource(recette);
+		IRI recette_iri = vf.createIRI(wcd, recette_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_consulte");
+		model.add(login_iri, predicat_iri, recette_iri);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public List<String> getConsulteRecette(Repository repo, String login) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_consulte ?recette_iri. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name ?recette_nom. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("recette_nom").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+
+	public void addAimeRecette(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String recette) {
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String recette_formate = engine.formatCaseResource(recette);
+		IRI recette_iri = vf.createIRI(wcd, recette_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_aime");
+		model.add(login_iri, predicat_iri, recette_iri);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public List<String> getAimeRecette(Repository repo, String login) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_aime ?recette_iri. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name ?recette_nom. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("recette_nom").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+
+	public void addPasAimeRecette(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String recette) {
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String recette_formate = engine.formatCaseResource(recette);
+		IRI recette_iri = vf.createIRI(wcd, recette_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pas_aime");
+		model.add(login_iri, predicat_iri, recette_iri);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public List<String> getPasAimeRecette(Repository repo, String login) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pas_aime ?recette_iri. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name ?recette_nom. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("recette_nom").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+
+	public void addFavoriRecette(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String recette) {
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		String recette_formate = engine.formatCaseResource(recette);
+		IRI recette_iri = vf.createIRI(wcd, recette_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_mis_en_favori");
+		model.add(login_iri, predicat_iri, recette_iri);
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public List<String> getFavoriRecette(Repository repo, String login) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_mis_en_favori ?recette_iri. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name ?recette_nom. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("recette_nom").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+
 }
