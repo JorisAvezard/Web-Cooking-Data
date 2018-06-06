@@ -128,6 +128,356 @@ public class User {
 		}
 	}
 
+	public void insertAllDataNiveauActiviteIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI data_type = vf.createIRI(wcd, "NiveauActivite");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI data_iri = vf.createIRI(wcd, key_iri);
+				model.add(data_iri, RDF.TYPE, data_type);
+				model.add(data_iri, FOAF.NAME, vf.createLiteral(line));
+			}
+			System.out.println("Success");
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataAllergieFruitDeMerIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI data_type = vf.createIRI(wcd, "Allergie");
+		IRI data_category = vf.createIRI(wcd, "FruitDeMer");
+		model.add(data_category, RDF.TYPE, data_type);
+		model.add(data_category, FOAF.NAME, vf.createLiteral("Fruits de mer"));
+		
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_categorie_allergie");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI data_iri = vf.createIRI(wcd, key_iri);
+				model.add(data_iri, predicat_iri, data_category);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataAllergieArachideIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI data_type = vf.createIRI(wcd, "Allergie");
+		IRI data_category = vf.createIRI(wcd, "Arachide");
+		model.add(data_category, RDF.TYPE, data_type);
+		model.add(data_category, FOAF.NAME, vf.createLiteral("Arachide"));
+		
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_categorie_allergie");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI data_iri = vf.createIRI(wcd, key_iri);
+				model.add(data_iri, predicat_iri, data_category);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataAllergieBleIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI data_type = vf.createIRI(wcd, "Allergie");
+		IRI data_category = vf.createIRI(wcd, "Blé");
+		model.add(data_category, RDF.TYPE, data_type);
+		model.add(data_category, FOAF.NAME, vf.createLiteral("Blé"));
+		
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_categorie_allergie");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI data_iri = vf.createIRI(wcd, key_iri);
+				model.add(data_iri, predicat_iri, data_category);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataAllergieLaitIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI data_type = vf.createIRI(wcd, "Allergie");
+		IRI data_category = vf.createIRI(wcd, "Lait");
+		model.add(data_category, RDF.TYPE, data_type);
+		model.add(data_category, FOAF.NAME, vf.createLiteral("Lait"));
+		
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_categorie_allergie");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI data_iri = vf.createIRI(wcd, key_iri);
+				model.add(data_iri, predicat_iri, data_category);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataAllergieMoutardeIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI data_type = vf.createIRI(wcd, "Allergie");
+		IRI data_category = vf.createIRI(wcd, "Moutarde");
+		model.add(data_category, RDF.TYPE, data_type);
+		model.add(data_category, FOAF.NAME, vf.createLiteral("Moutarde"));
+		
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_categorie_allergie");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI data_iri = vf.createIRI(wcd, key_iri);
+				model.add(data_iri, predicat_iri, data_category);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataAllergieNoixIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI data_type = vf.createIRI(wcd, "Allergie");
+		IRI data_category = vf.createIRI(wcd, "Noix");
+		model.add(data_category, RDF.TYPE, data_type);
+		model.add(data_category, FOAF.NAME, vf.createLiteral("Noix"));
+		
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_categorie_allergie");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI data_iri = vf.createIRI(wcd, key_iri);
+				model.add(data_iri, predicat_iri, data_category);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataAllergieOeufIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI data_type = vf.createIRI(wcd, "Allergie");
+		IRI data_category = vf.createIRI(wcd, "Oeuf");
+		model.add(data_category, RDF.TYPE, data_type);
+		model.add(data_category, FOAF.NAME, vf.createLiteral("Oeuf"));
+		
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_categorie_allergie");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI data_iri = vf.createIRI(wcd, key_iri);
+				model.add(data_iri, predicat_iri, data_category);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataAllergieSojaIntoDB(Repository repo, ValueFactory vf, Model model, String wcd,
+			String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String key_iri = "";
+		IRI data_type = vf.createIRI(wcd, "Allergie");
+		IRI data_category = vf.createIRI(wcd, "Soja");
+		model.add(data_category, RDF.TYPE, data_type);
+		model.add(data_category, FOAF.NAME, vf.createLiteral("Soja"));
+		
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_categorie_allergie");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				key_iri = engine.formatCaseResource(line);
+				IRI data_iri = vf.createIRI(wcd, key_iri);
+				model.add(data_iri, predicat_iri, data_category);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
+	public void insertAllDataAllergieIntoDB(Repository repo, ValueFactory vf, Model model, String wcd) {
+		insertAllDataAllergieFruitDeMerIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/fruits_de_mer.txt");
+		insertAllDataAllergieArachideIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_arachide.txt");
+		insertAllDataAllergieBleIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_blé.txt");
+		insertAllDataAllergieLaitIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_laitier.txt");
+		insertAllDataAllergieMoutardeIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_moutarde.txt");
+		insertAllDataAllergieNoixIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_noix.txt");
+		insertAllDataAllergieOeufIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_oeuf.txt");
+		insertAllDataAllergieSojaIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_soja.txt");
+		
+	}
+	
+	public List<String> getAllAllergiesFromDB(Repository repo) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?data \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?data_iri rdf:type wcd:Allergie. \n";
+			queryString += "    ?data_iri foaf:name ?data. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("data").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methodes sur l'inscription et connexion
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -828,6 +1178,32 @@ public class User {
 		return resultat;
 	}
 
+	public List<String> getAllGenreFromDB(Repository repo) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?data \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?data_iri rdf:type wcd:Genre. \n";
+			queryString += "    ?data_iri foaf:name ?data. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("data").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+	
 	public void addGenre(Repository repo, ValueFactory vf, Model model, String wcd, String login, String genre) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -873,9 +1249,9 @@ public class User {
 		}
 	}
 
-	public List<String> getUserGenre(Repository repo, String login) {
+	public String getUserGenre(Repository repo, String login) {
 		repo.initialize();
-		List<String> liste = new ArrayList<String>();
+		String liste = "";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
@@ -889,7 +1265,7 @@ public class User {
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("genre").stringValue());
+					liste = solution.getValue("genre").stringValue();
 				}
 			}
 		} finally {
@@ -898,12 +1274,66 @@ public class User {
 		return liste;
 	}
 
-	public void addBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd, String login, double bc) {
+	public List<String> getAllNiveauActiviteFromDB(Repository repo) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?na \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?na_iri rdf:type wcd:NiveauActivite. \n";
+			queryString += "    ?na_iri foaf:name ?na. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("na").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+
+	public String getUserNiveauActivite(Repository repo, String login) {
+		repo.initialize();
+		String liste = "";
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?na \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_niveau_activite ?na_iri. \n";
+			queryString += "    ?na_iri foaf:name ?na. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste = solution.getValue("na").stringValue();
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+	}
+
+	public void addNiveauActivite(Repository repo, ValueFactory vf, Model model, String wcd, String login, String na) {
 		repo.initialize();
 		Engine engine = new Engine();
 		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
-		IRI predicat_iri = vf.createIRI(wcd, "a_pour_besoin_calorique");
-		model.add(login_iri, predicat_iri, vf.createLiteral(bc));
+		String na_formate = engine.formatCaseResource(na);
+		IRI na_iri = vf.createIRI(wcd, na_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_niveau_activite");
+		model.add(login_iri, predicat_iri, na_iri);
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
@@ -912,35 +1342,188 @@ public class User {
 		}
 	}
 
-	public void removeBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd, String login) {
+	public void removeNiveauActivite(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String na) {
 		repo.initialize();
 		Engine engine = new Engine();
 
 		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
-		IRI predicat_iri = vf.createIRI(wcd, "a_pour_besoin_calorique");
+		String na_formate = engine.formatCaseResource(na);
+		IRI na_iri = vf.createIRI(wcd, na_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_niveau_activite");
 		try (RepositoryConnection conn = repo.getConnection()) {
-			conn.remove(login_iri, predicat_iri, null);
+			conn.remove(login_iri, predicat_iri, na_iri);
 		} finally {
 			repo.shutDown();
 		}
 	}
 
-	public void updateBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd, String login,
-			double bc) {
+	public void updateNiveauActivite(Repository repo, ValueFactory vf, Model model, String wcd, String login,
+			String na) {
 		repo.initialize();
 		Engine engine = new Engine();
 
 		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
-		IRI predicat_iri = vf.createIRI(wcd, "a_pour_besoin_calorique");
+		String na_formate = engine.formatCaseResource(na);
+		IRI na_iri = vf.createIRI(wcd, na_formate);
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_niveau_activite");
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.remove(login_iri, predicat_iri, null);
-			model.add(login_iri, predicat_iri, vf.createLiteral(bc));
+			model.add(login_iri, predicat_iri, na_iri);
 			conn.add(model);
 		} finally {
 			repo.shutDown();
 		}
 	}
 
+	// en kg
+	public void addPoids(Repository repo, ValueFactory vf, Model model, String wcd, String login, double poids) {
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_poids");
+		model.add(login_iri, predicat_iri, vf.createLiteral(poids));
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public void removePoids(Repository repo, ValueFactory vf, Model model, String wcd, String login) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_poids");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public void updatePoids(Repository repo, ValueFactory vf, Model model, String wcd, String login, double poids) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_poids");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+			model.add(login_iri, predicat_iri, vf.createLiteral(poids));
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public double getUserPoids(Repository repo, String login) {
+		repo.initialize();
+		double resultat = 0;
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "SELECT ?poids \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_poids ?poids. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					resultat = Double.valueOf(solution.getValue("poids").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return resultat;
+	}
+
+	// en m
+	public void addTaille(Repository repo, ValueFactory vf, Model model, String wcd, String login, double taille) {
+		repo.initialize();
+		Engine engine = new Engine();
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_taille");
+		model.add(login_iri, predicat_iri, vf.createLiteral(taille));
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public void removeTaille(Repository repo, ValueFactory vf, Model model, String wcd, String login) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_taille");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public void updateTaille(Repository repo, ValueFactory vf, Model model, String wcd, String login, double taille) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_taille");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.remove(login_iri, predicat_iri, null);
+			model.add(login_iri, predicat_iri, vf.createLiteral(taille));
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
+	public double getUserTaille(Repository repo, String login) {
+		repo.initialize();
+		double resultat = 0;
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "SELECT ?taille \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_taille ?taille. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					resultat = Double.valueOf(solution.getValue("taille").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return resultat;
+	}
+
+	public void updateBesoinCalorique(Repository repo, ValueFactory vf, Model model, String wcd, String login) {
+		repo.initialize();
+		Engine engine = new Engine();
+
+		IRI login_iri = vf.createIRI(wcd, formatCaseResource(login));
+		IRI predicat_iri = vf.createIRI(wcd, "a_pour_besoin_calorique");
+		try (RepositoryConnection conn = repo.getConnection()) {
+			double besoin_calorique = calculBesoinCalorique(repo, login);
+			conn.remove(login_iri, predicat_iri, null);
+			model.add(login_iri, predicat_iri, vf.createLiteral(besoin_calorique));
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+	
 	public double getUserBesoinCalorique(Repository repo, String login) {
 		repo.initialize();
 		double resultat = 0;
@@ -962,6 +1545,49 @@ public class User {
 			repo.shutDown();
 		}
 		return resultat;
+	}
+	
+	public double calculBesoinCalorique(Repository repo, String login){
+		double result = 0.0;
+		
+		String genre = getUserGenre(repo, login);
+		int age = getUserAge(repo, login);
+		double taille = getUserTaille(repo, login);
+		double poids = getUserPoids(repo, login);
+		String niveau_activite = getUserNiveauActivite(repo, login);
+		
+		if((genre.equals(""))||(age==0)||(taille==0)||(poids==0)||(niveau_activite.equals(""))){
+			return result;
+		}
+		
+		double coef_poids = 0.0;
+		double coef_taille = 0.0;
+		double coef_age = 0.0;
+		double coef = 0.0;
+		
+		if(genre.equals("Femme")){
+			coef_poids = 9.5634;
+			coef_taille = 184.96;
+			coef_age = 4.6756;
+			coef = 655.0955;
+		}else{
+			coef_poids = 13.7516;
+			coef_taille = 500.33;
+			coef_age = 6.755;
+			coef = 66.473;
+		}
+		
+		double coef_niveau_activite = 1;
+		
+		if(niveau_activite.equals("Actif")){
+			coef_niveau_activite = 1.37;
+		}else if(niveau_activite.equals("Tres actif")){
+			coef_niveau_activite = 1.55;
+		}else if(niveau_activite.equals("Extremement actif")){
+			coef_niveau_activite = 1.8;
+		}
+		
+		return ((coef_poids*poids)+(coef_taille*taille)-(coef_age*age)+coef)*coef_niveau_activite;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////

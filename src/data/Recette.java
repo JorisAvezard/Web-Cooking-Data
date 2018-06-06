@@ -528,7 +528,7 @@ public class Recette {
 					while (result.hasNext()) {
 						BindingSet solution = result.next();
 						// System.out.println(solution.getValue("ii").stringValue());
-						liste.add("Etape " + indice + " : " + solution.getValue("i").stringValue());
+						liste.add(solution.getValue("i").stringValue());
 						indice2++;
 					}
 				}
