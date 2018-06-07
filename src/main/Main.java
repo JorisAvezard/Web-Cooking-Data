@@ -36,7 +36,7 @@ import org.json.simple.JSONObject;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		// Initialisation des variables propre à la base RDF
 		File dataDir = new File("./db/");
 		NativeStore ns = new NativeStore(dataDir);
@@ -64,10 +64,11 @@ public class Main {
 //		String key = "crêPes";
 //		JSONObject j = recette.setJson(repo, vf, model, key);
 //		engine.getAllStatements(repo, vf, model, wcd);
-//		engine.getAllStatementsIRI(repo, vf, model, wcd);
 //		engine.removeAllStatementsIRI(repo, vf, model, wcd);
+//		engine.getAllStatementsIRI(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
-//		aliment.getAll(repo, vf, model);
+//		List<String> result = aliment.getAll(repo);
+//		engine.writeFile(result, "./fichiers_test/ia/allergies.txt");
 //		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user3", "agneau",750);
 //		user.removeAlimentInGardeManger(repo, vf, model, wcd, "user3", "agneau");
 //		user.updateAlimentQuantityInGardeManger(repo, vf, model, wcd, "user2", "agneau", 750);
@@ -87,6 +88,7 @@ public class Main {
 //		engine.writeFile(result);
 		
 //		user.insertAllDataMaladieIntoDB(repo, vf, model, wcd, "./fichiers_test/users/maladies.txt");
+//		user.insertAllDataAllergieIntoDB(repo, vf, model, wcd, "./fichiers_test/ia/allergies.txt");
 //		List<String> result = user.getAllMaladieFromDB(repo);
 //		user.addMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
 //		List<String> result = user.getAllRegimeAlimentaireFromDB(repo);
@@ -101,25 +103,28 @@ public class Main {
 //		user.addAllergie(repo, vf, model, wcd, "user1", "Poire");
 //		user.removeAllergie(repo, vf, model, wcd, "user1", "Poire");
 //		List<String> result = user.getUserAllergie(repo, "user1");
-//		user.addAge(repo, vf, model, wcd, "user1", 23);
+//		user.addAge(repo, vf, model, wcd, "mallauriep", 23);
 //		user.removeAge(repo, vf, model, wcd, "user1");
 //		int result = user.getUserAge(repo, "user1");
 //		user.insertAllDataGenreIntoDB(repo, vf, model, wcd);
-//		user.addGenre(repo, vf, model, wcd, "user1", "Femme");
+//		user.addGenre(repo, vf, model, wcd, "mallauriep", "Femme");
 //		user.removeGenre(repo, vf, model, wcd, "user1");
 //		List<String> result = user.getUserGenre(repo, "user1");
-//		user.addBesoinCalorique(repo, vf, model, wcd, "user1", 1750.5);
-//		user.updateBesoinCalorique(repo, vf, model, wcd, "user1", 2400);
-//		user.removeBesoinCalorique(repo, vf, model, wcd, "user1");
-//		double result = user.getUserBesoinCalorique(repo, "user1");
+//		user.addNiveauActivite(repo, vf, model, wcd, "mallauriep", "Tres actif");
+//		user.addPoids(repo, vf, model, wcd, "mallauriep", 50);
+//		user.addTaille(repo, vf, model, wcd, "mallauriep", 1.6);
+//		user.insertAllDataNiveauActiviteIntoDB(repo, vf, model, wcd, "./fichiers_test/users/niveau_activite.txt");
+//		double result = user.calculBesoinCalorique(repo, "mallauriep");
+//		user.insertAllDataAllergieIntoDB(repo, vf, model, wcd);
+//		List<String> result = user.getAllAllergiesFromDB(repo);
 //		System.out.println(result);
 		
 		
-		
-		
-		
-		
+//		ia.cleanData("fichiers_test/ia/profils.txt");
 //		ia.processCluster();
+//		ia.createProfil(repo);
+//		ia.processCleanData(repo, "fichiers_test/ia/profils.txt", "fichiers_test/ia/profils_nettoyes.txt");
+		ia.cleanData(repo, "fichiers_test/ia/profils.txt", "fichiers_test/ia/profils_nettoyes.txt");
 	}
 
 }

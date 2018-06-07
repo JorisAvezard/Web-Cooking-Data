@@ -14,6 +14,8 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryResult;
 
+import data.Aliment;
+
 public class Engine {
 
 	public Engine() {
@@ -91,7 +93,7 @@ public class Engine {
 
 	public void getAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
-		IRI garde_manger_iri = vf.createIRI(wcd, "a_pour_maladie");
+		IRI garde_manger_iri = vf.createIRI(wcd, "a_pour_categorie_allergie");
 		try (RepositoryConnection conn = repo.getConnection()) {
 			// let's check that our data is actually in the database
 			try (RepositoryResult<Statement> result = conn.getStatements(null, garde_manger_iri, null);) {
@@ -104,28 +106,45 @@ public class Engine {
 			repo.shutDown();
 		}
 	}
-	
+
+	public void removeAllAllergie(Repository repo, ValueFactory vf, Model model, String wcd) {
+		Aliment al = new Aliment();
+		List<String> allergies = al.getAll(repo);
+		repo.initialize();
+		IRI predicat_iri = vf.createIRI(wcd, "Allergie");
+
+		for (int i = 0; i < allergies.size(); i++) {
+
+			try (RepositoryConnection conn = repo.getConnection()) {
+				IRI sujet_iri = vf.createIRI(wcd, formatCaseResource(allergies.get(i)));
+				conn.remove(sujet_iri, null, predicat_iri);
+			}
+		}
+
+		repo.shutDown();
+
+	}
+
 	public void removeAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
-		IRI sujet_iri = vf.createIRI(wcd, "user1");
-		IRI predicat_iri = vf.createIRI(wcd, "a_pour_maladie");
+		IRI sujet_iri = vf.createIRI(wcd, "Aliment");
+		IRI predicat_iri = vf.createIRI(wcd, "NiveauActivite");
 		try (RepositoryConnection conn = repo.getConnection()) {
-			conn.remove(sujet_iri, predicat_iri, null);
+			conn.remove(sujet_iri, null, null);
 		} finally {
 			repo.shutDown();
 		}
 	}
 
-
-	public void writeFile(List<String> entry) {
-		String fileName = "all_recettes.csv";
+	public void writeFile(List<String> entry, String fileName) {
+		// String fileName = "all_recettes.csv";
 		BufferedWriter bw = null;
 		FileWriter fw = null;
 		try {
 			fw = new FileWriter(fileName, true);
 			bw = new BufferedWriter(fw);
 
-			for(int i=0;i<entry.size();i++){
+			for (int i = 0; i < entry.size(); i++) {
 				bw.write(entry.get(i) + "\n");
 			}
 			System.out.println("End");

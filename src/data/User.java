@@ -1037,7 +1037,6 @@ public class User {
 
 	}
 
-	// Allergie = Aliment
 	public void addAllergie(Repository repo, ValueFactory vf, Model model, String wcd, String login, String allergie) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -1094,10 +1093,12 @@ public class User {
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX foaf: <" + RDF.NAMESPACE + "> \n";
 			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
 			queryString += "SELECT ?allergie \n";
 			queryString += "WHERE { \n";
 			queryString += "    wcd:" + formatCaseResource(login) + " wcd:a_pour_allergie ?allergie_iri. \n";
+			queryString += "    ?allergie_iri rdf:type wcd:Allergie. \n";
 			queryString += "    ?allergie_iri foaf:name ?allergie. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
