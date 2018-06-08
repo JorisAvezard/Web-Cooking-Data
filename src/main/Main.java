@@ -50,83 +50,98 @@ public class Main {
 		Engine engine = new Engine();
 		User user = new User();
 		IA ia = new IA();
-		
-//		recette.processInsertion(repo, vf, model, wcd, "./fichiers_test/recettes/");
+		MachineLearning ml = new MachineLearning();
 
-//		String key = "crêPes";
-//		JSONObject j = recette.setJson(repo, vf, model, key);
-//		engine.getAllStatements(repo, vf, model, wcd);
-//		engine.removeAllStatementsIRI(repo, vf, model, wcd);
-//		engine.removeAllUserAimeRecette(repo, vf, model, wcd);
-//		engine.getAllStatementsIRI(repo, vf, model, wcd);
-//		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
-//		List<String> result = aliment.getAll(repo);
-//		engine.writeFile(result, "./fichiers_test/ia/allergies.txt");
-//		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user3", "agneau",750);
-//		user.removeAlimentInGardeManger(repo, vf, model, wcd, "user3", "agneau");
-//		user.updateAlimentQuantityInGardeManger(repo, vf, model, wcd, "user2", "agneau", 750);
-		
-//		user.addDataTestConnexion(repo, vf, model, wcd, "./fichiers_test/users/connexion.txt");
-//		user.getMDP(repo, vf, model);
-//		String result = user.checkConnexion(repo, vf, model, "toto", "toto");
-//		String result = user.processInscription(repo, vf, model, wcd, "Tata", "grr");
-//		List<String> test = new ArrayList<String>();
-//		test.add("d'écrevisse");
-//		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
-//		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
-//		List<String> result = recette.getIngredients(repo, "Accras d'écrevisses");
-//		List<String> result = aliment.getAll(repo, vf, model);
-//		List<String> result = user.getAlimentsFromGardeManger(repo, "user1");
-//		List <String> result = user.getAlimentsWithQuantityFromGardeManger(repo, "user2");
-//		List<String> result = recette.getAllNamesRecettes(repo);
-//		engine.writeFile(result);
-		
-//		user.insertAllDataMaladieIntoDB(repo, vf, model, wcd, "./fichiers_test/users/maladies.txt");
-//		user.insertAllDataAllergieIntoDB(repo, vf, model, wcd, "./fichiers_test/ia/allergies.txt");
-//		List<String> result = user.getAllMaladieFromDB(repo);
-//		user.addMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
-//		List<String> result = user.getAllRegimeAlimentaireFromDB(repo);
-//		user.updateMaladie(repo, vf, model, wcd, "user1", "Diabétique"); // [Cholestérol, Diabétique]
-//		user.removeMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
-//		List<String> result = user.getUserMaladie(repo, "user1");
-//		user.insertAllDataRegimeAlimentaireIntoDB(repo, vf, model, wcd, "./fichiers_test/users/regimes.txt");
-//		List<String> result = user.getAllRegimeAlimentaireFromDB(repo);
-//		user.addRegimeAlimentaire(repo, vf, model, wcd, "user1", "Végétarien");
-//		user.removeRegimeAlimentaire(repo, vf, model, wcd,  "user1", "Végétarien");
-//		List<String> result = user.getUserRegimeAlimentaire(repo, "user1");
-//		user.addAllergie(repo, vf, model, wcd, "user1", "Poire");
-//		user.removeAllergie(repo, vf, model, wcd, "user1", "Poire");
-//		List<String> result = user.getUserAllergie(repo, "user1");
-//		user.addAge(repo, vf, model, wcd, "mallauriep", 23);
-//		user.removeAge(repo, vf, model, wcd, "user1");
-//		int result = user.getUserAge(repo, "user1");
-//		user.insertAllDataGenreIntoDB(repo, vf, model, wcd);
-//		user.addGenre(repo, vf, model, wcd, "mallauriep", "Femme");
-//		user.removeGenre(repo, vf, model, wcd, "user1");
-//		List<String> result = user.getUserGenre(repo, "user1");
-//		user.addNiveauActivite(repo, vf, model, wcd, "mallauriep", "Tres actif");
-//		user.addPoids(repo, vf, model, wcd, "mallauriep", 50);
-//		user.addTaille(repo, vf, model, wcd, "mallauriep", 1.6);
-//		user.insertAllDataNiveauActiviteIntoDB(repo, vf, model, wcd, "./fichiers_test/users/niveau_activite.txt");
-//		double result = user.calculBesoinCalorique(repo, "mallauriep");
-//		user.insertAllDataAllergieIntoDB(repo, vf, model, wcd);
-//		List<String> result = user.getAllAllergiesFromDB(repo);
-		
-//		ia.processCluster();
-//		ia.createProfil(repo);
+		// recette.processInsertion(repo, vf, model, wcd,
+		// "./fichiers_test/recettes/");
+
+		// String key = "crêPes";
+		// JSONObject j = recette.setJson(repo, vf, model, key);
+		// engine.getAllStatements(repo, vf, model, wcd);
+		// engine.removeAllStatementsIRI(repo, vf, model, wcd);
+		// engine.removeAllUserAimeRecette(repo, vf, model, wcd);
+		// engine.getAllStatementsIRI(repo, vf, model, wcd);
+		// aliment.addAll(repo, vf, model, wcd,
+		// "./fichiers_test/aliments/donnees_nutritionnelles.csv");
+		// List<String> result = aliment.getAll(repo);
+		// engine.writeFile(result, "./fichiers_test/ia/allergies.txt");
+		// user.addAlimentIntoGardeManger(repo, vf, model, wcd, "user3",
+		// "agneau",750);
+		// user.removeAlimentInGardeManger(repo, vf, model, wcd, "user3",
+		// "agneau");
+		// user.updateAlimentQuantityInGardeManger(repo, vf, model, wcd,
+		// "user2", "agneau", 750);
+
+		// user.addDataTestConnexion(repo, vf, model, wcd,
+		// "./fichiers_test/users/connexion.txt");
+		// user.getMDP(repo, vf, model);
+		// String result = user.checkConnexion(repo, vf, model, "toto", "toto");
+		// String result = user.processInscription(repo, vf, model, wcd, "Tata",
+		// "grr");
+		// List<String> test = new ArrayList<String>();
+		// test.add("d'écrevisse");
+		// List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
+		// List<String> result = recette.getNamesRecettesByDifficulte(repo, vf,
+		// model, "inter");
+		// List<String> result = recette.getIngredients(repo, "Accras
+		// d'écrevisses");
+		// List<String> result = aliment.getAll(repo, vf, model);
+		// List<String> result = user.getAlimentsFromGardeManger(repo, "user1");
+		// List <String> result =
+		// user.getAlimentsWithQuantityFromGardeManger(repo, "user2");
+		// List<String> result = recette.getAllNamesRecettes(repo);
+		// engine.writeFile(result);
+
+		// user.insertAllDataMaladieIntoDB(repo, vf, model, wcd,
+		// "./fichiers_test/users/maladies.txt");
+		// user.insertAllDataAllergieIntoDB(repo, vf, model, wcd,
+		// "./fichiers_test/ia/allergies.txt");
+		// List<String> result = user.getAllMaladieFromDB(repo);
+		// user.addMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
+		// List<String> result = user.getAllRegimeAlimentaireFromDB(repo);
+		// user.updateMaladie(repo, vf, model, wcd, "user1", "Diabétique"); //
+		// [Cholestérol, Diabétique]
+		// user.removeMaladie(repo, vf, model, wcd, "user1", "Cholestérol");
+		// List<String> result = user.getUserMaladie(repo, "user1");
+		// user.insertAllDataRegimeAlimentaireIntoDB(repo, vf, model, wcd,
+		// "./fichiers_test/users/regimes.txt");
+		// List<String> result = user.getAllRegimeAlimentaireFromDB(repo);
+		// user.addRegimeAlimentaire(repo, vf, model, wcd, "user1",
+		// "Végétarien");
+		// user.removeRegimeAlimentaire(repo, vf, model, wcd, "user1",
+		// "Végétarien");
+		// List<String> result = user.getUserRegimeAlimentaire(repo, "user1");
+		// user.addAllergie(repo, vf, model, wcd, "user1", "Poire");
+		// user.removeAllergie(repo, vf, model, wcd, "user1", "Poire");
+		// List<String> result = user.getUserAllergie(repo, "user1");
+		// user.addAge(repo, vf, model, wcd, "mallauriep", 23);
+		// user.removeAge(repo, vf, model, wcd, "user1");
+		// int result = user.getUserAge(repo, "user1");
+		// user.insertAllDataGenreIntoDB(repo, vf, model, wcd);
+		// user.addGenre(repo, vf, model, wcd, "mallauriep", "Femme");
+		// user.removeGenre(repo, vf, model, wcd, "user1");
+		// List<String> result = user.getUserGenre(repo, "user1");
+		// user.addNiveauActivite(repo, vf, model, wcd, "mallauriep", "Tres
+		// actif");
+		// user.addPoids(repo, vf, model, wcd, "mallauriep", 50);
+		// user.addTaille(repo, vf, model, wcd, "mallauriep", 1.6);
+		// user.insertAllDataNiveauActiviteIntoDB(repo, vf, model, wcd,
+		// "./fichiers_test/users/niveau_activite.txt");
+		// double result = user.calculBesoinCalorique(repo, "mallauriep");
+		// user.insertAllDataAllergieIntoDB(repo, vf, model, wcd);
+		// List<String> result = user.getAllAllergiesFromDB(repo);
+
+		// ia.processCluster();
+		// ia.createProfil(repo);
 //		ia.cleanData(repo, "fichiers_test/ia/profils.txt", "fichiers_test/ia/profils_nettoyes.txt");
-//		ia.creerDonneesUserAimeRecette(repo, vf, model, wcd);
-//		List<String> users = new ArrayList<String>();
-//		users.add("user225");
-//		users.add("user1225");
-//		users.add("user0");
-//		users.add("user25");
-//		users.add("user2225");
-//		users.add("user4565");
-//		users.add("user2424");
-//		users.add("user2764");
-//		List<String> result = ia.tableDeVote(repo, users);
-//		System.out.println(result);
+		// ia.creerDonneesUserAimeRecette(repo, vf, model, wcd);
+//		ml.save_cluster("fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt");
+		// "25.0,136.6961201117902,1.5894170109599939,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0"
+		List<String> result = ia.suggestionRecetteParCluster(repo,
+				"fichiers_test/ia/profils_nettoyes.txt",
+				"fichiers_test/ia/resultat_cluster.txt",
+				"56.0,137.4507296494346,1.5666020829090357,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0");
+		System.out.println(result);
 	}
 
 }

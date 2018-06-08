@@ -263,25 +263,25 @@ public class IA {
 			fw = new FileWriter(fileNameDest, true);
 			bw = new BufferedWriter(fw);
 
-			bw.write("login;age;poids;taille");
-
-			for (i = 0; i < genres.size(); i++) {
-				bw.write(";" + engine.lowerCaseAll(genres.get(i)));
-			}
-			for (i = 0; i < maladies.size(); i++) {
-				bw.write(";" + engine.lowerCaseAll(maladies.get(i)));
-			}
-			for (i = 0; i < allergies.size(); i++) {
-				bw.write(";" + engine.lowerCaseAll(allergies.get(i)));
-			}
-			for (i = 0; i < regimes.size(); i++) {
-				bw.write(";" + engine.lowerCaseAll(regimes.get(i)));
-			}
-			for (i = 0; i < niveaux_acts.size(); i++) {
-				bw.write(";" + engine.lowerCaseAll(niveaux_acts.get(i)));
-			}
-
-			bw.write("\n");
+//			bw.write("login;age;poids;taille");
+//
+//			for (i = 0; i < genres.size(); i++) {
+//				bw.write(";" + engine.lowerCaseAll(genres.get(i)));
+//			}
+//			for (i = 0; i < maladies.size(); i++) {
+//				bw.write(";" + engine.lowerCaseAll(maladies.get(i)));
+//			}
+//			for (i = 0; i < allergies.size(); i++) {
+//				bw.write(";" + engine.lowerCaseAll(allergies.get(i)));
+//			}
+//			for (i = 0; i < regimes.size(); i++) {
+//				bw.write(";" + engine.lowerCaseAll(regimes.get(i)));
+//			}
+//			for (i = 0; i < niveaux_acts.size(); i++) {
+//				bw.write(";" + engine.lowerCaseAll(niveaux_acts.get(i)));
+//			}
+//
+//			bw.write("\n");
 
 			while ((line = bufferedReader.readLine()) != null) {
 				// System.out.println(line);
@@ -290,46 +290,49 @@ public class IA {
 				for (i = 0; i < line_split.length; i++) {
 					if (i == 0) {
 						bw.write(line_split[0]);
-					} else if (i > 0 && i < 4) {
+					} else if (i==1) {
+						bw.write(";" + String.valueOf(Double.valueOf(line_split[i])));
+					} else if ((i==2)||(i==3)) {
 						bw.write(";" + line_split[i]);
-					} else if (i == 4) {
+					}
+					else if (i == 4) {
 						for (j = 0; j < genres.size(); j++) {
 							if (genres.get(j).equals(line_split[4])) {
-								bw.write(";1");
+								bw.write(";1.0");
 							} else {
-								bw.write(";0");
+								bw.write(";0.0");
 							}
 						}
 					} else if (i == 5) {
 						for (j = 0; j < maladies.size(); j++) {
 							if (maladies.get(j).equals(line_split[5])) {
-								bw.write(";1");
+								bw.write(";1.0");
 							} else {
-								bw.write(";0");
+								bw.write(";0.0");
 							}
 						}
 					} else if (i == 6) {
 						for (j = 0; j < allergies.size(); j++) {
 							if (allergies.get(j).equals(line_split[6])) {
-								bw.write(";1");
+								bw.write(";1.0");
 							} else {
-								bw.write(";0");
+								bw.write(";0.0");
 							}
 						}
 					} else if (i == 7) {
 						for (j = 0; j < regimes.size(); j++) {
 							if (regimes.get(j).equals(line_split[7])) {
-								bw.write(";1");
+								bw.write(";1.0");
 							} else {
-								bw.write(";0");
+								bw.write(";0.0");
 							}
 						}
 					} else if (i == 8) {
 						for (j = 0; j < niveaux_acts.size(); j++) {
 							if (niveaux_acts.get(j).equals(line_split[8])) {
-								bw.write(";1");
+								bw.write(";1.0");
 							} else {
-								bw.write(";0");
+								bw.write(";0.0");
 							}
 						}
 						bw.write("\n");
@@ -416,7 +419,6 @@ public class IA {
 		moyenne = ((int) moyenne / votes.size()) + 1;
 		
 		for(i=0;i<recettes_aimees.size();i++){
-			System.out.println(recettes_aimees.get(i) + " : " + votes.get(i));
 			if(votes.get(i)>=moyenne){
 				recettes_finales.add(recettes_aimees.get(i));
 			}
@@ -424,16 +426,14 @@ public class IA {
 		
 		return recettes_finales;
 	}
-	// public void processCluster() throws IOException{
-	// Dataset data = FileHandler.loadDataset(new
-	// File("./fichiers_test/ia/profils.txt"), ";");
-	//
-	// Clusterer km = new KMeans();
-	// Dataset[] clusters = km.cluster(data);
-	//
-	// for(int i=0; i<clusters.length;i++){
-	// System.out.println(clusters[i].size());
-	// }
-	// }
-
+	
+	public List<String> suggestionRecetteParCluster(Repository repo, String fichier_profils_nettoyes, String fichier_resultat_cluster, String user_profil) throws IOException{
+		MachineLearning ml = new MachineLearning();
+		List<String> cluster_user = ml.find_cluster_user(fichier_resultat_cluster, user_profil);
+		List<String> users_id = ml.id_user(fichier_profils_nettoyes, cluster_user);
+		List<String> recettes_retournees = tableDeVote(repo, users_id);
+		
+		return recettes_retournees;
+	}
+	
 }
