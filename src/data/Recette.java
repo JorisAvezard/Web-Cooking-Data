@@ -462,9 +462,14 @@ public class Recette {
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
 			queryString += "SELECT ?ii \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:a_pour_ingredient ?i. \n";
+//			queryString += "    <http://m2bigcookingdata.org/" + key + "> wcd:a_pour_ingredient ?i. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \""+ key +"\". \n";
+			queryString += "    ?recette_iri wcd:a_pour_ingredient ?i. \n";
 			queryString += "    ?i wcd:description ?ii. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);

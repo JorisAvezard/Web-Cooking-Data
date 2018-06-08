@@ -45,14 +45,6 @@ public class Main {
 		Model model = new TreeModel();
 		String wcd = "http://m2bigcookingdata.org/";
 
-		//Initialisation des variables propre à Lucene
-//		String lucene_index = "./lucene/";
-//		Sail baseSail = ns;
-//		LuceneSail lucenesail = new LuceneSail();
-//		lucenesail.setParameter(LuceneSail.LUCENE_DIR_KEY, lucene_index);
-//		lucenesail.setBaseSail(ns);
-//		SailRepository repo_lucene = new SailRepository(lucenesail);
-		
 		Recette recette = new Recette();
 		Aliment aliment = new Aliment();
 		Engine engine = new Engine();
@@ -65,6 +57,7 @@ public class Main {
 //		JSONObject j = recette.setJson(repo, vf, model, key);
 //		engine.getAllStatements(repo, vf, model, wcd);
 //		engine.removeAllStatementsIRI(repo, vf, model, wcd);
+//		engine.removeAllUserAimeRecette(repo, vf, model, wcd);
 //		engine.getAllStatementsIRI(repo, vf, model, wcd);
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
 //		List<String> result = aliment.getAll(repo);
@@ -78,9 +71,10 @@ public class Main {
 //		String result = user.checkConnexion(repo, vf, model, "toto", "toto");
 //		String result = user.processInscription(repo, vf, model, wcd, "Tata", "grr");
 //		List<String> test = new ArrayList<String>();
-//		test.add("agneau");
+//		test.add("d'écrevisse");
 //		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
 //		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
+//		List<String> result = recette.getIngredients(repo, "Accras d'écrevisses");
 //		List<String> result = aliment.getAll(repo, vf, model);
 //		List<String> result = user.getAlimentsFromGardeManger(repo, "user1");
 //		List <String> result = user.getAlimentsWithQuantityFromGardeManger(repo, "user2");
@@ -117,14 +111,22 @@ public class Main {
 //		double result = user.calculBesoinCalorique(repo, "mallauriep");
 //		user.insertAllDataAllergieIntoDB(repo, vf, model, wcd);
 //		List<String> result = user.getAllAllergiesFromDB(repo);
-//		System.out.println(result);
 		
-		
-//		ia.cleanData("fichiers_test/ia/profils.txt");
 //		ia.processCluster();
 //		ia.createProfil(repo);
-//		ia.processCleanData(repo, "fichiers_test/ia/profils.txt", "fichiers_test/ia/profils_nettoyes.txt");
-		ia.cleanData(repo, "fichiers_test/ia/profils.txt", "fichiers_test/ia/profils_nettoyes.txt");
+//		ia.cleanData(repo, "fichiers_test/ia/profils.txt", "fichiers_test/ia/profils_nettoyes.txt");
+//		ia.creerDonneesUserAimeRecette(repo, vf, model, wcd);
+//		List<String> users = new ArrayList<String>();
+//		users.add("user225");
+//		users.add("user1225");
+//		users.add("user0");
+//		users.add("user25");
+//		users.add("user2225");
+//		users.add("user4565");
+//		users.add("user2424");
+//		users.add("user2764");
+//		List<String> result = ia.tableDeVote(repo, users);
+//		System.out.println(result);
 	}
 
 }

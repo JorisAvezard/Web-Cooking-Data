@@ -18,8 +18,8 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		int result = arrondirCentaine(2638);
-		System.out.println(result);
+		double a = 6.2;
+		System.out.println((int) a);
 	}
 
 }

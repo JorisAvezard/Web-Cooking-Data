@@ -10,9 +10,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.repository.Repository;
 
 import data.Aliment;
+import data.Recette;
 import data.User;
 import engine.Engine;
 //import weka.core.Instances;
@@ -185,7 +188,7 @@ public class IA {
 			String niveau_act = "";
 			String aucun = "Aucun";
 
-			while (indice < 100000) {
+			while (indice < 5000) {
 				current_user = "user" + String.valueOf(indice);
 				age = ageAleatoire();
 				poids = poidsAleatoire();
@@ -220,14 +223,13 @@ public class IA {
 	}
 
 	public int getIndiceFromValue(List<String> liste, String value) {
-		int indice = -1;
-
-		for (int i = 0; i < liste.size(); i++) {
+		int i = 0;
+		for (i = 0; i < liste.size(); i++) {
 			if (liste.get(i).equals(value)) {
 				return i;
 			}
 		}
-		return indice;
+		return -1;
 	}
 
 	public void cleanData(Repository repo, String fileName, String fileNameDest) {
@@ -262,7 +264,7 @@ public class IA {
 			bw = new BufferedWriter(fw);
 
 			bw.write("login;age;poids;taille");
-			
+
 			for (i = 0; i < genres.size(); i++) {
 				bw.write(";" + engine.lowerCaseAll(genres.get(i)));
 			}
@@ -282,7 +284,7 @@ public class IA {
 			bw.write("\n");
 
 			while ((line = bufferedReader.readLine()) != null) {
-//				System.out.println(line);
+				// System.out.println(line);
 				line_split = line.split(";");
 
 				for (i = 0; i < line_split.length; i++) {
@@ -333,8 +335,8 @@ public class IA {
 						bw.write("\n");
 					}
 				}
-//				indice++;
-//				System.out.println(indice);
+				// indice++;
+				// System.out.println(indice);
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -352,144 +354,76 @@ public class IA {
 			}
 		}
 	}
-	
-//	public List<String> cleanData(Repository repo, String fileName) {
-//		FileWriter fw = null;
-//		BufferedWriter bw = null;
-//
-//		User user = new User();
-//		Engine engine = new Engine();
-//
-//		List<String> genres = user.getAllGenreFromDB(repo);
-//		List<String> maladies = user.getAllMaladieFromDB(repo);
-//		List<String> allergies = user.getAllAllergiesFromDB(repo);
-//		List<String> regimes = user.getAllRegimeAlimentaireFromDB(repo);
-//		List<String> niveaux_acts = user.getAllNiveauActiviteFromDB(repo);
-//		genres.add("aucun");
-//		maladies.add("aucun");
-//		allergies.add("aucun");
-//		regimes.add("aucun");
-//		niveaux_acts.add("aucun");
-//
-//		int i = 0;
-//		int j = 0;
-//		int indice = 0;
-//
-//		List<String> liste = new ArrayList<String>();
-//		String tmp = null;
-//		String line = null;
-//		String[] line_split = null;
-//
-//		try {
-//			FileReader fileReader = new FileReader(fileName);
-//			BufferedReader bufferedReader = new BufferedReader(fileReader);
-//
-//			tmp = "login;age;poids;taille";
-//			
-//			for (i = 0; i < genres.size(); i++) {
-//				tmp += ";" + engine.lowerCaseAll(genres.get(i));
-//			}
-//			for (i = 0; i < maladies.size(); i++) {
-//				tmp += ";" + engine.lowerCaseAll(maladies.get(i));
-//			}
-//			for (i = 0; i < allergies.size(); i++) {
-//				tmp += ";" + engine.lowerCaseAll(allergies.get(i));
-//			}
-//			for (i = 0; i < regimes.size(); i++) {
-//				tmp += ";" + engine.lowerCaseAll(regimes.get(i));
-//			}
-//			for (i = 0; i < niveaux_acts.size(); i++) {
-//				tmp += ";" + engine.lowerCaseAll(niveaux_acts.get(i));
-//			}
-//			
-//			System.out.println(tmp);
-//
-//			liste.add(tmp);
-//
-//			while ((line = bufferedReader.readLine()) != null) {
-////				System.out.println(line);
-//				line_split = line.split(";");
-//
-//				for (i = 0; i < line_split.length; i++) {
-//					if (i == 0) {
-//						tmp = line_split[0];
-//					}
-//					if (i > 0 && i < 4) {
-//						tmp += ";" + line_split[i];
-//					}
-//					if (i == 4) {
-//						for (j = 0; j < genres.size(); i++) {
-//							System.out.println(genres.get(j));
-//							if (genres.get(j).equals(engine.lowerCaseAll(line_split[4]))) {
-//								tmp += ";1";
-//							} else {
-//								tmp += ";0";
-//							}
-//						}
-//					}
-//					if (i == 5) {
-//						for (j = 0; j < maladies.size(); i++) {
-//							System.out.println(maladies.get(j));
-//							if (maladies.get(j).equals(engine.lowerCaseAll(line_split[5]))) {
-//								tmp += ";1";
-//							} else {
-//								tmp += ";0";
-//							}
-//						}
-//					}
-//					if (i == 6) {
-//						for (j = 0; j < allergies.size(); i++) {
-//							System.out.println(allergies.get(j));
-//							if (allergies.get(j).equals(engine.lowerCaseAll(line_split[6]))) {
-//								tmp += ";1";
-//							} else {
-//								tmp += ";0";
-//							}
-//						}
-//					}
-//					if (i == 7) {
-//						for (j = 0; j < regimes.size(); i++) {
-//							System.out.println(regimes.get(j));
-//							if (regimes.get(j).equals(engine.lowerCaseAll(line_split[7]))) {
-//								tmp += ";1";
-//							} else {
-//								tmp += ";0";
-//							}
-//						}
-//					}
-//					if (i == 8) {
-//						for (j = 0; j < niveaux_acts.size(); i++) {
-//							System.out.println(niveaux_acts.get(j));
-//							if (niveaux_acts.get(j).equals(engine.lowerCaseAll(line_split[8]))) {
-//								tmp += ";1";
-//							} else {
-//								tmp += ";0";
-//							}
-//						}
-//					}
-//					liste.add(tmp);
-//				}
-//				indice++;
-//				System.out.println(indice);
-//			}
-//			bufferedReader.close();
-//		} catch (FileNotFoundException ex) {
-//			System.out.println("Unable to open file '" + fileName + "'");
-//		} catch (IOException ex) {
-//			ex.printStackTrace();
-//		}
-//		
-//		return liste;
-//	}
-	
-//	public void processCleanData(Repository repo, String fileName, String fileNameDest){
-//		List<String> liste = new ArrayList<>();
-//		liste = cleanData(repo, fileName);
-//		
-//		Engine en = new Engine();
-//		en.writeFile(liste, fileNameDest);
-//	}
 
+	public void creerDonneesUserAimeRecette(Repository repo, ValueFactory vf, Model model, String wcd) {
+		Recette rec = new Recette();
+		User us = new User();
+
+		List<String> recettes = rec.getAllNamesRecettes(repo);
+
+		int i = 0;
+		int j = 0;
+		int indice_rec = 0;
+		int max = recettes.size();
+		int nombre_user_recettes = 0;
+
+		for (i = 0; i < 5000; i++) {
+			nombre_user_recettes = (int) (Math.random() * (11));
+
+			if (nombre_user_recettes > 0) {
+				for (j = 0; j < nombre_user_recettes; j++) {
+					indice_rec = (int) (Math.random() * (max));
+					us.addAimeRecette(repo, vf, model, wcd, "user" + String.valueOf(i), recettes.get(indice_rec));
+					System.out.println(i);
+				}
+			}
+		}
+	}
+	
+	public List<String> tableDeVote(Repository repo, List<String> users){
+		User us = new User();
+		
+		List<String> user_recettes = new ArrayList<String>();
+		List<String> recettes_aimees = new ArrayList<String>();
+		List<String> recettes_finales = new ArrayList<String>();
+		List<Integer> votes = new ArrayList<Integer>();
+		
+		int i = 0;
+		int j = 0;
+		int indice_recette_aimee = -1;
+		
+		for(i=0;i<users.size();i++){
+			user_recettes = us.getAimeRecette(repo, users.get(i));
+			
+			for(j=0;j<user_recettes.size();j++){
+				if(recettes_aimees.contains(user_recettes.get(j))){
+					indice_recette_aimee = getIndiceFromValue(recettes_aimees, user_recettes.get(j));
+					votes.set(indice_recette_aimee, votes.get(indice_recette_aimee) + 1);
+				}
+				else{
+					recettes_aimees.add(user_recettes.get(j));
+					votes.add(1);
+				}
+			}
+		}
+		
+		int moyenne = 0;
+		
+		for(i=0;i<votes.size();i++){
+			moyenne = moyenne + votes.get(i);
+		}
+		
+		moyenne = ((int) moyenne / votes.size()) + 1;
+		
+		for(i=0;i<recettes_aimees.size();i++){
+			System.out.println(recettes_aimees.get(i) + " : " + votes.get(i));
+			if(votes.get(i)>=moyenne){
+				recettes_finales.add(recettes_aimees.get(i));
+			}
+		}
+		
+		return recettes_finales;
+	}
 	// public void processCluster() throws IOException{
 	// Dataset data = FileHandler.loadDataset(new
 	// File("./fichiers_test/ia/profils.txt"), ";");
