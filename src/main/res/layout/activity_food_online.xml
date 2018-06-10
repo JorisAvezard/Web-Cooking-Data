@@ -13,63 +13,184 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="100dp"
-        android:paddingBottom="100dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
-        android:orientation="vertical">
+        android:isScrollContainer="true"
+        android:overScrollMode="always"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbars="vertical"
+        android:paddingTop="70dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="30dp">
 
-        <TextView
-        android:id="@+id/tw_foods"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mes provisions"
-        android:textStyle="bold"
-        android:gravity="left"
-        android:textSize="20dp"
-        android:textColor="#960504" />
-
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:isScrollContainer="true"
-            android:overScrollMode="always"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarStyle="outsideInset"
-            android:scrollbars="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tw_foods"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mes provisions"
+                android:padding="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:textColor="@color/colorPrimary" />
 
             <LinearLayout
                 android:id="@+id/layoutOfDynamicFood"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="left"
                 android:orientation="vertical">
             </LinearLayout>
 
-        </ScrollView>
+            <TextView
+                android:id="@+id/tw_selection_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ajouter"
+                android:padding="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:textColor="@color/colorPrimary"/>
 
-        <TextView
-            android:id="@+id/tw_selection_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner"
+                android:layout_gravity="center"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/border_recipe"/>
 
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner" />
+            <TextView
+                android:id="@+id/tw_selection_spinner_qte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Quantité"
+                android:padding="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:textColor="@color/colorPrimary"/>
 
-        <Button
-            android:id="@+id/bu_add_gm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ajouter"
-            android:layout_gravity="right"
-            android:textColor="#960504"
-            />
+            <LinearLayout
+                android:id="@+id/layout_qte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/et_selection_spinner_qte"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Entrez une quantité"
+                    android:textCursorDrawable="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"/>
+
+                <Spinner
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/spinner_qte"
+                    android:layout_gravity="center"
+                    android:background="@drawable/border_recipe"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tw_capteur1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Aliment sur capteur 1"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary"
+                android:visibility="invisible"/>
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_capteur1"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/tw_capteur2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Aliment sur capteur 2"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary"
+                android:visibility="invisible"/>
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_capteur2"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rb_3"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5px"
+                    android:id="@+id/rb_byApp"
+                    android:text="Par l'application"
+                    android:checked="true"
+                    android:onClick="clicked_food"
+                    android:buttonTint="@color/colorPrimary"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5px"
+                    android:id="@+id/rb_byGMC"
+                    android:text="Par garde-manger connecté"
+                    android:buttonTint="@color/colorPrimary"
+                    android:onClick="clicked_food"/>
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/bu_add_gm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ajouter"
+                android:layout_gravity="center"
+                android:textColor="@color/colorPrimary"
+                />
+        </LinearLayout>
+
+    </ScrollView>
+
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

@@ -16,21 +16,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="100dp"
-        android:paddingBottom="100dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
+        android:paddingTop="70dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tw_name_research"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Rechercher"
+            android:text="Rechercher une recette"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30dp"
             android:textStyle="bold"
-            android:gravity="left"
-            android:textSize="20dp"
-            android:textColor="#960504" />
+            android:gravity="center"/>
 
         <EditText
             android:id="@+id/et_name_research"
@@ -38,14 +37,17 @@
             android:layout_height="wrap_content"
             android:hint=""
             android:inputType="text"
-            android:focusable="true" />
+            android:focusable="true"
+            android:textCursorDrawable="@color/colorPrimary"
+            android:backgroundTint="@color/colorPrimary"/>
 
         <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/rb_1"
-            android:orientation="vertical"
-            android:layout_gravity="left">
+            android:padding="10px"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,13 +55,15 @@
                 android:id="@+id/rb_byName"
                 android:text="Par nom"
                 android:onClick="clicked_NC"
-                android:checked="true"/>
+                android:checked="true"
+                android:buttonTint="@color/colorPrimary"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5px"
                 android:id="@+id/rb_byType"
                 android:text="Par type"
+                android:buttonTint="@color/colorPrimary"
                 android:onClick="clicked_NC"/>
             <RadioButton
                 android:layout_width="wrap_content"
@@ -67,6 +71,7 @@
                 android:padding="5px"
                 android:id="@+id/rb_byNote"
                 android:text="Par note"
+                android:buttonTint="@color/colorPrimary"
                 android:onClick="clicked_NC"/>
             <RadioButton
                 android:layout_width="wrap_content"
@@ -74,6 +79,7 @@
                 android:padding="5px"
                 android:id="@+id/rb_byDifficulty"
                 android:text="Par difficulté"
+                android:buttonTint="@color/colorPrimary"
                 android:onClick="clicked_NC"/>
             <RadioButton
                 android:layout_width="wrap_content"
@@ -81,21 +87,28 @@
                 android:padding="5px"
                 android:id="@+id/rb_byContentFood"
                 android:text="Selon ses provisions"
+                android:buttonTint="@color/colorPrimary"
                 android:onClick="clicked_NC"/>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5px"
-                android:id="@+id/rb_byNutritionalContribution"
-                android:text="Par apport nutritionnel"
-                android:onClick="clicked_NC"/>
+
         </RadioGroup>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5px"
+            android:layout_gravity="center"
+            android:id="@+id/rb_byNutritionalContribution"
+            android:text="Par apport nutritionnel"
+            android:buttonTint="@color/colorPrimary"
+            android:onClick="clicked_NC"/>
+
         <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/rb_2"
-            android:layout_gravity="left"
-            android:orientation="horizontal">
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:padding="10px">
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -103,6 +116,7 @@
                 android:padding="5px"
                 android:id="@+id/rb_byProtein"
                 android:text="Protéines"
+                android:buttonTint="@color/colorPrimary"
                 android:enabled="false"/>
             <RadioButton
                 android:layout_width="wrap_content"
@@ -110,6 +124,7 @@
                 android:padding="5px"
                 android:id="@+id/rb_byLipid"
                 android:text="Lipides"
+                android:buttonTint="@color/colorPrimary"
                 android:enabled="false"/>
             <RadioButton
                 android:layout_width="wrap_content"
@@ -117,6 +132,7 @@
                 android:padding="5px"
                 android:id="@+id/rb_byCarbohydrat"
                 android:text="Glucides"
+                android:buttonTint="@color/colorPrimary"
                 android:enabled="false"/>
         </RadioGroup>
 
@@ -127,7 +143,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Rechercher"
-            android:textColor="#960504" />
+            android:textColor="@color/colorPrimary"/>
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"

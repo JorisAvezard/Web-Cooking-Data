@@ -11,5 +11,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="Inscription invalide"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="30dp"
+        android:textColor="@color/colorPrimary"/>
 </RelativeLayout>

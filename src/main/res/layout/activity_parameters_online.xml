@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+
+    <include
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="70dp"
+        android:paddingBottom="30dp"
+        android:overScrollMode="always"
+        android:isScrollContainer="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tw_infos_compte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Informations de compte"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_genre"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Sexe"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_genre_valeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non disponible"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:background="@drawable/border_recipe" />
+
+            <TextView
+                android:id="@+id/tw_age"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Âge"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_age_valeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non disponible"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:background="@drawable/border_recipe" />
+
+            <TextView
+                android:id="@+id/tw_taille"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Taille (cm)"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_taille_valeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non disponible"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:background="@drawable/border_recipe" />
+
+            <TextView
+                android:id="@+id/tw_poids"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Poids (en kg)"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_poids_valeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non disponible"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:background="@drawable/border_recipe" />
+
+            <TextView
+                android:id="@+id/tw_activite"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Activité physique"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_activite_valeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non disponible"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:background="@drawable/border_recipe" />
+
+            <TextView
+                android:id="@+id/tw_maladie"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Problème de santé"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_maladie_valeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non disponible"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:background="@drawable/border_recipe" />
+
+            <TextView
+                android:id="@+id/tw_regime"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Régime alimentaire"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_regime_valeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non disponible"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:background="@drawable/border_recipe" />
+
+            <TextView
+                android:id="@+id/tw_allergie"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Allergie"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_allergie_valeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non disponible"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:background="@drawable/border_recipe" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_second_drawer" />
+
+</android.support.v4.widget.DrawerLayout>

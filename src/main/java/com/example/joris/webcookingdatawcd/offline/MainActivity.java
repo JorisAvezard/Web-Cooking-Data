@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.joris.webcookingdatawcd.object.Data;
 import com.example.joris.webcookingdatawcd.R;
+import com.example.joris.webcookingdatawcd.object.CoucouObj;
 import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,6 +23,7 @@ import com.google.gson.GsonBuilder;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,17 +57,18 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public class MyAsynTask extends AsyncTask<Void, Integer, Data> {
+    public class MyAsynTask extends AsyncTask<Void, Integer, CoucouObj> {
 
         @Override
-        protected Data doInBackground(Void... data) {
-            Data object = null;
+        protected CoucouObj doInBackground(Void... data) {
+            String name = "Joris";
+            CoucouObj object = null;
             try {
-                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/coucou/Joris");
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/coucou/" + URLEncoder.encode(name, "UTF-8"));
                 InputStream inputStream = request.sendRequest(url);
                 if (inputStream != null) {
                     InputStreamReader reader = new InputStreamReader(inputStream);
-                    object = gson.fromJson(reader, Data.class);
+                    object = gson.fromJson(reader, CoucouObj.class);
 
                 }
             } catch (Exception e) {
@@ -76,10 +78,10 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(Data data) {
+        protected void onPostExecute(CoucouObj data) {
             TextView tw_hellow = (TextView) findViewById(R.id.tw_hello);
             if(data != null)
-                tw_hellow.setText(data.getData()+"");
+                tw_hellow.setText(data.getCoucou());
             else
                 tw_hellow.setText("null");
         }

@@ -1,9 +1,8 @@
 package com.example.joris.webcookingdatawcd.offline;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -21,8 +20,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.joris.webcookingdatawcd.R;
-import com.example.joris.webcookingdatawcd.object.RecipeList;
-import com.example.joris.webcookingdatawcd.online.MainActivityOnline;
+import com.example.joris.webcookingdatawcd.object.ListeRecette;
 import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,7 +31,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ResearchActivity extends AppCompatActivity
@@ -84,10 +81,10 @@ public class ResearchActivity extends AppCompatActivity
                 else if(rb_byDifficulty.isChecked() == true) {
                     research_by = "recetteParDifficulte";
                 }
-                //myAsyncTask.execute(name_research, research_by);
+                myAsyncTask.execute(name_research, research_by);
 
 
-                LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+/*                LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 LinearLayout layoutOfDynamicContent = (LinearLayout) findViewById(R.id.layoutOfDynamicContent);
                 layoutOfDynamicContent.removeAllViewsInLayout();
                 List<String> list = new ArrayList<String>();
@@ -110,18 +107,18 @@ public class ResearchActivity extends AppCompatActivity
                     });
                     layoutOfDynamicContent.addView(textView, layoutParam);
                 }
-
+*/
             }
         });
     }
 
-    public class MyAsynTask extends AsyncTask<String, Integer, RecipeList> {
+    public class MyAsynTask extends AsyncTask<String, Integer, ListeRecette> {
 
         @Override
-        protected RecipeList doInBackground(String... data) {
+        protected ListeRecette doInBackground(String... data) {
             String name_research = data[0];
             String research_by = data[1];
-            RecipeList object = new RecipeList();
+            ListeRecette object = new ListeRecette();
             try {
                 URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/" + research_by + "/" + name_research);
                 InputStream inputStream = request.sendRequest(url);
@@ -129,7 +126,7 @@ public class ResearchActivity extends AppCompatActivity
 
                 if (inputStream != null) {
                     InputStreamReader reader = new InputStreamReader(inputStream);
-                    object = gson.fromJson(reader, RecipeList.class);
+                    object = gson.fromJson(reader, ListeRecette.class);
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -144,16 +141,21 @@ public class ResearchActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(RecipeList recipes) {
-            LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        protected void onPostExecute(ListeRecette recipes) {
+            LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             LinearLayout layoutOfDynamicContent = (LinearLayout) findViewById(R.id.layoutOfDynamicContent);
             layoutOfDynamicContent.removeAllViewsInLayout();
-            List<String> list = recipes.getRecipes();
+            List<String> list = recipes.getRecettes();
             for(int i=0; i<list.size(); i++) {
                 final TextView textView = new TextView(getBaseContext());
+                Drawable drawable = getResources().getDrawable(R.drawable.border_recipe);
                 textView.setText(list.get(i));
-                textView.setTextColor(Color.parseColor("#000096"));
+                textView.setTextSize(18);
+                textView.setTextColor(Color.parseColor("#ffffff"));
                 textView.setClickable(true);
+                textView.setPadding(50, 50, 50, 50);
+                textView.setBackground(drawable);
+
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

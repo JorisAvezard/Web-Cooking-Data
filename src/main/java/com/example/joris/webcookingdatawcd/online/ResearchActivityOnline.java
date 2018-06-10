@@ -2,6 +2,7 @@ package com.example.joris.webcookingdatawcd.online;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -16,11 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.joris.webcookingdatawcd.R;
-import com.example.joris.webcookingdatawcd.object.RecipeList;
+import com.example.joris.webcookingdatawcd.object.ListeRecette;
 import com.example.joris.webcookingdatawcd.offline.MainActivity;
 import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
 import com.google.gson.Gson;
@@ -77,6 +77,7 @@ public class ResearchActivityOnline extends AppCompatActivity
                 RadioButton rb_byProtein = (RadioButton) findViewById(R.id.rb_byProtein);
                 RadioButton rb_byLipid = (RadioButton) findViewById(R.id.rb_byLipid);
                 RadioButton rb_byCarbohydrat = (RadioButton) findViewById(R.id.rb_byCarbohydrat);
+                RadioButton rb_byContentFood = (RadioButton) findViewById(R.id.rb_byContentFood);
                 MyAsynTask myAsyncTask = new MyAsynTask();
                 String research_by = "";
                 if (rb_byName.isChecked() == true) {
@@ -87,6 +88,8 @@ public class ResearchActivityOnline extends AppCompatActivity
                     research_by = "recetteParNote";
                 } else if (rb_byDifficulty.isChecked() == true) {
                     research_by = "recetteParDifficulte";
+                } else if (rb_byContentFood.isChecked() == true) {
+                    research_by = "";
                 } else if (rb_byNutritionalContribution.isChecked() == true) {
                     if (rb_byProtein.isChecked() == true) {
                         research_by = "";
@@ -102,13 +105,13 @@ public class ResearchActivityOnline extends AppCompatActivity
     }
 
 
-            public class MyAsynTask extends AsyncTask<String, Integer, RecipeList> {
+            public class MyAsynTask extends AsyncTask<String, Integer, ListeRecette> {
 
                 @Override
-                protected RecipeList doInBackground(String... data) {
+                protected ListeRecette doInBackground(String... data) {
                     String name_research = data[0];
                     String research_by = data[1];
-                    RecipeList object = new RecipeList();
+                    ListeRecette object = new ListeRecette();
                     try {
                         URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/" + research_by + "/" + name_research);
                         InputStream inputStream = request.sendRequest(url);
@@ -116,7 +119,7 @@ public class ResearchActivityOnline extends AppCompatActivity
 
                         if (inputStream != null) {
                             InputStreamReader reader = new InputStreamReader(inputStream);
-                            object = gson.fromJson(reader, RecipeList.class);
+                            object = gson.fromJson(reader, ListeRecette.class);
                         }
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
@@ -131,20 +134,30 @@ public class ResearchActivityOnline extends AppCompatActivity
                 }
 
                 @Override
-                protected void onPostExecute(RecipeList recipes) {
-                    LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                protected void onPostExecute(ListeRecette recipes) {
+                    LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     LinearLayout layoutOfDynamicContent = (LinearLayout) findViewById(R.id.layoutOfDynamicContent);
                     layoutOfDynamicContent.removeAllViewsInLayout();
-                    List<String> list = recipes.getRecipes();
+                    List<String> list = recipes.getRecettes();
                     for(int i=0; i<list.size(); i++) {
-                        TextView textView = new TextView(getBaseContext());
+                        final TextView textView = new TextView(getBaseContext());
+                        Drawable drawable = getResources().getDrawable(R.drawable.border_recipe);
                         textView.setText(list.get(i));
-                        textView.setTextColor(Color.parseColor("#000096"));
+                        textView.setTextSize(18);
+                        textView.setTextColor(Color.parseColor("#ffffff"));
                         textView.setClickable(true);
+                        textView.setPadding(50, 50, 50, 50);
+                        textView.setBackground(drawable);
+
                         textView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //startActivity(new Intent(ResearchActivity.this,ReceipeActivity.class));
+                                String login = getIntent().getStringExtra("login");
+                                TextView tw = (TextView) v;
+                                Intent intent = new Intent(ResearchActivityOnline.this,RecipeActivityOnline.class);
+                                intent.putExtra("recette", tw.getText());
+                                intent.putExtra("login", login);
+                                startActivity(intent);
                             }
                         });
                         layoutOfDynamicContent.addView(textView, layoutParam);
@@ -157,36 +170,65 @@ public class ResearchActivityOnline extends AppCompatActivity
         RadioButton rb_P = (RadioButton) findViewById(R.id.rb_byProtein);
         RadioButton rb_L = (RadioButton) findViewById(R.id.rb_byLipid);
         RadioButton rb_C = (RadioButton) findViewById(R.id.rb_byCarbohydrat);
+        RadioButton rb_byName = (RadioButton) findViewById(R.id.rb_byName);
+        RadioButton rb_byType = (RadioButton) findViewById(R.id.rb_byType);
+        RadioButton rb_byNote = (RadioButton) findViewById(R.id.rb_byNote);
+        RadioButton rb_byDifficulty = (RadioButton) findViewById(R.id.rb_byDifficulty);
+        RadioButton rb_byContentFood = (RadioButton) findViewById(R.id.rb_byContentFood);
+        RadioButton rb_byNutritionalContribution = (RadioButton) findViewById(R.id.rb_byNutritionalContribution);
+
         switch(view.getId()) {
             case R.id.rb_byName:
-                if(checked) checkedIt(rb_P, rb_L, rb_C);
+                if(checked) {
+                    selectedIt(rb_P, rb_L, rb_C);
+                    rb_byNutritionalContribution.setChecked(false);
+                }
                 break;
             case R.id.rb_byType:
-                if(checked) checkedIt(rb_P, rb_L, rb_C);
+                if(checked) {
+                    selectedIt(rb_P, rb_L, rb_C);
+                    rb_byNutritionalContribution.setChecked(false);
+                }
                 break;
             case R.id.rb_byNote:
-                if(checked) checkedIt(rb_P, rb_L, rb_C);
+                if(checked) {
+                    selectedIt(rb_P, rb_L, rb_C);
+                    rb_byNutritionalContribution.setChecked(false);
+                }
                 break;
             case R.id.rb_byDifficulty:
-                if(checked) checkedIt(rb_P, rb_L, rb_C);
+                if(checked) {
+                    selectedIt(rb_P, rb_L, rb_C);
+                    rb_byNutritionalContribution.setChecked(false);
+                }
+                break;
+            case R.id.rb_byContentFood:
+                if(checked) {
+                    selectedIt(rb_P, rb_L, rb_C);
+                    rb_byNutritionalContribution.setChecked(false);
+                }
                 break;
             case R.id.rb_byNutritionalContribution:
                 if(checked) {
                     rb_P.setEnabled(true);
                     rb_L.setEnabled(true);
                     rb_C.setEnabled(true);
+
                     rb_C.setChecked(true);
                     rb_L.setChecked(true);
                     rb_P.setChecked(true);
+
+                    rb_byName.setChecked(false);
+                    rb_byType.setChecked(false);
+                    rb_byNote.setChecked(false);
+                    rb_byDifficulty.setChecked(false);
+                    rb_byContentFood.setChecked(false);
                 }
-                break;
-            case R.id.rb_byContentFood:
-                if(checked) checkedIt(rb_P, rb_L, rb_C);
                 break;
         }
     }
 
-    public void checkedIt(RadioButton rb_P, RadioButton rb_L, RadioButton rb_C) {
+    public void selectedIt(RadioButton rb_P, RadioButton rb_L, RadioButton rb_C) {
         if(rb_P.isChecked()) rb_P.setChecked(false);
         if(rb_L.isChecked()) rb_L.setChecked(false);
         if(rb_C.isChecked()) rb_C.setChecked(false);
@@ -239,7 +281,9 @@ public class ResearchActivityOnline extends AppCompatActivity
             nextIntent.putExtra("login", login);
             startActivity(nextIntent);
         } else if (id == R.id.nav_manage) {
-
+            Intent nextIntent = new Intent(ResearchActivityOnline.this,ParametersActivityOnline.class);
+            nextIntent.putExtra("login", login);
+            startActivity(nextIntent);
         } else if (id == R.id.nav_home) {
             Intent nextIntent = new Intent(ResearchActivityOnline.this,MainActivityOnline.class);
             nextIntent.putExtra("login", login);
@@ -250,7 +294,6 @@ public class ResearchActivityOnline extends AppCompatActivity
             startActivity(nextIntent);
         } else if (id == R.id.nav_deconnection) {
             Intent nextIntent = new Intent(ResearchActivityOnline.this,MainActivity.class);
-            nextIntent.putExtra("login", login);
             startActivity(nextIntent);
         }
 

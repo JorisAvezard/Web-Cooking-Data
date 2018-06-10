@@ -25,10 +25,10 @@
             android:id="@+id/tw_name_research"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="Rechercher"
-            android:textColor="#960504"
-            android:textSize="20dp"
+            android:gravity="center"
+            android:text="Rechercher une recette"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30dp"
             android:textStyle="bold" />
 
         <EditText
@@ -37,7 +37,9 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:hint=""
-            android:inputType="text" />
+            android:inputType="text"
+            android:textCursorDrawable="@color/colorPrimary"
+            android:backgroundTint="@color/colorPrimary"/>
 
         <RadioGroup
             android:id="@+id/rb_1"
@@ -52,28 +54,36 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:padding="5px"
-                android:text="Par nom" />
+                android:text="Par nom"
+                android:textSize="20dp"
+                android:buttonTint="@color/colorPrimary"/>
 
             <RadioButton
                 android:id="@+id/rb_byType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5px"
-                android:text="Par type" />
+                android:text="Par type"
+                android:textSize="20dp"
+                android:buttonTint="@color/colorPrimary"/>
 
             <RadioButton
                 android:id="@+id/rb_byNote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5px"
-                android:text="Par note" />
+                android:text="Par note"
+                android:textSize="20dp"
+                android:buttonTint="@color/colorPrimary"/>
 
             <RadioButton
                 android:id="@+id/rb_byDifficulty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5px"
-                android:text="Par difficulté" />
+                android:text="Par difficulté"
+                android:textSize="20dp"
+                android:buttonTint="@color/colorPrimary"/>
         </RadioGroup>
 
 
@@ -83,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Rechercher"
-            android:textColor="#960504" />
+            android:textColor="@color/colorPrimary" />
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"

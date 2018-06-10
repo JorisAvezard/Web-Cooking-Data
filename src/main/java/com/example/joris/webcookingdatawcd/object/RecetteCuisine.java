@@ -1,18 +1,19 @@
 package com.example.joris.webcookingdatawcd.object;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecetteCuisine {
 
-    public String nom;
-    public List<String> ingredients;
-    public List<String> personnes;
-    public List<String> etapes;
-    public List<String> auteur;
-    public List<String> tempsTotal;
-    public List<String> tempsCuisson;
-    public List<String> tempsPreparation;
-    public List<String> ustensiles;
+    public String nom = "";
+    public List<String> ingredients = new ArrayList<String>();
+    public List<String> personnes = new ArrayList<String>();
+    public List<String> etapes = new ArrayList<String>();
+    public List<String> auteur = new ArrayList<String>();
+    public List<String> tempsTotal = new ArrayList<String>();
+    public List<String> tempsCuisson = new ArrayList<String>();
+    public List<String> tempsPreparation = new ArrayList<String>();
+    public List<String> ustensiles = new ArrayList<String>();
 
     public RecetteCuisine() {
 

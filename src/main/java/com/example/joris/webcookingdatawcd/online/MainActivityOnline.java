@@ -87,7 +87,9 @@ public class MainActivityOnline extends AppCompatActivity
             nextIntent.putExtra("login", login);
             startActivity(nextIntent);
         } else if (id == R.id.nav_manage) {
-
+            Intent nextIntent = new Intent(MainActivityOnline.this,ParametersActivityOnline.class);
+            nextIntent.putExtra("login", login);
+            startActivity(nextIntent);
         } else if (id == R.id.nav_home) {
             Intent nextIntent = new Intent(MainActivityOnline.this,MainActivityOnline.class);
             nextIntent.putExtra("login", login);
@@ -98,7 +100,6 @@ public class MainActivityOnline extends AppCompatActivity
             startActivity(nextIntent);
         } else if (id == R.id.nav_deconnection) {
             Intent nextIntent = new Intent(MainActivityOnline.this,MainActivity.class);
-            nextIntent.putExtra("login", login);
             startActivity(nextIntent);
         }
 

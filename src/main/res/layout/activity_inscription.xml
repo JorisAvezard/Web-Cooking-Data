@@ -13,77 +13,266 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="100dp"
-        android:paddingBottom="100dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="70dp"
+        android:paddingBottom="30dp"
+        android:overScrollMode="always"
+        android:isScrollContainer="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbars="vertical">
 
-        <TextView
-            android:id="@+id/tw_login_inscription"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Identifiant de connexion"
-            android:textStyle="bold"
-            android:gravity="left"
-            android:textSize="20dp"
-            android:textColor="#960504" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et_login_inscription"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint=""
-            android:inputType="text" />
+            <TextView
+                android:id="@+id/tw_login_inscription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Identifiant de connexion"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:textSize="30dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
 
-        <TextView
-            android:id="@+id/tw_password_inscription"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Mot de passe"
-            android:textStyle="bold"
-            android:gravity="left"
-            android:textSize="20dp"
-            android:textColor="#960504" />
+            <EditText
+                android:id="@+id/et_login_inscription"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint=""
+                android:inputType="text"
+                android:textCursorDrawable="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary" />
 
-        <EditText
-            android:id="@+id/et_password_inscription"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint=""
-            android:inputType="textPassword" />
+            <TextView
+                android:id="@+id/tw_password_inscription"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Mot de passe"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:textSize="30dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
 
-        <TextView
-            android:id="@+id/tw_confirm_inscription"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Confirmez votre mot de passe"
-            android:textStyle="bold"
-            android:gravity="left"
-            android:textSize="20dp"
-            android:textColor="#960504" />
+            <EditText
+                android:id="@+id/et_password_inscription"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint=""
+                android:inputType="textPassword"
+                android:textCursorDrawable="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary"/>
 
-        <EditText
-            android:id="@+id/et_confirm_inscription"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint=""
-            android:inputType="textPassword" />
+            <TextView
+                android:id="@+id/tw_confirm_inscription"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Confirmez votre mot de passe"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:textSize="30dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
 
-        <Button
-            android:id="@+id/bu_inscription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="S'inscrire"
-            android:layout_gravity="right"
-            android:textColor="#960504"
-            />
+            <EditText
+                android:id="@+id/et_confirm_inscription"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint=""
+                android:inputType="textPassword"
+                android:textCursorDrawable="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary"/>
 
-    </LinearLayout>
 
+            <TextView
+                android:id="@+id/tw_infos"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Informations personnelles"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:textSize="30dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_genre"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Sexe"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_genre"
+                android:layout_gravity="center"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/tw_age"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Votre âge"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_age"
+                android:layout_gravity="center"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/tw_taille"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Votre taille (cm)"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_taille"
+                android:layout_gravity="center"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/tw_poids"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Votre poids (en kg)"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_poids"
+                android:layout_gravity="center"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/tw_activite"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="À quelle fréquence faites-vous du sport ?"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_activite"
+                android:layout_gravity="center"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/tw_maladie"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Problème de santé"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp" android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_maladie"
+                android:layout_gravity="center"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/tw_regime"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Votre régime alimentaire"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_regime"
+                android:layout_gravity="center"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/tw_allergie"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Allergie"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <Spinner
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner_allergie"
+                android:layout_gravity="center"
+                android:background="@drawable/border_recipe"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
+
+            <Button
+                android:id="@+id/bu_inscription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S'inscrire"
+                android:layout_gravity="right"
+                android:textColor="@color/colorPrimary"
+                />
+
+        </LinearLayout>
+    </ScrollView>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -38,6 +39,10 @@
         <activity android:name=".online.ResearchActivityOnline"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".online.FoodActivityOnline"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".online.RecipeActivityOnline"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".online.ParametersActivityOnline"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity android:name=".window.PopConnectionActivity"
