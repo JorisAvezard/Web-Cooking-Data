@@ -17,6 +17,11 @@ public class RecetteCuisine {
 	public List<String> tempsPreparation;
 	public List<String> ustensiles;
 	
+	public RecetteCuisine() {
+		
+		
+	}
+	
 	public RecetteCuisine(String nom, List<String> ingredients, List<String> personnes, List<String> etapes, List<String> auteur, 
 			List<String> tempsTotal, List<String> tempsCuisson, List<String> tempsPreparation, List<String> ustensiles) {
 		

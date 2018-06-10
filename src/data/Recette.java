@@ -2,16 +2,11 @@ package data;
 
 import engine.Engine;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +69,7 @@ public class Recette {
 		String key_iri = engine.formatCaseResource(key);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
 		IRI note_iri = vf.createIRI(wcd, "a_pour_note");
-		model.add(recette_nom, note_iri, vf.createLiteral(Float.valueOf("0")));
+		model.add(recette_nom, note_iri, vf.createLiteral(Double.valueOf("0")));
 		
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
@@ -97,7 +92,7 @@ public class Recette {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
-				model.add(recette_nom, note_iri, vf.createLiteral(Float.valueOf(line)));
+				model.add(recette_nom, note_iri, vf.createLiteral(Double.valueOf(line)));
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -464,26 +459,27 @@ public class Recette {
 	public List<String> getIngredients(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
-
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
 			queryString += "SELECT ?ii \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:a_pour_ingredient ?i. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    wcd:"+key+" wcd:a_pour_ingredient ?i. \n";
 			queryString += "    ?i wcd:description ?ii. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					// System.out.println(solution.getValue("ii").stringValue());
-					liste.add(solution.getValue("ii").stringValue());
+					if(!liste.contains(solution.getValue("ii").stringValue()))
+						liste.add(solution.getValue("ii").stringValue());
 				}
 			}
 		} finally {
 			repo.shutDown();
 		}
-
 		return liste;
 	}
 
@@ -533,7 +529,7 @@ public class Recette {
 					while (result.hasNext()) {
 						BindingSet solution = result.next();
 						// System.out.println(solution.getValue("ii").stringValue());
-						liste.add("Etape " + indice + " : " + solution.getValue("i").stringValue());
+						liste.add(solution.getValue("i").stringValue());
 						indice2++;
 					}
 				}
@@ -579,7 +575,6 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne l'auteur etant donne une recette
 	public List<String> getTempsTotal(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -604,7 +599,6 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne l'auteur etant donne une recette
 	public List<String> getTempsCuisson(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -629,7 +623,6 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne l'auteur etant donne une recette
 	public List<String> getTempsPreparation(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -654,7 +647,6 @@ public class Recette {
 		return liste;
 	}
 
-	// retourne les ingredients etant donne une recette
 	public List<String> getUstensiles(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -678,6 +670,79 @@ public class Recette {
 
 		return liste;
 	}
+	
+	public List<String> getNote(Repository repo, String key) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "SELECT ?note \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + key + " wcd:a_pour_note ?note. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("note").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+	}
+	
+	public List<String> getCategory(Repository repo, String key) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "SELECT ?cat \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + key + " wcd:a_pour_categorie ?cat. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("cat").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+	}
+
+	public List<String> getDifficulte(Repository repo, String key) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "SELECT ?dif \n";
+			queryString += "WHERE { \n";
+			queryString += "    wcd:" + key + " wcd:a_pour_difficulte ?dif. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("dif").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+	}
+
 
 	@SuppressWarnings("unchecked")
 	public JSONObject setJson(Repository repo, ValueFactory vf, Model model, String key) {
@@ -715,17 +780,9 @@ public class Recette {
 		String key = "";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-			System.out.println("AVANT REQUETE - " + key_words);
+//			System.out.println("AVANT REQUETE - " + key_words);
 			for(i=0;i<key_words.size();i++){
 				key = engine.lowerCaseAll(key_words.get(i));
-				
-				byte[] byteData = key.getBytes();
-				System.out.print("[BYTE] -> ");
-				for(int b=0; b<byteData.length; b++) {
-					System.out.print(byteData[b] + " ");
-				}
-				System.out.println("");
-				
 				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
@@ -751,10 +808,12 @@ public class Recette {
 		} finally {
 			repo.shutDown();
 		}
-		System.out.println(liste);
+//		System.out.println(liste);
 		return liste;
 	}
 	
+	// Entrée, plat, dessert
+	// Végétarien, Sans gluten
 	public List<String> getNamesRecettesByCategory(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -787,7 +846,7 @@ public class Recette {
 		return liste;
 	}
 	
-	public List<String> getNamesRecettesByNote(Repository repo, float note) {
+	public List<String> getNamesRecettesByNote(Repository repo, double note) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
@@ -880,5 +939,37 @@ public class Recette {
 
 		return liste;
 	}
+	
+	public List<String> getAllNamesRecettes(Repository repo) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+		Engine engine = new Engine();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_resource rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_resource foaf:name ?recette_nom. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					if (!liste.contains(solution.getValue("recette_nom").stringValue())) {
+						liste.add(solution.getValue("recette_nom").stringValue());
+					}
+					// System.out.println(solution.getValue("i").stringValue());
+				}
+			}
+		}finally {
+			repo.shutDown();
+		}
+
+		return liste;
+	}
+
 
 }

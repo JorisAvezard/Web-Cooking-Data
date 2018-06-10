@@ -3,7 +3,6 @@ package data;
 import engine.Engine;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,8 +19,6 @@ import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.sail.SailRepository;
-import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 
 public class Aliment {
 
@@ -124,12 +121,10 @@ public class Aliment {
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					System.out.println(solution.getValue("ii").stringValue());
-					// liste.add(solution.getValue("i").stringValue());
+					liste.add(solution.getValue("ii").stringValue());
 				}
 			}
 		} finally {
-			// System.out.println("Succes");
 			repo.shutDown();
 		}
 

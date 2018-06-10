@@ -40,9 +40,9 @@ public class Main {
 		File dataDir = new File("./db/");
 		NativeStore ns = new NativeStore(dataDir);
 		Repository repo = new SailRepository(ns);
-//		ValueFactory vf = SimpleValueFactory.getInstance();
-//		Model model = new TreeModel();
-//		String wcd = "http://m2bigcookingdata.org/";
+		ValueFactory vf = SimpleValueFactory.getInstance();
+		Model model = new TreeModel();
+		String wcd = "http://m2bigcookingdata.org/";
 
 		//Initialisation des variables propre à Lucene
 //		String lucene_index = "./lucene/";
@@ -73,16 +73,25 @@ public class Main {
 //		System.out.println(result);
 //		String result = user.processInscription(repo, vf, model, wcd, "Tata", "grr");
 //		System.out.println(result);
-		List<String> test = new ArrayList<String>();
-		test.add("mouss");
+//		List<String> test = new ArrayList<String>();
+//		test.add("mouss");
 //		test.add("cr");
-		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
+//		List<String> result = recette.getNamesRecettesByKeyWord(repo, test);
 //		List<String> result = recette.getNamesRecettesByDifficulte(repo, vf, model, "inter");
-//		List<String> result = aliment.getAll(repo, vf, model);
+//		List<String> result = aliment.getAll(repo);
+		List<String> result = recette.getIngredients(repo, "Agneau au miel de gingembre");
 //		List<String> result = user.getAlimentsFromGardeManger(repo, vf, model, "toto");
-		for(int i=0; i<result.size();i++){
-			System.out.println(result.get(i));
-		}
+//		for(int i=0; i<result.size();i++){
+//			System.out.println(result.get(i));
+//		}
+//		user.addAlimentIntoGardeManger(repo, vf, model, wcd, "okamii","Tomate");
+//		System.out.println("Repo : " + repo);
+//		List<String> result = user.getAlimentsFromGardeManger(repo, "okamii");
+		System.out.println(result);
+//		List<String> test = new ArrayList<String>();
+//		test.add("choco");
+//		List<String> result1 = recette.getNamesRecettesByKeyWord(repo, test);
+//		System.out.println(result1);
 	}
 
 }
