@@ -18,8 +18,12 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		double a = 6.2;
-		System.out.println((int) a);
+		System.out.println(System.currentTimeMillis());
+		int indice = 0;
+		for(int i=0;i<1000;i++){
+			indice++;
+		}
+		System.out.println(System.currentTimeMillis());
 	}
 
 }

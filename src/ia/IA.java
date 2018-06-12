@@ -151,9 +151,9 @@ public class IA {
 		return entry.get(indice);
 	}
 
-	public static List<String> prepareList(List<String> entry, String aucun) {
+	public static List<String> prepareList(List<String> entry) {
 		for (int i = 0; i < (int) entry.size() / 1.1; i++) {
-			entry.add(aucun);
+			entry.add("Aucun");
 		}
 		return entry;
 	}
@@ -169,11 +169,11 @@ public class IA {
 			User user = new User();
 			Aliment aliment = new Aliment();
 			String current_user = "";
-			List<String> genres = prepareList(user.getAllGenreFromDB(repo), "Aucun_genre");
-			List<String> maladies = prepareList(user.getAllMaladieFromDB(repo), "Aucun_maladie");
-			List<String> allergies = prepareList(user.getAllAllergiesFromDB(repo), "Aucun_allergie");
-			List<String> regimes = prepareList(user.getAllRegimeAlimentaireFromDB(repo), "Aucun_regime");
-			List<String> niveaux_acts = prepareList(user.getAllNiveauActiviteFromDB(repo), "Aucun_niveauact");
+			List<String> genres = prepareList(user.getAllGenreFromDB(repo));
+			List<String> maladies = prepareList(user.getAllMaladieFromDB(repo));
+			List<String> allergies = prepareList(user.getAllAllergiesFromDB(repo));
+			List<String> regimes = prepareList(user.getAllRegimeAlimentaireFromDB(repo));
+			List<String> niveaux_acts = prepareList(user.getAllNiveauActiviteFromDB(repo));
 
 			int indice = 0;
 			String line = "";
@@ -186,9 +186,9 @@ public class IA {
 			String allergie = "";
 			String regime = "";
 			String niveau_act = "";
-			String aucun = "Aucun";
+			// String aucun = "Aucun";
 
-			while (indice < 5000) {
+			while (indice < 40000) {
 				current_user = "user" + String.valueOf(indice);
 				age = ageAleatoire();
 				poids = poidsAleatoire();
@@ -244,11 +244,6 @@ public class IA {
 		List<String> allergies = user.getAllAllergiesFromDB(repo);
 		List<String> regimes = user.getAllRegimeAlimentaireFromDB(repo);
 		List<String> niveaux_acts = user.getAllNiveauActiviteFromDB(repo);
-		genres.add("Aucun_genre");
-		maladies.add("Aucun_maladie");
-		allergies.add("Aucun_allergie");
-		regimes.add("Aucun_regime");
-		niveaux_acts.add("Aucun_niveauact");
 
 		int i = 0;
 		int j = 0;
@@ -263,25 +258,25 @@ public class IA {
 			fw = new FileWriter(fileNameDest, true);
 			bw = new BufferedWriter(fw);
 
-//			bw.write("login;age;poids;taille");
-//
-//			for (i = 0; i < genres.size(); i++) {
-//				bw.write(";" + engine.lowerCaseAll(genres.get(i)));
-//			}
-//			for (i = 0; i < maladies.size(); i++) {
-//				bw.write(";" + engine.lowerCaseAll(maladies.get(i)));
-//			}
-//			for (i = 0; i < allergies.size(); i++) {
-//				bw.write(";" + engine.lowerCaseAll(allergies.get(i)));
-//			}
-//			for (i = 0; i < regimes.size(); i++) {
-//				bw.write(";" + engine.lowerCaseAll(regimes.get(i)));
-//			}
-//			for (i = 0; i < niveaux_acts.size(); i++) {
-//				bw.write(";" + engine.lowerCaseAll(niveaux_acts.get(i)));
-//			}
-//
-//			bw.write("\n");
+			// bw.write("login;age;poids;taille");
+			//
+			// for (i = 0; i < genres.size(); i++) {
+			// bw.write(";" + engine.lowerCaseAll(genres.get(i)));
+			// }
+			// for (i = 0; i < maladies.size(); i++) {
+			// bw.write(";" + engine.lowerCaseAll(maladies.get(i)));
+			// }
+			// for (i = 0; i < allergies.size(); i++) {
+			// bw.write(";" + engine.lowerCaseAll(allergies.get(i)));
+			// }
+			// for (i = 0; i < regimes.size(); i++) {
+			// bw.write(";" + engine.lowerCaseAll(regimes.get(i)));
+			// }
+			// for (i = 0; i < niveaux_acts.size(); i++) {
+			// bw.write(";" + engine.lowerCaseAll(niveaux_acts.get(i)));
+			// }
+			//
+			// bw.write("\n");
 
 			while ((line = bufferedReader.readLine()) != null) {
 				// System.out.println(line);
@@ -290,49 +285,78 @@ public class IA {
 				for (i = 0; i < line_split.length; i++) {
 					if (i == 0) {
 						bw.write(line_split[0]);
-					} else if (i==1) {
+					} else if (i == 1) {
 						bw.write(";" + String.valueOf(Double.valueOf(line_split[i])));
-					} else if ((i==2)||(i==3)) {
+					} else if ((i == 2) || (i == 3)) {
 						bw.write(";" + line_split[i]);
-					}
-					else if (i == 4) {
-						for (j = 0; j < genres.size(); j++) {
-							if (genres.get(j).equals(line_split[4])) {
-								bw.write(";1.0");
-							} else {
+					} else if (i == 4) {
+						if (line_split[4].equals("Aucun")) {
+							for (j = 0; j < genres.size(); j++) {
 								bw.write(";0.0");
+							}
+						} else {
+							for (j = 0; j < genres.size(); j++) {
+								if (genres.get(j).equals(line_split[4])) {
+									bw.write(";1.0");
+								} else {
+									bw.write(";0.0");
+								}
 							}
 						}
 					} else if (i == 5) {
-						for (j = 0; j < maladies.size(); j++) {
-							if (maladies.get(j).equals(line_split[5])) {
-								bw.write(";1.0");
-							} else {
+						if (line_split[5].equals("Aucun")) {
+							for (j = 0; j < maladies.size(); j++) {
 								bw.write(";0.0");
+							}
+						} else {
+							for (j = 0; j < maladies.size(); j++) {
+								if (maladies.get(j).equals(line_split[5])) {
+									bw.write(";1.0");
+								} else {
+									bw.write(";0.0");
+								}
 							}
 						}
 					} else if (i == 6) {
-						for (j = 0; j < allergies.size(); j++) {
-							if (allergies.get(j).equals(line_split[6])) {
-								bw.write(";1.0");
-							} else {
+						if (line_split[6].equals("Aucun")) {
+							for (j = 0; j < allergies.size(); j++) {
 								bw.write(";0.0");
+							}
+						} else {
+							for (j = 0; j < allergies.size(); j++) {
+								if (allergies.get(j).equals(line_split[6])) {
+									bw.write(";1.0");
+								} else {
+									bw.write(";0.0");
+								}
 							}
 						}
 					} else if (i == 7) {
-						for (j = 0; j < regimes.size(); j++) {
-							if (regimes.get(j).equals(line_split[7])) {
-								bw.write(";1.0");
-							} else {
+						if (line_split[7].equals("Aucun")) {
+							for (j = 0; j < regimes.size(); j++) {
 								bw.write(";0.0");
+							}
+						} else {
+							for (j = 0; j < regimes.size(); j++) {
+								if (regimes.get(j).equals(line_split[7])) {
+									bw.write(";1.0");
+								} else {
+									bw.write(";0.0");
+								}
 							}
 						}
 					} else if (i == 8) {
-						for (j = 0; j < niveaux_acts.size(); j++) {
-							if (niveaux_acts.get(j).equals(line_split[8])) {
-								bw.write(";1.0");
-							} else {
+						if (line_split[8].equals("Aucun")) {
+							for (j = 0; j < niveaux_acts.size(); j++) {
 								bw.write(";0.0");
+							}
+						} else {
+							for (j = 0; j < niveaux_acts.size(); j++) {
+								if (niveaux_acts.get(j).equals(line_split[8])) {
+									bw.write(";1.0");
+								} else {
+									bw.write(";0.0");
+								}
 							}
 						}
 						bw.write("\n");
@@ -382,58 +406,58 @@ public class IA {
 			}
 		}
 	}
-	
-	public List<String> tableDeVote(Repository repo, List<String> users){
+
+	public List<String> tableDeVote(Repository repo, List<String> users) {
 		User us = new User();
-		
+
 		List<String> user_recettes = new ArrayList<String>();
 		List<String> recettes_aimees = new ArrayList<String>();
 		List<String> recettes_finales = new ArrayList<String>();
 		List<Integer> votes = new ArrayList<Integer>();
-		
+
 		int i = 0;
 		int j = 0;
 		int indice_recette_aimee = -1;
-		
-		for(i=0;i<users.size();i++){
+
+		for (i = 0; i < users.size(); i++) {
 			user_recettes = us.getAimeRecette(repo, users.get(i));
-			
-			for(j=0;j<user_recettes.size();j++){
-				if(recettes_aimees.contains(user_recettes.get(j))){
+
+			for (j = 0; j < user_recettes.size(); j++) {
+				if (recettes_aimees.contains(user_recettes.get(j))) {
 					indice_recette_aimee = getIndiceFromValue(recettes_aimees, user_recettes.get(j));
 					votes.set(indice_recette_aimee, votes.get(indice_recette_aimee) + 1);
-				}
-				else{
+				} else {
 					recettes_aimees.add(user_recettes.get(j));
 					votes.add(1);
 				}
 			}
 		}
-		
+
 		int moyenne = 0;
-		
-		for(i=0;i<votes.size();i++){
+
+		for (i = 0; i < votes.size(); i++) {
 			moyenne = moyenne + votes.get(i);
 		}
-		
+
 		moyenne = ((int) moyenne / votes.size()) + 1;
-		
-		for(i=0;i<recettes_aimees.size();i++){
-			if(votes.get(i)>=moyenne){
+
+		for (i = 0; i < recettes_aimees.size(); i++) {
+			if (votes.get(i) >= moyenne) {
 				recettes_finales.add(recettes_aimees.get(i));
 			}
 		}
-		
+
 		return recettes_finales;
 	}
-	
-	public List<String> suggestionRecetteParCluster(Repository repo, String fichier_profils_nettoyes, String fichier_resultat_cluster, String user_profil) throws IOException{
+
+	public List<String> suggestionRecetteParCluster(Repository repo, String fichier_profils_nettoyes,
+			String fichier_resultat_cluster, String user_profil) throws IOException {
 		MachineLearning ml = new MachineLearning();
 		List<String> cluster_user = ml.find_cluster_user(fichier_resultat_cluster, user_profil);
 		List<String> users_id = ml.id_user(fichier_profils_nettoyes, cluster_user);
 		List<String> recettes_retournees = tableDeVote(repo, users_id);
-		
+
 		return recettes_retournees;
 	}
-	
+
 }

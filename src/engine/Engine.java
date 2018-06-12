@@ -9,6 +9,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -94,10 +95,10 @@ public class Engine {
 	public void getAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
 		IRI sujet_iri = vf.createIRI(wcd, "user5128");
-		IRI predicat_iri = vf.createIRI(wcd, "a_aime");
+		IRI predicat_iri = vf.createIRI(wcd, "Recette");
 		try (RepositoryConnection conn = repo.getConnection()) {
 			// let's check that our data is actually in the database
-			try (RepositoryResult<Statement> result = conn.getStatements(null, predicat_iri, null);) {
+			try (RepositoryResult<Statement> result = conn.getStatements(null, FOAF.NAME, null);) {
 				while (result.hasNext()) {
 					Statement st = result.next();
 					System.out.println(st);

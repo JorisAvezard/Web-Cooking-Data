@@ -35,24 +35,24 @@ public class Aliment {
 		Engine engine = new Engine();
 
 		IRI aliment_type_litteral = vf.createIRI(wcd, "Aliment");
-		IRI property_energy_j = vf.createIRI(wcd, "Energie_kJ/100g");
-		IRI property_energy_cal = vf.createIRI(wcd, "Energie_kcal/100g");
-		IRI property_proteine = vf.createIRI(wcd, "Proteines_g/100g");
-		IRI property_glucide = vf.createIRI(wcd, "Glucides_g/100g");
-		IRI property_lipide = vf.createIRI(wcd, "Lipides_g/100g");
-		IRI property_sucre = vf.createIRI(wcd, "Sucres_g/100g");
-		IRI property_cholesterol = vf.createIRI(wcd, "Cholesterol_mg/100g");
-		IRI property_fer = vf.createIRI(wcd, "Fer_mg/100g");
-		IRI property_vitamineD = vf.createIRI(wcd, "Vitamine_D_µg/100g");
-		IRI property_vitamineE = vf.createIRI(wcd, "Vitamine_E_mg/100g");
-		IRI property_vitamineC = vf.createIRI(wcd, "Vitamine_C_mg/100g");
-		IRI property_vitamineB1 = vf.createIRI(wcd, "Vitamine_B1_mg/100g");
-		IRI property_vitamineB2 = vf.createIRI(wcd, "Vitamine_B2_mg/100g");
-		IRI property_vitamineB3 = vf.createIRI(wcd, "Vitamine_B3_mg/100g");
-		IRI property_vitamineB5 = vf.createIRI(wcd, "Vitamine_B5_mg/100g");
-		IRI property_vitamineB6 = vf.createIRI(wcd, "Vitamine_B6_mg/100g");
-		IRI property_vitamineB9 = vf.createIRI(wcd, "Vitamine_B9_µg/100g");
-		IRI property_vitamineB12 = vf.createIRI(wcd, "Vitamine_B12_µg/100g");
+		IRI property_energy_j = vf.createIRI(wcd, "a_pour_energie_kJ/100g");
+		IRI property_energy_cal = vf.createIRI(wcd, "a_pour_energie_kcal/100g");
+		IRI property_proteine = vf.createIRI(wcd, "a_pour_proteines_g/100g");
+		IRI property_glucide = vf.createIRI(wcd, "a_pour_glucides_g/100g");
+		IRI property_lipide = vf.createIRI(wcd, "a_pour_lipides_g/100g");
+		IRI property_sucre = vf.createIRI(wcd, "a_pour_sucres_g/100g");
+		IRI property_cholesterol = vf.createIRI(wcd, "a_pour_cholesterol_mg/100g");
+		IRI property_fer = vf.createIRI(wcd, "a_pour_fer_mg/100g");
+		IRI property_vitamineD = vf.createIRI(wcd, "a_pour_vitamine_D_µg/100g");
+		IRI property_vitamineE = vf.createIRI(wcd, "a_pour_vitamine_E_mg/100g");
+		IRI property_vitamineC = vf.createIRI(wcd, "a_pour_vitamine_C_mg/100g");
+		IRI property_vitamineB1 = vf.createIRI(wcd, "a_pour_vitamine_B1_mg/100g");
+		IRI property_vitamineB2 = vf.createIRI(wcd, "a_pour_vitamine_B2_mg/100g");
+		IRI property_vitamineB3 = vf.createIRI(wcd, "a_pour_vitamine_B3_mg/100g");
+		IRI property_vitamineB5 = vf.createIRI(wcd, "a_pour_vitamine_B5_mg/100g");
+		IRI property_vitamineB6 = vf.createIRI(wcd, "a_pour_vitamine_B6_mg/100g");
+		IRI property_vitamineB9 = vf.createIRI(wcd, "a_pour_vitamine_B9_µg/100g");
+		IRI property_vitamineB12 = vf.createIRI(wcd, "a_pour_vitamine_B12_µg/100g");
 
 		String line = null;
 		try {
@@ -115,16 +115,16 @@ public class Aliment {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-			queryString += "SELECT ?ii \n";
+			queryString += "SELECT ?aliment \n";
 			queryString += "WHERE { \n";
-			queryString += "    ?i rdf:type wcd:Aliment. \n";
-			queryString += "    ?i foaf:name ?ii. \n";
+			queryString += "    ?aliment_iri rdf:type wcd:Aliment. \n";
+			queryString += "    ?aliment_iri foaf:name ?aliment. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("ii").stringValue());
+					liste.add(solution.getValue("aliment").stringValue());
 				}
 			}
 		} finally {
@@ -133,6 +133,29 @@ public class Aliment {
 
 		return liste;
 
+	}
+	
+	public List<String> getAlimentsWithKeyWordForExtraction(Repository repo, String key) {
+		List<String> liste = new ArrayList<String>();
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?aliment_name \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?aliment_resource rdf:type wcd:Aliment. \n";
+			queryString += "    ?aliment_resource foaf:name ?aliment_name. \n";
+			queryString += "   FILTER regex(?aliment_name, \"" + key + "\", \"i\") \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("aliment_name").stringValue());
+				}
+			}
+		}
+		return liste;
 	}
 
 	public List<String> getAlimentsWithKeyWord(Repository repo, String key) {
