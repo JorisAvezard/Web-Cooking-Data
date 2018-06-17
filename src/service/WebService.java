@@ -370,7 +370,7 @@ public class WebService {
 	@GET
 	@Path("/getFavori/{login}/")
 	public ListeRecette getFavori(@PathParam(value="login") String login) {
-		List<String> favoris = user.getAimeRecette(repo, login);
+		List<String> favoris = user.getFavoriRecette(repo, login);
 		ListeRecette listeRecette = new ListeRecette();
 		listeRecette.setRecettes(favoris);
 		return listeRecette;
