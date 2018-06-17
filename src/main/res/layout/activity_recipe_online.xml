@@ -130,6 +130,29 @@
                 android:padding="10dp"/>
 
             <TextView
+                android:id="@+id/tw_ustensiles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Ustensiles"
+                android:textColor="@color/colorPrimary"
+                android:textSize="26dp"
+                android:textStyle="bold"
+                android:padding="20dp"
+                android:background="#FFFFFF"/>
+
+            <TextView
+                android:id="@+id/tw_ustensiles_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Non disponible"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:background="@drawable/border_recipe"
+                android:padding="10dp"/>
+
+            <TextView
                 android:id="@+id/tw_preparation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,8 +175,36 @@
                 android:background="@drawable/border_recipe"
                 android:padding="10dp"/>
 
+            <Button
+                android:id="@+id/bu_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="J'aime"
+                android:layout_gravity="left"
+                android:textColor="@color/colorPrimary"
+                />
+
+            <Button
+                android:id="@+id/bu_favour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ajouter aux favoris"
+                android:layout_gravity="center"
+                android:textColor="@color/colorPrimary"
+                />
+
+            <Button
+                android:id="@+id/bu_dislike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Je n'aime pas"
+                android:layout_gravity="right"
+                android:textColor="@color/colorPrimary"
+                />
+
         </LinearLayout>
     </ScrollView>
+
 
 
     <android.support.design.widget.NavigationView

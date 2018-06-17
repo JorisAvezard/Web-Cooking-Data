@@ -7,13 +7,14 @@ public class RecetteCuisine {
 
     public String nom = "";
     public List<String> ingredients = new ArrayList<String>();
-    public List<String> personnes = new ArrayList<String>();
+    public int personnes = 0;
     public List<String> etapes = new ArrayList<String>();
     public List<String> auteur = new ArrayList<String>();
     public List<String> tempsTotal = new ArrayList<String>();
     public List<String> tempsCuisson = new ArrayList<String>();
     public List<String> tempsPreparation = new ArrayList<String>();
     public List<String> ustensiles = new ArrayList<String>();
+    public String image = "";
 
     public RecetteCuisine() {
 
@@ -27,7 +28,7 @@ public class RecetteCuisine {
         return ingredients;
     }
 
-    public List<String> getPersonnes() {
+    public int getPersonnes() {
         return personnes;
     }
 
@@ -53,5 +54,9 @@ public class RecetteCuisine {
 
     public List<String> getUstensiles() {
         return ustensiles;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

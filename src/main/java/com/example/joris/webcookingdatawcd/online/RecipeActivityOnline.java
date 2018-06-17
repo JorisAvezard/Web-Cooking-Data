@@ -11,10 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.joris.webcookingdatawcd.R;
+import com.example.joris.webcookingdatawcd.object.Data;
+import com.example.joris.webcookingdatawcd.object.ListeRecette;
 import com.example.joris.webcookingdatawcd.object.RecetteCuisine;
 import com.example.joris.webcookingdatawcd.offline.MainActivity;
 import com.example.joris.webcookingdatawcd.offline.RecipeActivity;
@@ -66,6 +69,45 @@ public class RecipeActivityOnline extends AppCompatActivity
         MyAsynTask myAsynTask = new MyAsynTask();
         myAsynTask.execute(recette);
 
+        MyAsynTaskAddConsulteRecette myAsynTaskConsulteRecette = new MyAsynTaskAddConsulteRecette();
+        myAsynTaskConsulteRecette.execute(login, recette);
+
+        Button bu_like = (Button) findViewById(R.id.bu_like);
+        bu_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                String login = intent.getStringExtra("login");
+                String recette = intent.getStringExtra("recette");
+                MyAsynTaskAddAimeRecette myAsynTaskAddAimeRecette = new MyAsynTaskAddAimeRecette();
+                myAsynTaskAddAimeRecette.execute(login, recette);
+            }
+        });
+
+        Button bu_favour = (Button) findViewById(R.id.bu_favour);
+        bu_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                String login = intent.getStringExtra("login");
+                String recette = intent.getStringExtra("recette");
+                MyAsynTaskAddFavori myAsynTaskAddFavori = new MyAsynTaskAddFavori();
+                myAsynTaskAddFavori.execute(login, recette);
+            }
+        });
+
+        Button bu_dislike = (Button) findViewById(R.id.bu_dislike);
+        bu_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                String login = intent.getStringExtra("login");
+                String recette = intent.getStringExtra("recette");
+                MyAsynTaskAddNonAimeRecette myAsynTaskAddNonAimeRecette = new MyAsynTaskAddNonAimeRecette();
+                myAsynTaskAddNonAimeRecette.execute(login, recette);
+            }
+        });
+
     }
 
     public class MyAsynTask extends AsyncTask<String, Integer, RecetteCuisine> {
@@ -113,7 +155,7 @@ public class RecipeActivityOnline extends AppCompatActivity
             }
 
             imageView = (ImageView) findViewById(R.id.imageView);
-            Picasso.with(getBaseContext()).load("https://image.afcdn.com/recipe/20151023/63919_w420h344c1cx2808cy1872.jpg").fit().into(imageView);
+            Picasso.with(getBaseContext()).load(recipe.getImage()).fit().into(imageView);
 
             TextView tw_author = (TextView) findViewById(R.id.tw_author);
             List<String> author = recipe.getAuteur();
@@ -139,13 +181,9 @@ public class RecipeActivityOnline extends AppCompatActivity
             }
 
             TextView tw_persons = (TextView) findViewById(R.id.tw_persons);
-            List<String> persons = recipe.getPersonnes();
-            if(persons.size()>0) {
-                if (!persons.get(0).equals("")) {
-                    tw_persons.setText("Pour " + persons.get(0) + " personnes");
-                } else {
-                    tw_persons.setText("Nombre de personnes non disponible");
-                }
+            int persons = recipe.getPersonnes();
+            if (persons != 0) {
+                tw_persons.setText("Pour " + persons + " personnes");
             } else {
                 tw_persons.setText("Nombre de personnes non disponible");
             }
@@ -188,6 +226,20 @@ public class RecipeActivityOnline extends AppCompatActivity
                 }
             }
 
+            TextView tw_ustensiles_list = (TextView) findViewById(R.id.tw_ustensiles_list);
+            List<String> ustensiles_list = recipe.getUstensiles();
+            if(ustensiles_list.size() > 0) {
+                tw_ustensiles_list.setText("");
+                for(int i=0; i<ustensiles_list.size(); i++) {
+                    String get_ustensiles_list = tw_ustensiles_list.getText().toString();
+                    tw_ustensiles_list.setText(get_ustensiles_list + ustensiles_list.get(i));
+                    if(i != ustensiles_list.size()-1) {
+                        get_ustensiles_list = tw_ustensiles_list.getText().toString();
+                        tw_ustensiles_list.setText(get_ustensiles_list + "\n\n");
+                    }
+                }
+            }
+
             TextView tw_preparation_list = (TextView) findViewById(R.id.tw_preparation_list);
             List<String> preparation_list = recipe.getEtapes();
             if(preparation_list.size() > 0) {
@@ -200,6 +252,114 @@ public class RecipeActivityOnline extends AppCompatActivity
                         tw_preparation_list.setText(get_preparation_list + preparation_list.get(i));
                 }
             }
+        }
+    }
+
+    public class MyAsynTaskAddConsulteRecette extends AsyncTask<String, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(String... data) {
+            String login = data[0];
+            String recette = data[1].replaceAll(" ", "_");
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addRecetteConsulte/" + login + "/" + recette);
+                InputStream inputStream = request.sendRequest(url);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void data) {
+
+        }
+    }
+
+    public class MyAsynTaskAddFavori extends AsyncTask<String, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(String... data) {
+            String login = data[0];
+            String recette = data[1].replaceAll(" ", "_");
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addFavori/" + login + "/" + recette);
+                InputStream inputStream = request.sendRequest(url);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void data) {
+
+        }
+    }
+
+    public class MyAsynTaskAddNonAimeRecette extends AsyncTask<String, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(String... data) {
+            String login = data[0];
+            String recette = data[1].replaceAll(" ", "_");
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addNonAimeRecette/" + login + "/" + recette);
+                InputStream inputStream = request.sendRequest(url);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void data) {
+
+        }
+    }
+
+    public class MyAsynTaskAddAimeRecette extends AsyncTask<String, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(String... data) {
+            String login = data[0];
+            String recette = data[1].replaceAll(" ", "_");
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addAimeRecette/" + login + "/" + recette);
+                InputStream inputStream = request.sendRequest(url);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void data) {
+
         }
     }
 

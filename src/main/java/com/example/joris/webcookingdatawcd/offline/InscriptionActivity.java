@@ -144,10 +144,10 @@ public class InscriptionActivity extends AppCompatActivity
             String age = data[3];
             String taille = data[4];
             String poids = data[5];
-            String activite = data[6];
-            String maladie = data[7];
-            String regime = data[8];
-            String allergie = data[9];
+            String activite = data[6].replaceAll(" ", "_");
+            String maladie = data[7].replaceAll(" ", "_");
+            String regime = data[8].replaceAll(" ", "_");
+            String allergie = data[9].replaceAll(" ", "_");
             Data object = null;
             try {
                 URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/inscription/" + login + "/" + password

@@ -109,7 +109,7 @@ public class RecipeActivity extends AppCompatActivity
             }
 
             imageView = (ImageView) findViewById(R.id.imageView);
-            Picasso.with(getBaseContext()).load("https://image.afcdn.com/recipe/20151023/63919_w420h344c1cx2808cy1872.jpg").fit().into(imageView);
+            Picasso.with(getBaseContext()).load(recipe.getImage()).fit().into(imageView);
 
             TextView tw_author = (TextView) findViewById(R.id.tw_author);
             List<String> author = recipe.getAuteur();
@@ -135,13 +135,9 @@ public class RecipeActivity extends AppCompatActivity
             }
 
             TextView tw_persons = (TextView) findViewById(R.id.tw_persons);
-            List<String> persons = recipe.getPersonnes();
-            if(persons.size()>0) {
-                if (!persons.get(0).equals("")) {
-                    tw_persons.setText("Pour " + persons.get(0) + " personnes");
-                } else {
-                    tw_persons.setText("Nombre de personnes non disponible");
-                }
+            int persons = recipe.getPersonnes();
+            if (persons != 0) {
+                tw_persons.setText("Pour " + persons + " personnes");
             } else {
                 tw_persons.setText("Nombre de personnes non disponible");
             }
@@ -180,6 +176,20 @@ public class RecipeActivity extends AppCompatActivity
                     if(i != ingredients_list.size()-1) {
                         get_ingredients_list = tw_ingredients_list.getText().toString();
                         tw_ingredients_list.setText(get_ingredients_list + "\n\n");
+                    }
+                }
+            }
+
+            TextView tw_ustensiles_list = (TextView) findViewById(R.id.tw_ustensiles_list);
+            List<String> ustensiles_list = recipe.getUstensiles();
+            if(ustensiles_list.size() > 0) {
+                tw_ustensiles_list.setText("");
+                for(int i=0; i<ustensiles_list.size(); i++) {
+                    String get_ustensiles_list = tw_ustensiles_list.getText().toString();
+                    tw_ustensiles_list.setText(get_ustensiles_list + ustensiles_list.get(i));
+                    if(i != ustensiles_list.size()-1) {
+                        get_ustensiles_list = tw_ustensiles_list.getText().toString();
+                        tw_ustensiles_list.setText(get_ustensiles_list + "\n\n");
                     }
                 }
             }

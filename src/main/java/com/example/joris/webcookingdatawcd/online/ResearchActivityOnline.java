@@ -73,168 +73,85 @@ public class ResearchActivityOnline extends AppCompatActivity
                 RadioButton rb_byType = (RadioButton) findViewById(R.id.rb_byType);
                 RadioButton rb_byNote = (RadioButton) findViewById(R.id.rb_byNote);
                 RadioButton rb_byDifficulty = (RadioButton) findViewById(R.id.rb_byDifficulty);
-                RadioButton rb_byNutritionalContribution = (RadioButton) findViewById(R.id.rb_byNutritionalContribution);
-                RadioButton rb_byProtein = (RadioButton) findViewById(R.id.rb_byProtein);
-                RadioButton rb_byLipid = (RadioButton) findViewById(R.id.rb_byLipid);
-                RadioButton rb_byCarbohydrat = (RadioButton) findViewById(R.id.rb_byCarbohydrat);
                 RadioButton rb_byContentFood = (RadioButton) findViewById(R.id.rb_byContentFood);
                 MyAsynTask myAsyncTask = new MyAsynTask();
                 String research_by = "";
+                Intent intent = getIntent();
+                String login = intent.getStringExtra("login");
                 if (rb_byName.isChecked() == true) {
-                    research_by = "recetteParNom";
+                    research_by = "recetteParNom/" + name_research;
                 } else if (rb_byType.isChecked() == true) {
-                    research_by = "recetteParCategorie";
+                    research_by = "recetteParCategorie/" + name_research;
                 } else if (rb_byNote.isChecked() == true) {
-                    research_by = "recetteParNote";
+                    research_by = "recetteParNote/" + name_research;
                 } else if (rb_byDifficulty.isChecked() == true) {
-                    research_by = "recetteParDifficulte";
+                    research_by = "recetteParDifficulte/" + name_research;
                 } else if (rb_byContentFood.isChecked() == true) {
-                    research_by = "";
-                } else if (rb_byNutritionalContribution.isChecked() == true) {
-                    if (rb_byProtein.isChecked() == true) {
-                        research_by = "";
-                    } else if (rb_byLipid.isChecked() == true) {
-                        research_by = "";
-                    } else if (rb_byCarbohydrat.isChecked() == true) {
-                        research_by = "";
-                    }
+                    research_by = "recetteParContenu/" + login;
                 }
-                myAsyncTask.execute(name_research, research_by);
+                myAsyncTask.execute(research_by);
             }
         });
     }
 
 
-            public class MyAsynTask extends AsyncTask<String, Integer, ListeRecette> {
+    public class MyAsynTask extends AsyncTask<String, Integer, ListeRecette> {
 
-                @Override
-                protected ListeRecette doInBackground(String... data) {
-                    String name_research = data[0];
-                    String research_by = data[1];
-                    ListeRecette object = new ListeRecette();
-                    try {
-                        URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/" + research_by + "/" + name_research);
-                        InputStream inputStream = request.sendRequest(url);
-                        String result = "";
+        @Override
+        protected ListeRecette doInBackground(String... data) {
+            String research_by = data[0];
+            ListeRecette object = new ListeRecette();
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/" + research_by);
+                InputStream inputStream = request.sendRequest(url);
+                String result = "";
 
-                        if (inputStream != null) {
-                            InputStreamReader reader = new InputStreamReader(inputStream);
-                            object = gson.fromJson(reader, ListeRecette.class);
-                        }
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return object;
+                if (inputStream != null) {
+                    InputStreamReader reader = new InputStreamReader(inputStream);
+                    object = gson.fromJson(reader, ListeRecette.class);
                 }
-
-                @Override
-                protected void onPostExecute(ListeRecette recipes) {
-                    LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    LinearLayout layoutOfDynamicContent = (LinearLayout) findViewById(R.id.layoutOfDynamicContent);
-                    layoutOfDynamicContent.removeAllViewsInLayout();
-                    List<String> list = recipes.getRecettes();
-                    for(int i=0; i<list.size(); i++) {
-                        final TextView textView = new TextView(getBaseContext());
-                        Drawable drawable = getResources().getDrawable(R.drawable.border_recipe);
-                        textView.setText(list.get(i));
-                        textView.setTextSize(18);
-                        textView.setTextColor(Color.parseColor("#ffffff"));
-                        textView.setClickable(true);
-                        textView.setPadding(50, 50, 50, 50);
-                        textView.setBackground(drawable);
-
-                        textView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String login = getIntent().getStringExtra("login");
-                                TextView tw = (TextView) v;
-                                Intent intent = new Intent(ResearchActivityOnline.this,RecipeActivityOnline.class);
-                                intent.putExtra("recette", tw.getText());
-                                intent.putExtra("login", login);
-                                startActivity(intent);
-                            }
-                        });
-                        layoutOfDynamicContent.addView(textView, layoutParam);
-                    }
-                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-    public void clicked_NC(View view) {
-        boolean checked = ((RadioButton) view).isChecked();
-        RadioButton rb_P = (RadioButton) findViewById(R.id.rb_byProtein);
-        RadioButton rb_L = (RadioButton) findViewById(R.id.rb_byLipid);
-        RadioButton rb_C = (RadioButton) findViewById(R.id.rb_byCarbohydrat);
-        RadioButton rb_byName = (RadioButton) findViewById(R.id.rb_byName);
-        RadioButton rb_byType = (RadioButton) findViewById(R.id.rb_byType);
-        RadioButton rb_byNote = (RadioButton) findViewById(R.id.rb_byNote);
-        RadioButton rb_byDifficulty = (RadioButton) findViewById(R.id.rb_byDifficulty);
-        RadioButton rb_byContentFood = (RadioButton) findViewById(R.id.rb_byContentFood);
-        RadioButton rb_byNutritionalContribution = (RadioButton) findViewById(R.id.rb_byNutritionalContribution);
-
-        switch(view.getId()) {
-            case R.id.rb_byName:
-                if(checked) {
-                    selectedIt(rb_P, rb_L, rb_C);
-                    rb_byNutritionalContribution.setChecked(false);
-                }
-                break;
-            case R.id.rb_byType:
-                if(checked) {
-                    selectedIt(rb_P, rb_L, rb_C);
-                    rb_byNutritionalContribution.setChecked(false);
-                }
-                break;
-            case R.id.rb_byNote:
-                if(checked) {
-                    selectedIt(rb_P, rb_L, rb_C);
-                    rb_byNutritionalContribution.setChecked(false);
-                }
-                break;
-            case R.id.rb_byDifficulty:
-                if(checked) {
-                    selectedIt(rb_P, rb_L, rb_C);
-                    rb_byNutritionalContribution.setChecked(false);
-                }
-                break;
-            case R.id.rb_byContentFood:
-                if(checked) {
-                    selectedIt(rb_P, rb_L, rb_C);
-                    rb_byNutritionalContribution.setChecked(false);
-                }
-                break;
-            case R.id.rb_byNutritionalContribution:
-                if(checked) {
-                    rb_P.setEnabled(true);
-                    rb_L.setEnabled(true);
-                    rb_C.setEnabled(true);
-
-                    rb_C.setChecked(true);
-                    rb_L.setChecked(true);
-                    rb_P.setChecked(true);
-
-                    rb_byName.setChecked(false);
-                    rb_byType.setChecked(false);
-                    rb_byNote.setChecked(false);
-                    rb_byDifficulty.setChecked(false);
-                    rb_byContentFood.setChecked(false);
-                }
-                break;
+            return object;
         }
-    }
 
-    public void selectedIt(RadioButton rb_P, RadioButton rb_L, RadioButton rb_C) {
-        if(rb_P.isChecked()) rb_P.setChecked(false);
-        if(rb_L.isChecked()) rb_L.setChecked(false);
-        if(rb_C.isChecked()) rb_C.setChecked(false);
-        rb_P.setEnabled(false);
-        rb_L.setEnabled(false);
-        rb_C.setEnabled(false);
+        @Override
+        protected void onPostExecute(ListeRecette recipes) {
+            LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout layoutOfDynamicContent = (LinearLayout) findViewById(R.id.layoutOfDynamicContent);
+            layoutOfDynamicContent.removeAllViewsInLayout();
+            List<String> list = recipes.getRecettes();
+            for (int i = 0; i < list.size(); i++) {
+                final TextView textView = new TextView(getBaseContext());
+                Drawable drawable = getResources().getDrawable(R.drawable.border_recipe);
+                textView.setText(list.get(i));
+                textView.setTextSize(18);
+                textView.setTextColor(Color.parseColor("#ffffff"));
+                textView.setClickable(true);
+                textView.setPadding(50, 50, 50, 50);
+                textView.setBackground(drawable);
+
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String login = getIntent().getStringExtra("login");
+                        TextView tw = (TextView) v;
+                        Intent intent = new Intent(ResearchActivityOnline.this, RecipeActivityOnline.class);
+                        intent.putExtra("recette", tw.getText());
+                        intent.putExtra("login", login);
+                        startActivity(intent);
+                    }
+                });
+                layoutOfDynamicContent.addView(textView, layoutParam);
+            }
+        }
     }
 
     @Override

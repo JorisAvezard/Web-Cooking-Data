@@ -92,49 +92,7 @@
 
         </RadioGroup>
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5px"
-            android:layout_gravity="center"
-            android:id="@+id/rb_byNutritionalContribution"
-            android:text="Par apport nutritionnel"
-            android:buttonTint="@color/colorPrimary"
-            android:onClick="clicked_NC"/>
 
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/rb_2"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:padding="10px">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5px"
-                android:id="@+id/rb_byProtein"
-                android:text="Protéines"
-                android:buttonTint="@color/colorPrimary"
-                android:enabled="false"/>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5px"
-                android:id="@+id/rb_byLipid"
-                android:text="Lipides"
-                android:buttonTint="@color/colorPrimary"
-                android:enabled="false"/>
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5px"
-                android:id="@+id/rb_byCarbohydrat"
-                android:text="Glucides"
-                android:buttonTint="@color/colorPrimary"
-                android:enabled="false"/>
-        </RadioGroup>
 
 
         <Button

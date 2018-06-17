@@ -130,6 +130,29 @@
                 android:padding="10dp"/>
 
             <TextView
+                android:id="@+id/tw_ustensiles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Ustensiles"
+                android:textColor="@color/colorPrimary"
+                android:textSize="26dp"
+                android:textStyle="bold"
+                android:padding="20dp"
+                android:background="#FFFFFF"/>
+
+            <TextView
+                android:id="@+id/tw_ustensiles_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Non disponible"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:background="@drawable/border_recipe"
+                android:padding="10dp"/>
+
+            <TextView
                 android:id="@+id/tw_preparation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

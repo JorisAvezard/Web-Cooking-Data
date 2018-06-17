@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,11 +74,7 @@ public class FoodActivityOnline extends AppCompatActivity
 
         spinner_qte = (Spinner) findViewById(R.id.spinner_qte);
         List<String> list_qte = new ArrayList<String>();
-        list_qte.add("grammes");
-        list_qte.add("entité(s)");
-        list_qte.add("mL");
         ArrayAdapter adapter_qte = new ArrayAdapter(FoodActivityOnline.this, R.layout.spinner_item, list_qte);
-        //adapter_qte.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_qte.setAdapter(adapter_qte);
 
         spinner = (Spinner) findViewById(R.id.spinner);
@@ -86,8 +83,25 @@ public class FoodActivityOnline extends AppCompatActivity
         MyAsynTask myAsynTask = new MyAsynTask();
         myAsynTask.execute();
 
-        MyAsynTaskFood myAsynTaskFood = new MyAsynTaskFood();
-        myAsynTaskFood.execute(login);
+        MyAsynTaskUpdateFood myAsynTaskUpdateFood = new MyAsynTaskUpdateFood();
+        myAsynTaskUpdateFood.execute(login);
+
+        Button bu_delete_gm = (Button) findViewById(R.id.bu_delete_gm);
+        bu_delete_gm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton rb_byApp = (RadioButton) findViewById(R.id.rb_byApp);
+                RadioButton rb_byGMC = (RadioButton) findViewById(R.id.rb_byGMC);
+                if(rb_byApp.isChecked()) {
+                    String aliment = spinner.getSelectedItem().toString();
+                    MyAsynTaskDeleteFood myAsynTaskDeleteFood = new MyAsynTaskDeleteFood();
+                    myAsynTaskDeleteFood.execute(aliment, login);
+                }
+                else if(rb_byGMC.isChecked()) {
+
+                }
+            }
+        });
 
         Button bu_add_gm = (Button) findViewById(R.id.bu_add_gm);
         bu_add_gm.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +125,20 @@ public class FoodActivityOnline extends AppCompatActivity
             }
         }
     });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String aliment = spinner.getSelectedItem().toString();
+                MyAsynTaskQuantityFood myAsynTaskQuantityFood = new MyAsynTaskQuantityFood();
+                myAsynTaskQuantityFood.execute(aliment);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 }
 
@@ -151,6 +179,8 @@ public class FoodActivityOnline extends AppCompatActivity
                 }
                 break;
         }
+
+
     }
 
     /*AsyncTask pour chercher les aliments dans la base*/
@@ -199,6 +229,35 @@ public class FoodActivityOnline extends AppCompatActivity
             //adapter_capteurs.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_capteur1.setAdapter(adapter_capteurs);
             spinner_capteur2.setAdapter(adapter_capteurs);
+        }
+    }
+
+    /*AsyncTask pour actualiser le contenu du garde manger de l'utilisateur connecte*/
+    public class MyAsynTaskUpdateFood extends AsyncTask<String, Integer, Void> {
+        @Override
+        protected Void doInBackground(String... data) {
+            String login = data[0];
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/updateGardeManger/" + URLEncoder.encode(login, "UTF-8"));
+                InputStream inputStream = request.sendRequest(url);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void data) {
+            Intent intent = getIntent();
+            String login = intent.getStringExtra("login");
+            MyAsynTaskFood myAsynTaskFood = new MyAsynTaskFood();
+            myAsynTaskFood.execute(login);
         }
     }
 
@@ -259,12 +318,46 @@ public class FoodActivityOnline extends AppCompatActivity
 
         @Override
         protected Void doInBackground(String... data) {
-            String aliment = data[0].replaceAll(" ", "_").trim();;
+            String aliment = data[0].replaceAll(" ", "_").trim();
             String quantite = data[1];
             String login = data[2];
             System.out.println("aliment : " + aliment + ", quantite : " + quantite + ", login : " + login);
             try {
                 URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addAlimentBase/" + URLEncoder.encode(aliment, "UTF-8") + "/" + quantite + "/" + login);
+                InputStream inputStream = request.sendRequest(url);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void data) {
+            Intent nextIntent = new Intent(FoodActivityOnline.this,FoodActivityOnline.class);
+            Intent intent = getIntent();
+            String login = intent.getStringExtra("login");
+            nextIntent.putExtra("login", login);
+            startActivity(nextIntent);
+        }
+    }
+
+    /*Suppression d'un aliment dans le garde manger par l'application*/
+    public class MyAsynTaskDeleteFood extends AsyncTask<String, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(String... data) {
+            String aliment = data[0].replaceAll(" ", "_").trim();
+            String login = data[1];
+            System.out.println("aliment : " + aliment + ", quantite : "  + ", login : " + login);
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/deleteAlimentBase/" + URLEncoder.encode(aliment, "UTF-8") + "/" + login);
                 InputStream inputStream = request.sendRequest(url);
 
             } catch (MalformedURLException e) {
@@ -323,6 +416,49 @@ public class FoodActivityOnline extends AppCompatActivity
             String login = intent.getStringExtra("login");
             nextIntent.putExtra("login", login);
             startActivity(nextIntent);
+        }
+    }
+
+    /*ecuperation de l'unité de l'aliment*/
+    public class MyAsynTaskQuantityFood extends AsyncTask<String, Integer, Data> {
+
+        @Override
+        protected Data doInBackground(String... data) {
+            String aliment = data[0].replaceAll(" ", "_").trim();
+            Data object = null;
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/quantityOfAliment/" + URLEncoder.encode(aliment, "UTF-8"));
+                InputStream inputStream = request.sendRequest(url);
+                if (inputStream != null) {
+                    InputStreamReader reader = new InputStreamReader(inputStream);
+                    object = gson.fromJson(reader, Data.class);
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        protected void onPostExecute(Data data) {
+            List<String> list_qte = new ArrayList<String>();
+            if(data == null) {
+                list_qte.add("grammes");
+                list_qte.add("L");
+                list_qte.add("entité(s)");
+            }
+            else {
+                list_qte.add(data.getData());
+            }
+            ArrayAdapter adapter_qte = new ArrayAdapter(FoodActivityOnline.this, R.layout.spinner_item, list_qte);
+            spinner_qte.setAdapter(adapter_qte);
         }
     }
 
