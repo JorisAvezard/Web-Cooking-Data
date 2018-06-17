@@ -38,7 +38,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		// Initialisation des variables propre à la base RDF
-		File dataDir = new File("./db/"); // db_test01_test_get_methods_recettes
+		File dataDir = new File("./db_demo/"); // db_test_ia_01  / db_demo
 		NativeStore ns = new NativeStore(dataDir);
 		Repository repo = new SailRepository(ns);
 		ValueFactory vf = SimpleValueFactory.getInstance();
@@ -55,9 +55,9 @@ public class Main {
 		//////////////////////////
 		// Remplissage de la base
 		//////////////////////////
-
+		
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
-//		recette.processInsertion(repo, vf, model, wcd, "./fichiers_test/recettes/");
+		recette.processInsertion(repo, vf, model, wcd, "./fichiers/recettes_decoupe_02_00000001/"); // recettes_decoupe_01 fait
 //		user.insertAllDataMaladieIntoDB(repo, vf, model, wcd, "./fichiers_test/users/maladies.txt");
 //		user.insertAllDataRegimeAlimentaireIntoDB(repo, vf, model, wcd, "./fichiers_test/users/regimes.txt");
 //		user.insertAllDataGenreIntoDB(repo, vf, model, wcd);
@@ -71,13 +71,12 @@ public class Main {
 		// Tests unitaire sur la base
 		//////////////////////////////
 
-		// engine.getAllStatements(repo, vf, model, wcd);
+//		 engine.getAllStatements(repo, vf, model, wcd);
 		// engine.removeAllStatementsIRI(repo, vf, model, wcd);
 		// engine.removeAllUserAimeRecette(repo, vf, model, wcd);
-		// engine.getAllStatementsIRI(repo, vf, model, wcd);
+//		 engine.getAllStatementsIRI(repo, vf, model, wcd);
 
-		// List<String> result = recette.getIngredients(repo, "'tchinas' :
-		// bricks à la ricotta, tomates séchées et coriandre");
+//		 List<String> result = recette.getIngredients(repo, "Burger bun de riz");
 		// System.out.println(result);
 
 //		 List<String> result = aliment.getAll(repo);
@@ -101,13 +100,10 @@ public class Main {
 		// List<String> result = recette.getNamesRecettesByDifficulte(repo, vf,
 		// model, "inter");
 
-		// List<String> result = recette.getNamesRecettesByAliments(repo,
-		// "thon");
+//		 List<String> result = recette.getNamesRecettesByAliments(repo,
+//		 "saumon");
 		// List<String> result = aliment.getAll(repo, vf, model);
-		// List<String> result = user.getAlimentsFromGardeManger(repo, "user1");
-		// List <String> result =
-		// user.getAlimentsWithQuantityFromGardeManger(repo, "user2");
-//		 List<String> result = recette.getAllNamesRecettes(repo);
+//		 List<Stxring> result = recette.getAllNamesRecettes(repo);
 		// engine.writeFile(result);
 
 //		 List<String> result = user.getAllMaladieFromDB(repo);
@@ -137,22 +133,29 @@ public class Main {
 		// user.addTaille(repo, vf, model, wcd, "mallauriep", 1.6);
 		// double result = user.calculBesoinCalorique(repo, "mallauriep");
 //		List<String> result = user.getAllNiveauActiviteFromDB(repo);
-//		 List<String> result = user.getAllAllergiesFromDB(repo);
+//		 List<String> result = user.getAllAlimentsFromAllergie(repo, "Oeuf");
+//		List<String> qwerty = recette.getCategory(repo, "Abricots gratinés à la cannelle");
+//		System.out.println(qwerty);
+//		List<String> result = recette.getNamesRecettesByCategory(repo, "sans gluten");
+//		List<String> result = recette.getNamesRecettesByAllergie(repo, "Fruits de mer");
+//		System.out.println(result);
 
-		// ia.processCluster();
-		// ia.createProfil(repo);
+		
+//		ia.createProfilsAleatoire(repo);
 		// ia.cleanData(repo,
 		// "fichiers_test/ia/profils.txt","fichiers_test/ia/profils_nettoyes.txt");
 		// ia.creerDonneesUserAimeRecette(repo, vf, model, wcd);
-		// ml.save_cluster("fichiers_test/ia/profils_nettoyes.txt",
-		// "fichiers_test/ia/resultat_cluster.txt");
+		// ml.save_cluster("fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt");
 		// "25.0,136.6961201117902,1.5894170109599939,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0"
 		// List<String> result = ia.suggestionRecetteParCluster(repo,
 		// "fichiers_test/ia/profils_nettoyes.txt",
 		// "fichiers_test/ia/resultat_cluster.txt",
 		// "56.0,137.4507296494346,1.5666020829090357,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0");
-//		 System.out.println(result);
-
+		
+//		ia.insertProfilIntoDB(repo, vf, model, wcd, "fichiers_test/ia/profils.txt");
+//		ia.processOffline(repo, "fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt");
+//		List<String> result = ia.processOnline(repo, "fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt", "user78");
+//		System.out.println(result);
 	}
 
 }

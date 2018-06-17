@@ -1,5 +1,6 @@
 package test;
 
+import data.Recette;
 
 public class Test {
 	
@@ -18,12 +19,10 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(System.currentTimeMillis());
-		int indice = 0;
-		for(int i=0;i<1000;i++){
-			indice++;
-		}
-		System.out.println(System.currentTimeMillis());
+		Recette rec = new Recette();
+		String line = "Aiguillette de-poulet sauce douce-image.txt";
+		String process = rec.getProcessFile(line);
+		System.out.println(process);
 	}
 
 }

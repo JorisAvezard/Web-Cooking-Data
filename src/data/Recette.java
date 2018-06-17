@@ -45,6 +45,13 @@ public class Recette {
 
 		return result;
 	}
+	
+	public String getProcessFile(String fichier) {
+		String[] tmp = fichier.split(".txt");
+		String[] tmp2 = tmp[0].split("-");
+
+		return tmp2[tmp2.length-1];
+	}
 
 	public String getNameFromPath(String fileName) {
 		String[] tmp = fileName.split("/");
@@ -213,6 +220,36 @@ public class Recette {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
+				line = line.replace("\"", "");
+				line = line.replaceAll("\\(", "");
+				line = line.replaceAll("\\)", "");
+				line = line.replaceAll("\\`", "");
+				line = line.replaceAll("\\~", "");
+				line = line.replaceAll("\\!", "");
+				line = line.replaceAll("\\@", "");
+				line = line.replaceAll("\\#", "");
+				line = line.replaceAll("\\$", "");
+				line = line.replaceAll("\\%", "");
+				line = line.replaceAll("\\^", "");
+				line = line.replaceAll("\\&", "");
+				line = line.replaceAll("\\*", "");
+				line = line.replaceAll("\\-", "");
+				line = line.replaceAll("\\_", "");
+				line = line.replaceAll("\\=", "");
+				line = line.replaceAll("\\+", "");
+				line = line.replaceAll("\\[", "");
+				line = line.replaceAll("\\]", "");
+				line = line.replaceAll("\\{", "");
+				line = line.replaceAll("\\}", "");
+				line = line.replaceAll("\\|", "");
+				line = line.replaceAll("\\'", "");
+				line = line.replaceAll("\\/", "");
+				line = line.replaceAll("\\?", "");
+				line = line.replaceAll("\\.", "");
+				line = line.replaceAll("\\>", "");
+				line = line.replaceAll("\\,", "");
+				line = line.replaceAll("\\<", "");
+				
 				String ing_iri = engine.formatCaseResource(line);
 				IRI ing = vf.createIRI(wcd, ing_iri);
 				model.add(ing, RDF.TYPE, data_type);
@@ -249,6 +286,7 @@ public class Recette {
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
+		IRI auteur_type = vf.createIRI(wcd, "Auteur");
 
 		String line = null;
 		try {
@@ -258,7 +296,7 @@ public class Recette {
 			while ((line = bufferedReader.readLine()) != null) {
 				String aut_iri = line.replace(' ', '_');
 				IRI per = vf.createIRI(wcd, aut_iri);
-				model.add(per, RDF.TYPE, FOAF.PERSON);
+				model.add(per, RDF.TYPE, auteur_type);
 				model.add(per, FOAF.NAME, vf.createLiteral(line));
 				model.add(recette_nom, DC.CREATOR, per);
 			}
@@ -469,27 +507,46 @@ public class Recette {
 	// ajoute le nb de personnes d'une recette
 	public void processInsertion(Repository repo, ValueFactory vf, Model model, String wcd, String path) {
 		Engine engine = new Engine();
-		String key = "";
-		File folder = new File(path); // ./fichiers_test/recettes/
+		String key = null;
+		String process = null;
+		int i = 0;
+		File folder = new File(path);
 		for (File fileEntry : folder.listFiles()) {
 			String fichier = fileEntry.getName();
 			if (engine.goodFile(fichier)) {
+				System.out.println(i);
 				key = getNameFromFile(fichier);
+				process = getProcessFile(fichier);
+				
 				addTypeAndName(repo, vf, model, wcd, key);
-				addNote(repo, vf, model, wcd, path + key + "-note.txt");
-				addImage(repo, vf, model, wcd, path + key + "-image.txt");
-				addCategorie(repo, vf, model, wcd, path + key + "-categorie.txt");
-				addDifficulte(repo, vf, model, wcd, path + key + "-difficulte.txt");
-				addIngredients(repo, vf, model, wcd, path + key + "-ingredients.txt");
-				addAuteur(repo, vf, model, wcd, path + key + "-auteur.txt");
-				addEtapes(repo, vf, model, wcd, path + key + "-etapes.txt");
-				addUstensiles(repo, vf, model, wcd, path + key + "-ustensiles.txt");
-				addTempsTotal(repo, vf, model, wcd, path + key + "-tempsTotal.txt");
-				addTempsPreparation(repo, vf, model, wcd, path + key + "-preparation.txt");
-				addTempsCuisson(repo, vf, model, wcd, path + key + "-cuisson.txt");
-				// addNbPersonnes(repo, vf, model, wcd, path + key +
-				// "-nbPersonne.txt");
+				
+				if(process.equals("note")){
+					addNote(repo, vf, model, wcd, path + key + "-note.txt");
+				}else if(process.equals("image")){
+					addImage(repo, vf, model, wcd, path + key + "-image.txt");
+				}else if(process.equals("categorie")){
+					addCategorie(repo, vf, model, wcd, path + key + "-categorie.txt");
+				}else if(process.equals("difficulte")){
+					addDifficulte(repo, vf, model, wcd, path + key + "-difficulte.txt");
+				}else if(process.equals("ingredients")){
+					addIngredients(repo, vf, model, wcd, path + key + "-ingredients.txt");
+				}else if(process.equals("auteur")){
+					addAuteur(repo, vf, model, wcd, path + key + "-auteur.txt");
+				}else if(process.equals("etapes")){
+					addEtapes(repo, vf, model, wcd, path + key + "-etapes.txt");
+				}else if(process.equals("ustensiles")){
+					addUstensiles(repo, vf, model, wcd, path + key + "-ustensiles.txt");
+				}else if(process.equals("tempsTotal")){
+					addTempsTotal(repo, vf, model, wcd, path + key + "-tempsTotal.txt");
+				}else if(process.equals("preparation")){
+					addTempsPreparation(repo, vf, model, wcd, path + key + "-preparation.txt");
+				}else if(process.equals("cuisson")){
+					addTempsCuisson(repo, vf, model, wcd, path + key + "-cuisson.txt");
+				}else if(process.equals("nbPersonne")){
+					addNbPersonnes(repo, vf, model, wcd, path + key + "-nbPersonne.txt");
+				}
 			}
+			i++;
 		}
 		System.out.println("End");
 	}
@@ -583,7 +640,6 @@ public class Recette {
 	// retourne pour combien de personnes est destinee une recette
 	public int getNbPersonnes(Repository repo, String key) {
 		repo.initialize();
-		List<String> liste = new ArrayList<String>();
 		int resultat = 0;
 
 		try (RepositoryConnection conn = repo.getConnection()) {
@@ -904,7 +960,7 @@ public class Recette {
 		key = engine.lowerCaseAll(key);
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-			
+
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
@@ -947,7 +1003,7 @@ public class Recette {
 			queryString += "   FILTER (?note >= " + note + ") \n";
 			queryString += "}";
 			queryString += "ORDER BY DESC(?note)";
-			
+
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
@@ -1010,6 +1066,40 @@ public class Recette {
 			queryString += "    ?recette_resource foaf:name ?recette_nom. \n";
 			queryString += "    ?recette_resource wcd:a_pour_ingredient ?ingredient. \n";
 			queryString += "    ?ingredient wcd:aliment_respectif wcd:" + key + ". \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					if (!liste.contains(solution.getValue("recette_nom").stringValue())) {
+						liste.add(solution.getValue("recette_nom").stringValue());
+					}
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+	}
+	
+	public List<String> getNamesRecettesByAllergie(Repository repo, String key) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+		Engine engine = new Engine();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_resource rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_resource foaf:name ?recette_nom. \n";
+			queryString += "    ?recette_resource wcd:a_pour_ingredient ?ingredient_iri. \n";
+			queryString += "    ?ingredient_iri wcd:aliment_respectif ?aliment_iri. \n";
+			queryString += "    ?aliment_iri wcd:a_pour_categorie_allergie ?allergie_iri. \n";
+			queryString += "    ?allergie_iri foaf:name \"" + key + "\". \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {

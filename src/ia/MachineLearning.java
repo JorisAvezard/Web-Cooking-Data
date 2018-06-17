@@ -24,6 +24,8 @@ import net.sf.javaml.clustering.evaluation.SumOfAveragePairwiseSimilarities;
 import net.sf.javaml.clustering.evaluation.SumOfCentroidSimilarities;
 import net.sf.javaml.clustering.evaluation.SumOfSquaredErrors;
 import net.sf.javaml.core.Dataset;
+import net.sf.javaml.core.DefaultDataset;
+import net.sf.javaml.core.DenseInstance;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.MahalanobisDistance;
 import net.sf.javaml.tools.data.FileHandler;
@@ -83,6 +85,110 @@ public class MachineLearning {
 		// // System.out.println(clusters[i].instance(6)+"\n");
 		// }
 		return clusters;
+	}
+
+	public static double[] convertStringListToDoubleList(String[] entry) {
+		double[] result = new double[entry.length-1];
+		int i = 0;
+
+		for (i = 1; i < entry.length; i++) {
+			result[i-1] = Double.valueOf(entry[i]);
+		}
+
+		return result;
+	}
+
+//	public void processKMean(List<String> profils, String fichier_de_sortie) throws Exception {
+//		double score = 0.0;
+//		Dataset data = new DefaultDataset();
+//		int i = 0;
+//		int j = 0;
+//
+//		double[] profil_split = null;
+//		
+//		for (i = 0; i < profils.size(); i++) {
+//			profil_split = convertStringListToDoubleList(profils.get(i).split(";"));
+//			Instance instance = new DenseInstance(profil_split);
+//			data.add(instance);
+//		}
+//
+//		Clusterer km = new KMeans(15);
+//		Dataset[] clusters = km.cluster(data);
+//		ClusterEvaluation sse = new SumOfSquaredErrors();
+//		score = sse.score(clusters);
+//		System.out.println("le taux erreur :" + score + "\n");
+//
+//		String val = "";
+//		BufferedWriter bw = null;
+//		FileWriter fw = null;
+//		try {
+//			fw = new FileWriter(fichier_de_sortie);
+//			bw = new BufferedWriter(fw);
+//			for (i = 0; i < clusters.length; i++) {
+//				for (j = 0; j < clusters[i].size(); j++) {
+//					val = i + ";" + clusters[i].instance(j).get(0);
+//					for (int k = 1; k < clusters[i].instance(j).size(); k++) {
+//						val += "," + clusters[i].instance(j).get(k);
+//					}
+//					bw.write(val + "\n");
+//				}
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				if (bw != null)
+//					bw.close();
+//				if (fw != null)
+//					fw.close();
+//			} catch (IOException ex) {
+//				ex.printStackTrace();
+//			}
+//		}
+//	}
+	
+	public void processKMean(String fichier_profils_nettoyes, String fichier_resultat_cluster) throws Exception {
+		double score = 0.0;
+		int i = 0;
+		int j = 0;
+		int k = 0;
+
+		Dataset data0 = FileHandler.loadDataset(new File(fichier_profils_nettoyes), ";");
+		Dataset data = remove_id(data0);
+
+		Clusterer km = new KMeans(15);
+		Dataset[] clusters = km.cluster(data);
+		ClusterEvaluation sse = new SumOfSquaredErrors();
+		score = sse.score(clusters);
+		System.out.println("le taux erreur :" + score + "\n");
+
+		String val = "";
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(fichier_resultat_cluster);
+			bw = new BufferedWriter(fw);
+			for (i = 0; i < clusters.length; i++) {
+				for (j = 0; j < clusters[i].size(); j++) {
+					val = i + ";" + clusters[i].instance(j).get(0);
+					for (k = 1; k < clusters[i].instance(j).size(); k++) {
+						val += "," + clusters[i].instance(j).get(k);
+					}
+					bw.write(val + "\n");
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+				if (fw != null)
+					fw.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	public static Dataset remove_id(Dataset data) throws Exception {
@@ -217,4 +323,40 @@ public class MachineLearning {
 		return all_id;
 	}
 
+//	public static ArrayList<String> id_user(List<String> profils, List<String> cluster_user)
+//			throws IOException {
+//		ArrayList<String> all_id = new ArrayList<String>();
+//		ArrayList<String[]> result = new ArrayList<String[]>();
+//		String profil = null;
+//		int i = 0;
+//		for (int j=0;j<profils.size();j++) {
+//			String[] resul2 = new String[2];
+//			String [] resul = profils.get(j).split(";");
+//
+//			profil = resul[1];
+//
+//			for (i = 2; i < resul.length; i++) {
+//				profil += ";" + resul[i];
+//			}
+//
+//			resul2[0] = resul[0];
+//			resul2[1] = profil;
+//
+//			result.add(resul2);
+//		}
+//	
+//		for (int p = 0; p < cluster_user.size(); p++) {
+//			for (String[] arr : result) {
+//				if (cluster_user.get(p).equals(arr[1])) {
+//					all_id.add(arr[0]);
+//				}
+//			}
+//		}
+//		for ( int f=0;f<all_id.size();f++){
+//			System.out.println(all_id.get(f));
+//		}
+//
+//		return all_id;
+//	}
+	
 }

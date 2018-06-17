@@ -442,14 +442,14 @@ public class User {
 	}
 
 	public void insertAllDataAllergieIntoDB(Repository repo, ValueFactory vf, Model model, String wcd) {
-		insertAllDataAllergieFruitDeMerIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/fruits_de_mer.txt");
-		insertAllDataAllergieArachideIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_arachide.txt");
-		insertAllDataAllergieBleIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_blé.txt");
-		insertAllDataAllergieLaitIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_laitier.txt");
-		insertAllDataAllergieMoutardeIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_moutarde.txt");
-		insertAllDataAllergieNoixIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_noix.txt");
-		insertAllDataAllergieOeufIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_oeuf.txt");
-		insertAllDataAllergieSojaIntoDB(repo, vf, model, wcd, "./fichiers_test/aliments/produits_soja.txt");
+		insertAllDataAllergieFruitDeMerIntoDB(repo, vf, model, wcd, "./fichiers/allergies/allergie_fruits_de_mer.txt");
+		insertAllDataAllergieArachideIntoDB(repo, vf, model, wcd, "./fichiers/allergies/allergie_arachide.txt");
+		insertAllDataAllergieBleIntoDB(repo, vf, model, wcd, "./fichiers/allergies/allergie_blé.txt");
+		insertAllDataAllergieLaitIntoDB(repo, vf, model, wcd, "./fichiers/allergies/allergie_lait.txt");
+		insertAllDataAllergieMoutardeIntoDB(repo, vf, model, wcd, "./fichiers/allergies/allergie_moutarde.txt");
+		insertAllDataAllergieNoixIntoDB(repo, vf, model, wcd, "./fichiers/allergies/allergie_noix.txt");
+		insertAllDataAllergieOeufIntoDB(repo, vf, model, wcd, "./fichiers/allergies/allergie_oeuf.txt");
+		insertAllDataAllergieSojaIntoDB(repo, vf, model, wcd, "./fichiers/allergies/allergie_soja.txt");
 
 	}
 
@@ -471,6 +471,35 @@ public class User {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
 					liste.add(solution.getValue("data").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+	
+	public List<String> getAllAlimentsFromAllergie(Repository repo, String allergie) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?aliment_name \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?aliment_iri rdf:type wcd:Aliment. \n";
+			queryString += "    ?aliment_iri foaf:name ?aliment_name. \n";
+			queryString += "    ?aliment_iri wcd:a_pour_categorie_allergie ?data_iri. \n";
+			queryString += "    ?data_iri rdf:type wcd:Allergie. \n";
+			queryString += "    ?data_iri foaf:name \""+ allergie +"\". \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("aliment_name").stringValue());
 				}
 			}
 		} finally {
@@ -545,9 +574,7 @@ public class User {
 		// return liste;
 	}
 
-	public String checkConnexion(String login_entry, String password_entry) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
+	public String checkConnexion(Repository repo, String login_entry, String password_entry) {
 		repo.initialize();
 		String mdp_true = "";
 
@@ -611,9 +638,7 @@ public class User {
 		}
 	}
 
-	public String processInscription(String login_entry, String mdp_entry) {
-		File dataDir = new File("./db/");
-		Repository repo = new SailRepository(new NativeStore(dataDir));
+	public String processInscription(Repository repo, String login_entry, String mdp_entry) {
 		ValueFactory vf = SimpleValueFactory.getInstance();
 		Model model = new TreeModel();
 		String wcd = "http://m2bigcookingdata.org/";
@@ -1070,9 +1095,9 @@ public class User {
 		return liste;
 	}
 
-	public List<String> getUserMaladie(Repository repo, String login) {
+	public String getUserMaladie(Repository repo, String login) {
 		repo.initialize();
-		List<String> liste = new ArrayList<String>();
+		String liste = "Aucun";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
@@ -1090,7 +1115,7 @@ public class User {
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("maladie").stringValue());
+					liste = solution.getValue("maladie").stringValue();
 				}
 			}
 		} finally {
@@ -1226,9 +1251,9 @@ public class User {
 		}
 	}
 
-	public List<String> getUserRegimeAlimentaire(Repository repo, String login) {
+	public String getUserRegimeAlimentaire(Repository repo, String login) {
 		repo.initialize();
-		List<String> liste = new ArrayList<String>();
+		String liste = "Aucun";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -1248,7 +1273,7 @@ public class User {
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("regime").stringValue());
+					liste = solution.getValue("regime").stringValue();
 				}
 			}
 		} finally {
@@ -1309,9 +1334,9 @@ public class User {
 		}
 	}
 
-	public List<String> getUserAllergie(Repository repo, String login) {
+	public String getUserAllergie(Repository repo, String login) {
 		repo.initialize();
-		List<String> liste = new ArrayList<String>();
+		String liste = "Aucun";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
@@ -1330,7 +1355,7 @@ public class User {
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("allergie").stringValue());
+					liste = solution.getValue("allergie").stringValue();
 				}
 			}
 		} finally {
@@ -1383,7 +1408,7 @@ public class User {
 
 	public int getUserAge(Repository repo, String login) {
 		repo.initialize();
-		int resultat = 0;
+		int resultat = -1;
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -1483,7 +1508,7 @@ public class User {
 
 	public String getUserGenre(Repository repo, String login) {
 		repo.initialize();
-		String liste = "";
+		String liste = "Aucun";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -1540,7 +1565,7 @@ public class User {
 
 	public String getUserNiveauActivite(Repository repo, String login) {
 		repo.initialize();
-		String liste = "";
+		String liste = "Aucun";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -1665,7 +1690,7 @@ public class User {
 
 	public double getUserPoids(Repository repo, String login) {
 		repo.initialize();
-		double resultat = 0;
+		double resultat = -1;
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -1735,9 +1760,9 @@ public class User {
 		}
 	}
 
-	public int getUserTaille(Repository repo, String login) {
+	public double getUserTaille(Repository repo, String login) {
 		repo.initialize();
-		int resultat = 0;
+		double resultat = -1;
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -1755,7 +1780,7 @@ public class User {
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					resultat = Integer.valueOf(solution.getValue("taille").stringValue());
+					resultat = Double.valueOf(solution.getValue("taille").stringValue());
 				}
 			}
 		} finally {
@@ -1810,15 +1835,15 @@ public class User {
 	}
 
 	public double calculBesoinCalorique(Repository repo, String login) {
-		double result = 0.0;
+		double result = -1;
 
 		String genre = getUserGenre(repo, login);
 		int age = getUserAge(repo, login);
-		int taille = getUserTaille(repo, login);
+		double taille = getUserTaille(repo, login);
 		double poids = getUserPoids(repo, login);
 		String niveau_activite = getUserNiveauActivite(repo, login);
 
-		if ((genre.equals("")) || (age == 0) || (taille == 0) || (poids == 0) || (niveau_activite.equals(""))) {
+		if ((genre.equals("Aucun")) || (age == -1) || (taille == -1) || (poids == -1) || (niveau_activite.equals("Aucun"))) {
 			return result;
 		}
 
@@ -2038,6 +2063,37 @@ public class User {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
 					liste.add(solution.getValue("recette_nom").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////
+	// Methodes generales
+	//////////////////////////////////////////////////////////////////////////////
+	
+	public List<String> getAllLogins(Repository repo){
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?login \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?user_iri rdf:type foaf:Person. \n";
+			queryString += "    ?user_iri foaf:name ?login. \n";
+			queryString += "}";
+
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("login").stringValue());
 				}
 			}
 		} finally {
