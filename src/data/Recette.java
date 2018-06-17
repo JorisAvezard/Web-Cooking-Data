@@ -1,6 +1,7 @@
 package data;
 
 import engine.Engine;
+import engine.Extraction;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,14 +29,29 @@ public class Recette {
 	public Recette() {
 
 	}
-	
+
 	public String getNameFromFile(String fichier) {
-		String[] tmp2 = fichier.split(".txt");
-		String[] tmp3 = tmp2[0].split("-");
+		String result = null;
+		String[] tmp = fichier.split(".txt");
+		String[] tmp2 = tmp[0].split("-");
 
-		return tmp3[0];
+		result = tmp2[0];
+
+		if (tmp2.length > 2) {
+			for (int i = 1; i < tmp2.length - 1; i++) {
+				result += "-" + tmp2[i];
+			}
+		}
+
+		return result;
 	}
+	
+	public String getProcessFile(String fichier) {
+		String[] tmp = fichier.split(".txt");
+		String[] tmp2 = tmp[0].split("-");
 
+		return tmp2[tmp2.length-1];
+	}
 
 	public String getNameFromPath(String fileName) {
 		String[] tmp = fileName.split("/");
@@ -55,44 +71,31 @@ public class Recette {
 		IRI recette_objet = vf.createIRI(wcd, "Recette");
 		model.add(recette_nom, RDF.TYPE, recette_objet);
 		model.add(recette_nom, FOAF.NAME, vf.createLiteral(rec_nom_litteral));
-		
+
 		try (RepositoryConnection conn = repo.getConnection()) {
 			conn.add(model);
 		} finally {
 			repo.shutDown();
 		}
 	}
-	
-	public void addNote(Repository repo, ValueFactory vf, Model model, String wcd, String key) {
-		repo.initialize();
-		Engine engine = new Engine();
-		String key_iri = engine.formatCaseResource(key);
-		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI note_iri = vf.createIRI(wcd, "a_pour_note");
-		model.add(recette_nom, note_iri, vf.createLiteral(Double.valueOf("0")));
-		
-		try (RepositoryConnection conn = repo.getConnection()) {
-			conn.add(model);
-		} finally {
-			repo.shutDown();
-		}
-	}
-	
-	public void addNoteTest(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+
+	public void addNote(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI note_iri = vf.createIRI(wcd, "a_pour_note");
+		IRI cat_iri = vf.createIRI(wcd, "a_pour_note");
 
 		String line = null;
+		String[] line_split = null;
 		try {
 			FileReader fileReader = new FileReader(fileName);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
-				model.add(recette_nom, note_iri, vf.createLiteral(Double.valueOf(line)));
+				line_split = line.split(" ");
+				model.add(recette_nom, cat_iri, vf.createLiteral(line_split[0]));
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -107,7 +110,37 @@ public class Recette {
 			repo.shutDown();
 		}
 	}
-	
+
+	public void addImage(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+		repo.initialize();
+		Engine engine = new Engine();
+		String rec_nom = getNameFromPath(fileName);
+		String key_iri = engine.formatCaseResource(rec_nom);
+		IRI recette_nom = vf.createIRI(wcd, key_iri);
+		IRI cat_iri = vf.createIRI(wcd, "a_pour_image");
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+			while ((line = bufferedReader.readLine()) != null) {
+				model.add(recette_nom, cat_iri, vf.createLiteral(line));
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			conn.add(model);
+		} finally {
+			repo.shutDown();
+		}
+	}
+
 	public void addCategorie(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -137,7 +170,7 @@ public class Recette {
 			repo.shutDown();
 		}
 	}
-	
+
 	public void addDifficulte(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
@@ -167,17 +200,19 @@ public class Recette {
 			repo.shutDown();
 		}
 	}
-	
+
 	// ajoute les ingredients d'une recette
 	public void addIngredients(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
 		repo.initialize();
 		Engine engine = new Engine();
+		Extraction extraction = new Extraction();
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
 		IRI data_predicate = vf.createIRI(wcd, "a_pour_ingredient");
 		IRI data_type = vf.createIRI(wcd, "Ingredient");
-		IRI ing_desc = vf.createIRI(wcd, "description");
+		IRI ing_desc = vf.createIRI(wcd, "a_pour_description");
+		IRI link_ing_ali = vf.createIRI(wcd, "aliment_respectif");
 
 		String line = null;
 		try {
@@ -185,12 +220,50 @@ public class Recette {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
+				line = line.replace("\"", "");
+				line = line.replaceAll("\\(", "");
+				line = line.replaceAll("\\)", "");
+				line = line.replaceAll("\\`", "");
+				line = line.replaceAll("\\~", "");
+				line = line.replaceAll("\\!", "");
+				line = line.replaceAll("\\@", "");
+				line = line.replaceAll("\\#", "");
+				line = line.replaceAll("\\$", "");
+				line = line.replaceAll("\\%", "");
+				line = line.replaceAll("\\^", "");
+				line = line.replaceAll("\\&", "");
+				line = line.replaceAll("\\*", "");
+				line = line.replaceAll("\\-", "");
+				line = line.replaceAll("\\_", "");
+				line = line.replaceAll("\\=", "");
+				line = line.replaceAll("\\+", "");
+				line = line.replaceAll("\\[", "");
+				line = line.replaceAll("\\]", "");
+				line = line.replaceAll("\\{", "");
+				line = line.replaceAll("\\}", "");
+				line = line.replaceAll("\\|", "");
+				line = line.replaceAll("\\'", "");
+				line = line.replaceAll("\\/", "");
+				line = line.replaceAll("\\?", "");
+				line = line.replaceAll("\\.", "");
+				line = line.replaceAll("\\>", "");
+				line = line.replaceAll("\\,", "");
+				line = line.replaceAll("\\<", "");
+				
 				String ing_iri = engine.formatCaseResource(line);
 				IRI ing = vf.createIRI(wcd, ing_iri);
 				model.add(ing, RDF.TYPE, data_type);
 				model.add(recette_nom, data_predicate, ing);
 				String ing_desc_value = engine.formatCaseLitteral(line);
 				model.add(ing, ing_desc, vf.createLiteral(ing_desc_value));
+
+				String aliment_respectif = extraction.getAlimentFromIngredient(repo, line);
+				// System.out.println("aliment_respectif :"+ aliment_respectif);
+				if (!aliment_respectif.equals("")) {
+					aliment_respectif = engine.formatCaseResource(aliment_respectif);
+					IRI aliment_resource = vf.createIRI(wcd, aliment_respectif);
+					model.add(ing, link_ing_ali, aliment_resource);
+				}
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -213,6 +286,7 @@ public class Recette {
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
+		IRI auteur_type = vf.createIRI(wcd, "Auteur");
 
 		String line = null;
 		try {
@@ -222,7 +296,7 @@ public class Recette {
 			while ((line = bufferedReader.readLine()) != null) {
 				String aut_iri = line.replace(' ', '_');
 				IRI per = vf.createIRI(wcd, aut_iri);
-				model.add(per, RDF.TYPE, FOAF.PERSON);
+				model.add(per, RDF.TYPE, auteur_type);
 				model.add(per, FOAF.NAME, vf.createLiteral(line));
 				model.add(recette_nom, DC.CREATOR, per);
 			}
@@ -311,7 +385,7 @@ public class Recette {
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI data_predicate = vf.createIRI(wcd, "temps_total");
+		IRI data_predicate = vf.createIRI(wcd, "a_pour_temps_total");
 
 		String line = null;
 		try {
@@ -342,7 +416,7 @@ public class Recette {
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI data_predicate = vf.createIRI(wcd, "temps_preparation");
+		IRI data_predicate = vf.createIRI(wcd, "a_pour_temps_preparation");
 
 		String line = null;
 		try {
@@ -350,7 +424,8 @@ public class Recette {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
-				model.add(recette_nom, data_predicate, vf.createLiteral(engine.getValueFromPreparationAndCuissonRecetteFile(line)));
+				model.add(recette_nom, data_predicate,
+						vf.createLiteral(engine.getValueFromPreparationAndCuissonRecetteFile(line)));
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -373,7 +448,7 @@ public class Recette {
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI data_predicate = vf.createIRI(wcd, "temps_cuisson");
+		IRI data_predicate = vf.createIRI(wcd, "a_pour_temps_cuisson");
 
 		String line = null;
 		try {
@@ -381,7 +456,8 @@ public class Recette {
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			while ((line = bufferedReader.readLine()) != null) {
-				model.add(recette_nom, data_predicate, vf.createLiteral(engine.getValueFromPreparationAndCuissonRecetteFile(line)));
+				model.add(recette_nom, data_predicate,
+						vf.createLiteral(engine.getValueFromPreparationAndCuissonRecetteFile(line)));
 			}
 			bufferedReader.close();
 		} catch (FileNotFoundException ex) {
@@ -404,7 +480,7 @@ public class Recette {
 		String rec_nom = getNameFromPath(fileName);
 		String key_iri = engine.formatCaseResource(rec_nom);
 		IRI recette_nom = vf.createIRI(wcd, key_iri);
-		IRI data_predicate = vf.createIRI(wcd, "nb_personnes");
+		IRI data_predicate = vf.createIRI(wcd, "a_pour_nb_personnes");
 
 		String line = null;
 		try {
@@ -431,26 +507,46 @@ public class Recette {
 	// ajoute le nb de personnes d'une recette
 	public void processInsertion(Repository repo, ValueFactory vf, Model model, String wcd, String path) {
 		Engine engine = new Engine();
-		String key = "";
-		File folder = new File(path); //./fichiers_test/recettes/
+		String key = null;
+		String process = null;
+		int i = 0;
+		File folder = new File(path);
 		for (File fileEntry : folder.listFiles()) {
 			String fichier = fileEntry.getName();
 			if (engine.goodFile(fichier)) {
-				 key = getNameFromFile(fichier);
-				 addTypeAndName(repo, vf, model, wcd, key);
-				 addNote(repo, vf, model, wcd, key);
-//				 addNoteTest(repo, vf, model, wcd, path + key + "-note.txt");
-				 addCategorie(repo, vf, model, wcd, path + key + "-categorie.txt");
-				 addDifficulte(repo, vf, model, wcd, path + key + "-difficulte.txt");
-				 addIngredients(repo, vf, model, wcd, path + key + "-ingredients.txt");
-				 addAuteur(repo, vf, model, wcd, path + key + "-auteur.txt");
-				 addEtapes(repo, vf, model, wcd, path + key + "-etapes.txt");
-				 addUstensiles(repo, vf, model, wcd, path + key + "-ustensiles.txt");
-				 addTempsTotal(repo, vf, model, wcd, path + key + "-tempsTotal.txt");
-				 addTempsPreparation(repo, vf, model, wcd, path + key + "-preparation.txt");
-				 addTempsCuisson(repo, vf, model, wcd, path + key + "-cuisson.txt");
-				 addNbPersonnes(repo, vf, model, wcd, path + key + "-nbPersonne.txt");
+				System.out.println(i);
+				key = getNameFromFile(fichier);
+				process = getProcessFile(fichier);
+				
+				addTypeAndName(repo, vf, model, wcd, key);
+				
+				if(process.equals("note")){
+					addNote(repo, vf, model, wcd, path + key + "-note.txt");
+				}else if(process.equals("image")){
+					addImage(repo, vf, model, wcd, path + key + "-image.txt");
+				}else if(process.equals("categorie")){
+					addCategorie(repo, vf, model, wcd, path + key + "-categorie.txt");
+				}else if(process.equals("difficulte")){
+					addDifficulte(repo, vf, model, wcd, path + key + "-difficulte.txt");
+				}else if(process.equals("ingredients")){
+					addIngredients(repo, vf, model, wcd, path + key + "-ingredients.txt");
+				}else if(process.equals("auteur")){
+					addAuteur(repo, vf, model, wcd, path + key + "-auteur.txt");
+				}else if(process.equals("etapes")){
+					addEtapes(repo, vf, model, wcd, path + key + "-etapes.txt");
+				}else if(process.equals("ustensiles")){
+					addUstensiles(repo, vf, model, wcd, path + key + "-ustensiles.txt");
+				}else if(process.equals("tempsTotal")){
+					addTempsTotal(repo, vf, model, wcd, path + key + "-tempsTotal.txt");
+				}else if(process.equals("preparation")){
+					addTempsPreparation(repo, vf, model, wcd, path + key + "-preparation.txt");
+				}else if(process.equals("cuisson")){
+					addTempsCuisson(repo, vf, model, wcd, path + key + "-cuisson.txt");
+				}else if(process.equals("nbPersonne")){
+					addNbPersonnes(repo, vf, model, wcd, path + key + "-nbPersonne.txt");
+				}
 			}
+			i++;
 		}
 		System.out.println("End");
 	}
@@ -459,54 +555,116 @@ public class Recette {
 	public List<String> getIngredients(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
+
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-			queryString += "SELECT ?ii \n";
+			queryString += "SELECT ?ingredient_nom \n";
 			queryString += "WHERE { \n";
 			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
-			queryString += "    wcd:"+key+" wcd:a_pour_ingredient ?i. \n";
-			queryString += "    ?i wcd:description ?ii. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "     ?recette_iri wcd:a_pour_ingredient ?ingredient_iri. \n";
+			queryString += "    ?ingredient_iri wcd:a_pour_description ?ingredient_nom. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					if(!liste.contains(solution.getValue("ii").stringValue()))
-						liste.add(solution.getValue("ii").stringValue());
+					liste.add(solution.getValue("ingredient_nom").stringValue());
 				}
 			}
 		} finally {
 			repo.shutDown();
 		}
+
 		return liste;
 	}
 
-	// retourne pour combien de personnes est destinee une recette
-	public List<String> getNbPersonnes(Repository repo, String key) {
+	public double getNote(Repository repo, String key) {
 		repo.initialize();
-		List<String> liste = new ArrayList<String>();
+		double resultat = 0;
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-			queryString += "SELECT ?i \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?note \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:nb_personnes ?i. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "     ?recette_iri wcd:a_pour_note ?note. \n";
 			queryString += "}";
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					// System.out.println(solution.getValue("ii").stringValue());
-					liste.add(solution.getValue("i").stringValue());
+					resultat = Double.valueOf(solution.getValue("note").stringValue());
 				}
 			}
 		} finally {
 			repo.shutDown();
 		}
 
-		return liste;
+		return resultat;
+	}
+
+	public String getImage(Repository repo, String key) {
+		repo.initialize();
+		String resultat = null;
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?image \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "     ?recette_iri wcd:a_pour_image ?image. \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					resultat = solution.getValue("image").stringValue();
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return resultat;
+	}
+
+	// retourne pour combien de personnes est destinee une recette
+	public int getNbPersonnes(Repository repo, String key) {
+		repo.initialize();
+		int resultat = 0;
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?nombre \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "     ?recette_iri wcd:a_pour_nb_personnes ?nombre. \n";
+			queryString += "}";
+
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					resultat = Integer.valueOf(solution.getValue("nombre").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return resultat;
 	}
 
 	// retourne les etapes etant donne une recette
@@ -520,16 +678,20 @@ public class Recette {
 		try (RepositoryConnection conn = repo.getConnection()) {
 			while (cont) {
 				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-				queryString += "SELECT ?i \n";
+				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+				queryString += "SELECT ?etape \n";
 				queryString += "WHERE { \n";
-				queryString += "    wcd:" + key + " wcd:a_pour_etape_" + indice + " ?i. \n";
+				queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+				queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+				queryString += "    ?recette_iri wcd:a_pour_etape_" + indice + " ?etape. \n";
 				queryString += "}";
+
 				TupleQuery query = conn.prepareTupleQuery(queryString);
 				try (TupleQueryResult result = query.evaluate()) {
 					while (result.hasNext()) {
 						BindingSet solution = result.next();
-						// System.out.println(solution.getValue("ii").stringValue());
-						liste.add(solution.getValue("i").stringValue());
+						liste.add(solution.getValue("etape").stringValue());
 						indice2++;
 					}
 				}
@@ -553,19 +715,22 @@ public class Recette {
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
 			queryString += "PREFIX dc: <" + DC.NAMESPACE + "> \n";
-			queryString += "SELECT ?ii \n";
+			queryString += "SELECT ?auteur \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " dc:creator ?i. \n";
-			queryString += "    ?i foaf:name ?ii. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "    ?recette_iri dc:creator ?auteur_iri. \n";
+			queryString += "    ?auteur_iri foaf:name ?auteur. \n";
 			queryString += "}";
+
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					// System.out.println(solution.getValue("ii").stringValue());
-					liste.add(solution.getValue("ii").stringValue());
+					liste.add(solution.getValue("auteur").stringValue());
 				}
 			}
 		} finally {
@@ -581,15 +746,20 @@ public class Recette {
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-			queryString += "SELECT ?i \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?temps \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:temps_total ?i. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "    ?recette_iri wcd:a_pour_temps_total ?temps. \n";
 			queryString += "}";
+
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("i").stringValue());
+					liste.add(solution.getValue("temps").stringValue());
 				}
 			}
 		} finally {
@@ -605,15 +775,20 @@ public class Recette {
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-			queryString += "SELECT ?i \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?temps \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:temps_cuisson ?i. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "    ?recette_iri wcd:a_pour_temps_cuisson ?temps. \n";
 			queryString += "}";
+
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("i").stringValue());
+					liste.add(solution.getValue("temps").stringValue());
 				}
 			}
 		} finally {
@@ -629,15 +804,20 @@ public class Recette {
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-			queryString += "SELECT ?i \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?temps \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:temps_preparation ?i. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "    ?recette_iri wcd:a_pour_temps_preparation ?temps. \n";
 			queryString += "}";
+
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("i").stringValue());
+					liste.add(solution.getValue("temps").stringValue());
 				}
 			}
 		} finally {
@@ -653,15 +833,20 @@ public class Recette {
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-			queryString += "SELECT ?i \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?ustensile \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:a_pour_ustensile ?i. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "    ?recette_iri wcd:a_pour_ustensile ?ustensile. \n";
 			queryString += "}";
+
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("i").stringValue());
+					liste.add(solution.getValue("ustensile").stringValue());
 				}
 			}
 		} finally {
@@ -670,41 +855,22 @@ public class Recette {
 
 		return liste;
 	}
-	
-	public List<String> getNote(Repository repo, String key) {
-		repo.initialize();
-		List<String> liste = new ArrayList<String>();
 
-		try (RepositoryConnection conn = repo.getConnection()) {
-			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-			queryString += "SELECT ?note \n";
-			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:a_pour_note ?note. \n";
-			queryString += "}";
-			TupleQuery query = conn.prepareTupleQuery(queryString);
-			try (TupleQueryResult result = query.evaluate()) {
-				while (result.hasNext()) {
-					BindingSet solution = result.next();
-					liste.add(solution.getValue("note").stringValue());
-				}
-			}
-		} finally {
-			repo.shutDown();
-		}
-
-		return liste;
-	}
-	
 	public List<String> getCategory(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
 			queryString += "SELECT ?cat \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:a_pour_categorie ?cat. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "    ?recette_iri wcd:a_pour_categorie ?cat. \n";
 			queryString += "}";
+
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
@@ -725,10 +891,15 @@ public class Recette {
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
 			queryString += "SELECT ?dif \n";
 			queryString += "WHERE { \n";
-			queryString += "    wcd:" + key + " wcd:a_pour_difficulte ?dif. \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "    ?recette_iri wcd:a_pour_difficulte ?dif. \n";
 			queryString += "}";
+
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
@@ -743,75 +914,43 @@ public class Recette {
 		return liste;
 	}
 
-
-	@SuppressWarnings("unchecked")
-	public JSONObject setJson(Repository repo, ValueFactory vf, Model model, String key) {
-		JSONObject result = new JSONObject();
-		Engine engine = new Engine();
-		String key_iri = engine.formatCaseResource(key);
-
-		List<String> ing_val = getIngredients(repo, key_iri);
-		List<String> nbper_val = getNbPersonnes(repo, key_iri);
-		List<String> et_val = getEtapes(repo, key_iri);
-		List<String> aut_val = getAuteur(repo, key_iri);
-		List<String> tt_val = getTempsTotal(repo, key_iri);
-		List<String> tc_val = getTempsCuisson(repo, key_iri);
-		List<String> tp_val = getTempsPreparation(repo, key_iri);
-		List<String> ust_val = getUstensiles(repo, key_iri);
-		result.put("ingredients", ing_val);
-		result.put("nb personnes", nbper_val);
-		result.put("etapes", et_val);
-		result.put("auteur", aut_val);
-		result.put("temps total", tt_val);
-		result.put("temps cuisson", tc_val);
-		result.put("temps preparation", tp_val);
-		result.put("ustensiles", ust_val);
-
-		System.out.print(result);
-
-		return result;
-	}
-	
 	public List<String> getNamesRecettesByKeyWord(Repository repo, List<String> key_words) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
-		int i =0;
+		int i = 0;
 		String key = "";
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-//			System.out.println("AVANT REQUETE - " + key_words);
-			for(i=0;i<key_words.size();i++){
+			for (i = 0; i < key_words.size(); i++) {
 				key = engine.lowerCaseAll(key_words.get(i));
+
 				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
 				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
 				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-				queryString += "SELECT ?ii \n";
+				queryString += "SELECT ?recette_nom \n";
 				queryString += "WHERE { \n";
-				queryString += "    ?i rdf:type wcd:Recette. \n";
-				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "   FILTER regex(?ii, \""+key+"\", \"i\") \n";
-//				queryString += "   OPTIONAL { FILTER regex(?ii, \""+key+"\", \"i\")}. \n";
-//				queryString += "   OPTIONAL { FILTER regex(?ii, \""+key2+"\", \"i\")}. \n";
+				queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+				queryString += "    ?recette_iri foaf:name ?recette_nom. \n";
+				queryString += "   FILTER regex(?recette_nom, \"" + key + "\", \"i\") \n";
 				queryString += "}";
+
 				TupleQuery query = conn.prepareTupleQuery(queryString);
 				try (TupleQueryResult result = query.evaluate()) {
 					while (result.hasNext()) {
 						BindingSet solution = result.next();
-						if(!liste.contains(solution.getValue("ii").stringValue())){
-							liste.add(solution.getValue("ii").stringValue());
+						if (!liste.contains(solution.getValue("recette_nom").stringValue())) {
+							liste.add(solution.getValue("recette_nom").stringValue());
 						}
-//						System.out.println(solution.getValue("i").stringValue());
 					}
 				}
 			}
 		} finally {
 			repo.shutDown();
 		}
-//		System.out.println(liste);
 		return liste;
 	}
-	
+
 	// Entrée, plat, dessert
 	// Végétarien, Sans gluten
 	public List<String> getNamesRecettesByCategory(Repository repo, String key) {
@@ -821,62 +960,64 @@ public class Recette {
 		key = engine.lowerCaseAll(key);
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-				
-				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
-				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-				queryString += "SELECT ?ii \n";
-				queryString += "WHERE { \n";
-				queryString += "    ?i rdf:type wcd:Recette. \n";
-				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "    ?i wcd:a_pour_categorie ?cat. \n";
-				queryString += "   FILTER regex(?cat, \""+key+"\", \"i\") \n";
-				queryString += "}";
-				TupleQuery query = conn.prepareTupleQuery(queryString);
-				try (TupleQueryResult result = query.evaluate()) {
-					while (result.hasNext()) {
-						BindingSet solution = result.next();
-							liste.add(solution.getValue("ii").stringValue());
-					}
+
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name ?recette_nom. \n";
+			queryString += "    ?recette_iri wcd:a_pour_categorie ?cat. \n";
+			queryString += "   FILTER regex(?cat, \"" + key + "\", \"i\") \n";
+			queryString += "}";
+
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("recette_nom").stringValue());
 				}
+			}
 		} finally {
 			repo.shutDown();
 		}
 
 		return liste;
 	}
-	
+
 	public List<String> getNamesRecettesByNote(Repository repo, double note) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-				
-				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
-				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-				queryString += "SELECT ?ii \n";
-				queryString += "WHERE { \n";
-				queryString += "    ?i rdf:type wcd:Recette. \n";
-				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "    ?i wcd:a_pour_note ?note. \n";
-				queryString += "   FILTER (?note >= "+note+") \n";
-				queryString += "}";
-				queryString += "ORDER BY DESC(?note)";
-				TupleQuery query = conn.prepareTupleQuery(queryString);
-				try (TupleQueryResult result = query.evaluate()) {
-					while (result.hasNext()) {
-						BindingSet solution = result.next();
-							liste.add(solution.getValue("ii").stringValue());
-					}
+
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name ?recette_nom. \n";
+			queryString += "    ?recette_iri wcd:a_pour_note ?note. \n";
+			queryString += "   FILTER (?note >= " + note + ") \n";
+			queryString += "}";
+			queryString += "ORDER BY DESC(?note)";
+
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("recette_nom").stringValue());
 				}
+			}
 		} finally {
 			repo.shutDown();
 		}
 
 		return liste;
 	}
-	
+
 	public List<String> getNamesRecettesByDifficulte(Repository repo, String key) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -884,32 +1025,33 @@ public class Recette {
 		key = engine.lowerCaseAll(key);
 
 		try (RepositoryConnection conn = repo.getConnection()) {
-				
-				String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
-				queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
-				queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
-				queryString += "SELECT ?ii \n";
-				queryString += "WHERE { \n";
-				queryString += "    ?i rdf:type wcd:Recette. \n";
-				queryString += "    ?i foaf:name ?ii. \n";
-				queryString += "    ?i wcd:a_pour_difficulte ?dif. \n";
-				queryString += "   FILTER regex(?dif, \""+key+"\", \"i\") \n";
-				queryString += "}";
-				TupleQuery query = conn.prepareTupleQuery(queryString);
-				try (TupleQueryResult result = query.evaluate()) {
-					while (result.hasNext()) {
-						BindingSet solution = result.next();
-							liste.add(solution.getValue("ii").stringValue());
-					}
+
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name ?recette_nom. \n";
+			queryString += "    ?recette_iri wcd:a_pour_difficulte ?dif. \n";
+			queryString += "   FILTER regex(?dif, \"" + key + "\", \"i\") \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("recette_nom").stringValue());
 				}
+			}
 		} finally {
 			repo.shutDown();
 		}
 
 		return liste;
 	}
-	
+
 	public List<String> getNamesRecettesByAliments(Repository repo, String key) {
+		repo.initialize();
 		List<String> liste = new ArrayList<String>();
 		Engine engine = new Engine();
 		key = engine.formatCaseResource(key);
@@ -932,14 +1074,49 @@ public class Recette {
 					if (!liste.contains(solution.getValue("recette_nom").stringValue())) {
 						liste.add(solution.getValue("recette_nom").stringValue());
 					}
-					// System.out.println(solution.getValue("i").stringValue());
 				}
 			}
+		} finally {
+			repo.shutDown();
 		}
 
 		return liste;
 	}
 	
+	public List<String> getNamesRecettesByAllergie(Repository repo, String key) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+		Engine engine = new Engine();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?recette_nom \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_resource rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_resource foaf:name ?recette_nom. \n";
+			queryString += "    ?recette_resource wcd:a_pour_ingredient ?ingredient_iri. \n";
+			queryString += "    ?ingredient_iri wcd:aliment_respectif ?aliment_iri. \n";
+			queryString += "    ?aliment_iri wcd:a_pour_categorie_allergie ?allergie_iri. \n";
+			queryString += "    ?allergie_iri foaf:name \"" + key + "\". \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					if (!liste.contains(solution.getValue("recette_nom").stringValue())) {
+						liste.add(solution.getValue("recette_nom").stringValue());
+					}
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+	}
+
 	public List<String> getAllNamesRecettes(Repository repo) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
@@ -961,15 +1138,13 @@ public class Recette {
 					if (!liste.contains(solution.getValue("recette_nom").stringValue())) {
 						liste.add(solution.getValue("recette_nom").stringValue());
 					}
-					// System.out.println(solution.getValue("i").stringValue());
 				}
 			}
-		}finally {
+		} finally {
 			repo.shutDown();
 		}
 
 		return liste;
 	}
-
 
 }

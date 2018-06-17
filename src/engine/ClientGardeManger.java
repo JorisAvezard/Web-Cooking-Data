@@ -6,7 +6,7 @@ import java.net.UnknownHostException;
 
 public class ClientGardeManger {
 	
-	public String serverName = "192.168.137.166";
+	public String serverName = "192.168.137.250";
     public int serverPort = 8888;
     
     public ClientGardeManger() {

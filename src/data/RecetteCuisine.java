@@ -9,21 +9,22 @@ public class RecetteCuisine {
 
 	public String nom;
 	public List<String> ingredients;
-	public List<String> personnes;
+	public int personnes;
 	public List<String> etapes;
 	public List<String> auteur;
 	public List<String> tempsTotal;
 	public List<String> tempsCuisson;
 	public List<String> tempsPreparation;
 	public List<String> ustensiles;
+	public String image;
 	
 	public RecetteCuisine() {
 		
 		
 	}
 	
-	public RecetteCuisine(String nom, List<String> ingredients, List<String> personnes, List<String> etapes, List<String> auteur, 
-			List<String> tempsTotal, List<String> tempsCuisson, List<String> tempsPreparation, List<String> ustensiles) {
+	public RecetteCuisine(String nom, List<String> ingredients, int personnes, List<String> etapes, List<String> auteur, 
+			List<String> tempsTotal, List<String> tempsCuisson, List<String> tempsPreparation, List<String> ustensiles, String image) {
 		
 		this.nom = nom;
 		this.ingredients = ingredients;
@@ -34,6 +35,7 @@ public class RecetteCuisine {
 		this.tempsCuisson = tempsCuisson;
 		this.tempsPreparation = tempsPreparation;
 		this.ustensiles = ustensiles;
+		this.image = image;
 		
 	}
 
@@ -45,7 +47,7 @@ public class RecetteCuisine {
 		return ingredients;
 	}
 
-	public List<String> getPersonnes() {
+	public int getPersonnes() {
 		return personnes;
 	}
 
@@ -81,7 +83,7 @@ public class RecetteCuisine {
 		this.ingredients = ingredients;
 	}
 
-	public void setPersonnes(List<String> personnes) {
+	public void setPersonnes(int personnes) {
 		this.personnes = personnes;
 	}
 
