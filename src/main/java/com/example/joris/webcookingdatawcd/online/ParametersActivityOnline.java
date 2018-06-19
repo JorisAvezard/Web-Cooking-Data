@@ -97,6 +97,7 @@ public class ParametersActivityOnline extends AppCompatActivity
             TextView tw_maladie_valeur = (TextView) findViewById(R.id.tw_maladie_valeur);
             TextView tw_regime_valeur = (TextView) findViewById(R.id.tw_regime_valeur);
             TextView tw_allergie_valeur = (TextView) findViewById(R.id.tw_allergie_valeur);
+            TextView tw_besoins_valeur = (TextView) findViewById(R.id.tw_besoins_valeur);
 
             if(!data.getSexe().equals("")) {
                 tw_genre_valeur.setText(data.getSexe());
@@ -121,6 +122,10 @@ public class ParametersActivityOnline extends AppCompatActivity
             }
             if(!data.getAllergie().equals("")) {
                 tw_allergie_valeur.setText(data.getAllergie());
+            }
+
+            if(!data.getBesoin().equals("")) {
+                tw_besoins_valeur.setText(data.getBesoin());
             }
         }
     }

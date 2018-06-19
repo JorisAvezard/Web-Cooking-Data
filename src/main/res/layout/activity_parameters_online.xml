@@ -210,6 +210,27 @@
                 android:padding="20dp"
                 android:background="@drawable/border_recipe" />
 
+            <TextView
+                android:id="@+id/tw_besoins"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Besoins nutritionnels"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tw_besoins_valeur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Non disponible"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:padding="20dp"
+                android:background="@drawable/border_recipe" />
+
         </LinearLayout>
 
     </ScrollView>
