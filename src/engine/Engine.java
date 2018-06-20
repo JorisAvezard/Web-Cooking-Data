@@ -94,12 +94,12 @@ public class Engine {
 
 	public void getAllStatementsIRI(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
-		IRI sujet_iri = vf.createIRI(wcd, "user5128");
-		IRI predicat_iri = vf.createIRI(wcd, "Allergie");
+		IRI sujet_iri = vf.createIRI(wcd, "user0");
+		IRI predicat_iri = vf.createIRI(wcd, "a_aime");
 		int i = 0;
 		try (RepositoryConnection conn = repo.getConnection()) {
 			// let's check that our data is actually in the database
-			try (RepositoryResult<Statement> result = conn.getStatements(null, null, predicat_iri);) {
+			try (RepositoryResult<Statement> result = conn.getStatements(sujet_iri, null, null);) {
 				while (result.hasNext()) {
 					Statement st = result.next();
 					i++;

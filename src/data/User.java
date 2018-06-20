@@ -1,6 +1,7 @@
 package data;
 
 import engine.Engine;
+import ia.IA;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1760,9 +1761,9 @@ public class User {
 		}
 	}
 
-	public double getUserTaille(Repository repo, String login) {
+	public int getUserTaille(Repository repo, String login) {
 		repo.initialize();
-		double resultat = -1;
+		int resultat = -1;
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -1780,7 +1781,7 @@ public class User {
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					resultat = Double.valueOf(solution.getValue("taille").stringValue());
+					resultat = Integer.valueOf(solution.getValue("taille").stringValue());
 				}
 			}
 		} finally {
@@ -2101,5 +2102,5 @@ public class User {
 		}
 		return liste;
 	}
-
+	
 }

@@ -156,7 +156,7 @@ public class MachineLearning {
 		Dataset data0 = FileHandler.loadDataset(new File(fichier_profils_nettoyes), ";");
 		Dataset data = remove_id(data0);
 
-		Clusterer km = new KMeans(15);
+		Clusterer km = new KMeans(31);
 		Dataset[] clusters = km.cluster(data);
 		ClusterEvaluation sse = new SumOfSquaredErrors();
 		score = sse.score(clusters);

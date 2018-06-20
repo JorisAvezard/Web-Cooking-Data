@@ -28,6 +28,65 @@ public class Aliment {
 	public Aliment() {
 
 	}
+	
+	public List<String> getAlimentFicheNutritionnelle(Repository repo, String aliment) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?enKJ ?enCal ?pro ?glu ?lip ?suc ?cho ?fer ?vE ?vC ?vB1 ?vB2 ?vB3 ?vB5 ?vB6 \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?aliment_resource wcd:a_pour_energie_kJ\\/100g ?enKJ. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_energie_kcal\\/100g ?enCal. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_proteines_g\\/100g ?pro. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_glucides_g\\/100g ?glu. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_lipides_g\\/100g ?lip. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_sucres_g\\/100g ?suc. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_cholesterol_mg\\/100g ?cho. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_fer_mg\\/100g ?fer. \n";
+//			queryString += "    ?aliment_resource wcd:a_pour_vitamine_D_µg\\/100g ?vD. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_vitamine_E_mg\\/100g ?vE. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_vitamine_C_mg\\/100g ?vC. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_vitamine_B1_mg\\/100g ?vB1. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_vitamine_B2_mg\\/100g ?vB2. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_vitamine_B3_mg\\/100g ?vB3. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_vitamine_B5_mg\\/100g ?vB5. \n";
+			queryString += "    ?aliment_resource wcd:a_pour_vitamine_B6_mg\\/100g ?vB6. \n";
+//			queryString += "    ?aliment_resource wcd:a_pour_vitamine_B9_µg\\/100g ?vB9. \n";
+//			queryString += "    ?aliment_resource wcd:a_pour_vitamine_B12_µg\\/100g ?vB12. \n";
+			queryString += "    ?aliment_resource foaf:name \"" + aliment + "\". \n";
+			queryString += "}";
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("enKJ").stringValue());
+					liste.add(solution.getValue("enCal").stringValue());
+					liste.add(solution.getValue("pro").stringValue());
+					liste.add(solution.getValue("glu").stringValue());
+					liste.add(solution.getValue("lip").stringValue());
+					liste.add(solution.getValue("suc").stringValue());
+					liste.add(solution.getValue("cho").stringValue());
+					liste.add(solution.getValue("fer").stringValue());
+//					liste.add(solution.getValue("vD").stringValue());
+					liste.add(solution.getValue("vE").stringValue());
+					liste.add(solution.getValue("vC").stringValue());
+					liste.add(solution.getValue("vB1").stringValue());
+					liste.add(solution.getValue("vB2").stringValue());
+					liste.add(solution.getValue("vB3").stringValue());
+					liste.add(solution.getValue("vB5").stringValue());
+					liste.add(solution.getValue("vB6").stringValue());
+//					liste.add(solution.getValue("vB9").stringValue());
+//					liste.add(solution.getValue("vB12").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
+	}
 
 	// Insere les donnees de type Aliment dans la base depuis le fichier csv
 	public static void addAll(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
@@ -183,4 +242,6 @@ public class Aliment {
 		}
 		return liste;
 	}
+	
+	
 }

@@ -15,6 +15,9 @@ import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
@@ -143,13 +146,13 @@ public class IA {
 
 	public static double poidsAleatoire(String genre, int taille) throws IOException {
 		double coef = -1;
-		
-		if(genre.equals("Femme")){
+
+		if (genre.equals("Femme")) {
 			coef = 2.5;
-		}else{
+		} else {
 			coef = 4;
 		}
-		
+
 		double poids_ideal = taille - 100 - ((taille - 150) / coef);
 		double min = poids_ideal - 10;
 		double max = poids_ideal + 40;
@@ -309,10 +312,11 @@ public class IA {
 		}
 	}
 
-	public void insertProfilIntoDB(Repository repo, ValueFactory vf, Model model, String wcd, String fileName) {
+	public void insertProfilIntoDB(Repository repo, ValueFactory vf, Model model, String wcd) {
 		repo.initialize();
 		Engine engine = new Engine();
 		User user = new User();
+		String fileName = "./fichiers_test/ia/profils.txt";
 
 		IRI predicat_age = vf.createIRI(wcd, "a_pour_age");
 		IRI predicat_poids = vf.createIRI(wcd, "a_pour_poids");
@@ -534,99 +538,288 @@ public class IA {
 		}
 	}
 
-	public void creerDonneesUserAimeRecette(Repository repo, ValueFactory vf, Model model, String wcd) {
-		Recette rec = new Recette();
-		User us = new User();
+	// public void creerDonneesUserAimeRecette(Repository repo, ValueFactory vf,
+	// Model model, String wcd, Recette rec,
+	// User us) {
+	// List<String> recettes_sans_gluten = rec.getNamesRecettesByCategory(repo,
+	// "sans gluten");
+	// List<String> recettes_vegetarien = rec.getNamesRecettesByCategory(repo,
+	// "végétarien");
+	// List<String> recettes_minceur = rec.getNamesRecettesByCategory(repo,
+	// "minceur");
+	// List<String> recettes_toutes = rec.getAllNamesRecettes(repo);
+	// List<String> recettes = new ArrayList<String>();
+	//
+	// int i = 0;
+	// int j = 0;
+	// int indice_rec = 0;
+	// int nombre_user_recettes = 0;
+	// String current_regime = null;
+	// String current_user = null;
+	//
+	// for (i = 0; i < 40000; i++) {
+	// nombre_user_recettes = (int) (Math.random() * (11));
+	//
+	// if (nombre_user_recettes > 0) {
+	// current_user = "user" + String.valueOf(i);
+	// current_regime = us.getUserRegimeAlimentaire(repo, current_user);
+	//
+	// if (current_regime.equals("Recette minceur")) {
+	// recettes = recettes_minceur;
+	// } else if (current_regime.equals("Sans gluten")) {
+	// recettes = recettes_sans_gluten;
+	// } else if (current_regime.equals("Végétarien")) {
+	// recettes = recettes_vegetarien;
+	// } else if (current_regime.equals("Aucun")) {
+	// recettes = recettes_toutes;
+	// }
+	//
+	// for (j = 0; j < nombre_user_recettes; j++) {
+	// indice_rec = (int) (Math.random() * (recettes.size()));
+	// us.addAimeRecette(repo, vf, model, wcd, current_user,
+	// recettes.get(indice_rec));
+	// }
+	// }
+	// System.out.println(current_user + " : " + nombre_user_recettes);
+	// }
+	// }
 
-		List<String> recettes = rec.getAllNamesRecettes(repo);
+	public void creerDonneesUserAimeRecette(Repository repo, ValueFactory vf, Model model, String wcd, Recette rec,
+			User us) {
 
-		int i = 0;
-		int j = 0;
-		int indice_rec = 0;
-		int max = recettes.size();
-		int nombre_user_recettes = 0;
+		String fileName = "./fichiers_test/ia/recettes_aimees.txt";
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(fileName, true);
+			bw = new BufferedWriter(fw);
 
-		for (i = 0; i < 40000; i++) {
-			nombre_user_recettes = (int) (Math.random() * (11));
+			List<String> recettes_sans_gluten = rec.getNamesRecettesByCategory(repo, "sans gluten");
+			List<String> recettes_vegetarien = rec.getNamesRecettesByCategory(repo, "végétarien");
+			List<String> recettes_minceur = rec.getNamesRecettesByCategory(repo, "minceur");
+			List<String> recettes_toutes = rec.getAllNamesRecettes(repo);
+			List<String> recettes = new ArrayList<String>();
+			List<String> recettes2 = new ArrayList<String>();
+			List<String> recettes_allergie = new ArrayList<String>();
 
-			if (nombre_user_recettes > 0) {
-				for (j = 0; j < nombre_user_recettes; j++) {
-					indice_rec = (int) (Math.random() * (max));
-					us.addAimeRecette(repo, vf, model, wcd, "user" + String.valueOf(i), recettes.get(indice_rec));
-					System.out.println(i);
+			int i = 0;
+			int j = 0;
+			int indice_rec = 0;
+			int nombre_user_recettes = 0;
+			String current_regime = null;
+			String current_allergie = null;
+			String current_user = null;
+
+			for (i = 0; i < 40000; i++) {
+				// nombre_user_recettes = (int) (Math.random() * (11));
+				nombre_user_recettes = (int) (Math.random() * (2));
+
+				if (nombre_user_recettes > 0) {
+					current_user = "user" + String.valueOf(i);
+					current_regime = us.getUserRegimeAlimentaire(repo, current_user);
+					current_allergie = us.getUserAllergie(repo, current_user);
+
+					if (current_regime.equals("Recette minceur")) {
+						recettes = recettes_minceur;
+					} else if (current_regime.equals("Sans gluten")) {
+						recettes = recettes_sans_gluten;
+					} else if (current_regime.equals("Végétarien")) {
+						recettes = recettes_vegetarien;
+					} else if (current_regime.equals("Aucun")) {
+						recettes = recettes_toutes;
+					}
+
+					if (!current_allergie.equals("Aucun")) {
+						recettes_allergie = rec.getNamesRecettesByAllergie(repo, current_allergie);
+
+						for (j = 0; j < recettes.size(); j++) {
+							if (!recettes_allergie.contains(recettes.get(j))) {
+								recettes2.add(recettes.get(j));
+							}
+						}
+
+						for (j = 0; j < nombre_user_recettes; j++) {
+							indice_rec = (int) (Math.random() * (recettes2.size()));
+							bw.write(current_user + ";" + recettes2.get(indice_rec) + "\n");
+						}
+					} else {
+						for (j = 0; j < nombre_user_recettes; j++) {
+							indice_rec = (int) (Math.random() * (recettes.size()));
+							bw.write(current_user + ";" + recettes.get(indice_rec) + "\n");
+						}
+					}
+					System.out.println(current_user + " : " + nombre_user_recettes);
 				}
+
+			}
+			System.out.println("End");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+				if (fw != null)
+					fw.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
 			}
 		}
 	}
 
-	public List<String> tableDeVote(Repository repo, List<String> users) {
+	public void insertUserAimeRecetteIntoDB(Repository repo, ValueFactory vf, Model model, String wcd) {
+		Engine engine = new Engine();
+		User user = new User();
+		String fileName = "./fichiers_test/ia/recettes_aimees.txt"; //
+
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+			while ((line = bufferedReader.readLine()) != null) {
+				String[] line_split = line.split(";");
+				System.out.println(line_split[0]);
+				user.addAimeRecette(repo, vf, model, wcd, line_split[0], line_split[1]);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + fileName + "'");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		System.out.println("End");
+	}
+
+	public List<String> getRecettesATrier(Repository repo, List<String> users) {
 		User us = new User();
 
 		List<String> user_recettes = new ArrayList<String>();
 		List<String> recettes_aimees = new ArrayList<String>();
-		List<String> recettes_finales = new ArrayList<String>();
-		List<Integer> votes = new ArrayList<Integer>();
 
 		int i = 0;
 		int j = 0;
-		int indice_recette_aimee = -1;
 
 		for (i = 0; i < users.size(); i++) {
 			user_recettes = us.getAimeRecette(repo, users.get(i));
 
 			for (j = 0; j < user_recettes.size(); j++) {
-				if (recettes_aimees.contains(user_recettes.get(j))) {
-					indice_recette_aimee = getIndiceFromValue(recettes_aimees, user_recettes.get(j));
-					votes.set(indice_recette_aimee, votes.get(indice_recette_aimee) + 1);
-				} else {
+				if (!recettes_aimees.contains(user_recettes.get(j))) {
+					System.out.println(user_recettes.get(j));
 					recettes_aimees.add(user_recettes.get(j));
-					votes.add(1);
+				}
+			}
+		}
+
+		return recettes_aimees;
+	}
+
+	public List<String> tableDeVote(Repository repo, List<String> users, List<String> recettes) {
+		User us = new User();
+
+		List<String> user_recettes = new ArrayList<String>();
+		List<String> recettes_finales = new ArrayList<String>();
+		Integer[] votes = new Integer[recettes.size()];
+
+		int i = 0;
+		int j = 0;
+		int indice_recette_aimee = -1;
+
+		for (i = 0; i < votes.length; i++) {
+			votes[i] = 0;
+		}
+
+		for (i = 0; i < users.size(); i++) {
+			user_recettes = us.getAimeRecette(repo, users.get(i));
+
+			for (j = 0; j < user_recettes.size(); j++) {
+				if (recettes.contains(user_recettes.get(j))) {
+					indice_recette_aimee = getIndiceFromValue(recettes, user_recettes.get(j));
+					votes[indice_recette_aimee] = votes[indice_recette_aimee] + 1;
 				}
 			}
 		}
 
 		int moyenne = 0;
 
-		for (i = 0; i < votes.size(); i++) {
-			moyenne = moyenne + votes.get(i);
+		for (i = 0; i < votes.length; i++) {
+			moyenne = moyenne + votes[i];
 		}
 
-		moyenne = ((int) moyenne / votes.size()) + 1;
+		moyenne = ((int) moyenne / votes.length) + 1;
 
-		for (i = 0; i < recettes_aimees.size(); i++) {
-			if (votes.get(i) >= moyenne) {
-				recettes_finales.add(recettes_aimees.get(i));
+		for (i = 0; i < recettes.size(); i++) {
+			if (votes[i] >= moyenne) {
+				recettes_finales.add(recettes.get(i));
 			}
 		}
 
+		// return recettes;
 		return recettes_finales;
 	}
 
 	public String generateUserProfil(Repository repo, User user, String login) {
 		String profil = null;
 
-		String current_age = String.valueOf(Double.valueOf(user.getUserAge(repo, login)));
-		String current_poids = String.valueOf(user.getUserPoids(repo, login));
-		String current_taille = String.valueOf(user.getUserTaille(repo, login));
-		String current_genre = user.getUserGenre(repo, login);
 		String current_maladie = user.getUserMaladie(repo, login);
 		String current_allergie = user.getUserAllergie(repo, login);
 		String current_regime = user.getUserRegimeAlimentaire(repo, login);
 		String current_niveau_act = user.getUserNiveauActivite(repo, login);
 
-		profil = current_age + "," + current_poids + "," + current_taille + "," + current_genre + "," + current_maladie
-				+ "," + current_allergie + "," + current_regime + "," + current_niveau_act;
+		profil = current_maladie + "," + current_allergie + "," + current_regime + "," + current_niveau_act;
 
 		return profil;
+	}
+
+	public static String generateUserProfilBis(Repository repo, User user, String login) {
+		String profil = null;
+
+		String current_maladie = user.getUserMaladie(repo, login);
+		String current_allergie = user.getUserAllergie(repo, login);
+		String current_regime = user.getUserRegimeAlimentaire(repo, login);
+		String current_niveau_act = user.getUserNiveauActivite(repo, login);
+
+		profil = login + ";" + current_maladie + ";" + current_allergie + ";" + current_regime + ";"
+				+ current_niveau_act;
+
+		return profil;
+	}
+
+	public static List<String> getAllProfils(Repository repo, User user) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+		String current_user = null;
+		String current_profil = null;
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?login \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?user_iri rdf:type foaf:Person. \n";
+			queryString += "    ?user_iri foaf:name ?login. \n";
+			queryString += "}";
+
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					current_user = solution.getValue("login").stringValue();
+					// current_profil = generateUserProfilBis(repo, user,
+					// current_user);
+					liste.add(current_user);
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+		return liste;
 	}
 
 	public List<String> generateProfil(Repository repo, User user, List<String> logins) {
 		List<String> all_profils = new ArrayList<String>();
 		String current_login = null;
-		String current_age = null;
-		String current_poids = null;
-		String current_taille = null;
-		String current_genre = null;
 		String current_maladie = null;
 		String current_allergie = null;
 		String current_regime = null;
@@ -635,17 +828,12 @@ public class IA {
 
 		for (i = 0; i < logins.size(); i++) {
 			current_login = logins.get(i);
-			current_age = String.valueOf(user.getUserAge(repo, current_login));
-			current_poids = String.valueOf(user.getUserPoids(repo, current_login));
-			current_taille = String.valueOf(user.getUserTaille(repo, current_login));
-			current_genre = user.getUserGenre(repo, current_login);
 			current_maladie = user.getUserMaladie(repo, current_login);
 			current_allergie = user.getUserAllergie(repo, current_login);
 			current_regime = user.getUserRegimeAlimentaire(repo, current_login);
 			current_niveau_act = user.getUserNiveauActivite(repo, current_login);
 
-			all_profils.add(current_login + ";" + current_age + ";" + current_poids + ";" + current_taille + ";"
-					+ current_genre + ";" + current_maladie + ";" + current_allergie + ";" + current_regime + ";"
+			all_profils.add(current_login + ";" + current_maladie + ";" + current_allergie + ";" + current_regime + ";"
 					+ current_niveau_act);
 		}
 
@@ -788,7 +976,6 @@ public class IA {
 		User user = new User();
 		Engine engine = new Engine();
 
-		List<String> genres = user.getAllGenreFromDB(repo);
 		List<String> maladies = user.getAllMaladieFromDB(repo);
 		List<String> allergies = user.getAllAllergiesFromDB(repo);
 		List<String> regimes = user.getAllRegimeAlimentaireFromDB(repo);
@@ -812,73 +999,55 @@ public class IA {
 					if (i == 0) {
 						bw.write(line_split[0]);
 					} else if (i == 1) {
-						bw.write(";" + String.valueOf(Double.valueOf(line_split[i])));
-					} else if ((i == 2) || (i == 3)) {
-						bw.write(";" + line_split[i]);
+						if (line_split[1].equals("Aucun")) {
+							for (j = 0; j < maladies.size(); j++) {
+								bw.write(";0.0");
+							}
+						} else {
+							for (j = 0; j < maladies.size(); j++) {
+								if (maladies.get(j).equals(line_split[1])) {
+									bw.write(";1.0");
+								} else {
+									bw.write(";0.0");
+								}
+							}
+						}
+					} else if (i == 2) {
+						if (line_split[2].equals("Aucun")) {
+							for (j = 0; j < allergies.size(); j++) {
+								bw.write(";0.0");
+							}
+						} else {
+							for (j = 0; j < allergies.size(); j++) {
+								if (allergies.get(j).equals(line_split[2])) {
+									bw.write(";1.0");
+								} else {
+									bw.write(";0.0");
+								}
+							}
+						}
+					} else if (i == 3) {
+						if (line_split[3].equals("Aucun")) {
+							for (j = 0; j < regimes.size(); j++) {
+								bw.write(";0.0");
+							}
+						} else {
+							for (j = 0; j < regimes.size(); j++) {
+								if (regimes.get(j).equals(line_split[3])) {
+									bw.write(";1.0");
+								} else {
+									bw.write(";0.0");
+								}
+							}
+						}
 					} else if (i == 4) {
 						if (line_split[4].equals("Aucun")) {
-							for (j = 0; j < genres.size(); j++) {
-								bw.write(";0.0");
-							}
-						} else {
-							for (j = 0; j < genres.size(); j++) {
-								if (genres.get(j).equals(line_split[4])) {
-									bw.write(";1.0");
-								} else {
-									bw.write(";0.0");
-								}
-							}
-						}
-					} else if (i == 5) {
-						if (line_split[5].equals("Aucun")) {
-							for (j = 0; j < maladies.size(); j++) {
-								bw.write(";0.0");
-							}
-						} else {
-							for (j = 0; j < maladies.size(); j++) {
-								if (maladies.get(j).equals(line_split[5])) {
-									bw.write(";1.0");
-								} else {
-									bw.write(";0.0");
-								}
-							}
-						}
-					} else if (i == 6) {
-						if (line_split[6].equals("Aucun")) {
-							for (j = 0; j < allergies.size(); j++) {
-								bw.write(";0.0");
-							}
-						} else {
-							for (j = 0; j < allergies.size(); j++) {
-								if (allergies.get(j).equals(line_split[6])) {
-									bw.write(";1.0");
-								} else {
-									bw.write(";0.0");
-								}
-							}
-						}
-					} else if (i == 7) {
-						if (line_split[7].equals("Aucun")) {
-							for (j = 0; j < regimes.size(); j++) {
-								bw.write(";0.0");
-							}
-						} else {
-							for (j = 0; j < regimes.size(); j++) {
-								if (regimes.get(j).equals(line_split[7])) {
-									bw.write(";1.0");
-								} else {
-									bw.write(";0.0");
-								}
-							}
-						}
-					} else if (i == 8) {
-						if (line_split[8].equals("Aucun")) {
 							for (j = 0; j < niveaux_acts.size(); j++) {
 								bw.write(";0.0");
 							}
 						} else {
 							for (j = 0; j < niveaux_acts.size(); j++) {
-								if (niveaux_acts.get(j).equals(line_split[8])) {
+								if (niveaux_acts.get(j).equals(line_split[4])) {
 									bw.write(";1.0");
 								} else {
 									bw.write(";0.0");
@@ -901,6 +1070,94 @@ public class IA {
 				ex.printStackTrace();
 			}
 		}
+	}
+
+	public String cleanProfil(Repository repo, String profil) {
+		User user = new User();
+		Engine engine = new Engine();
+
+		List<String> maladies = user.getAllMaladieFromDB(repo);
+		List<String> allergies = user.getAllAllergiesFromDB(repo);
+		List<String> regimes = user.getAllRegimeAlimentaireFromDB(repo);
+		List<String> niveaux_acts = user.getAllNiveauActiviteFromDB(repo);
+
+		int i = 0;
+		int j = 0;
+		int k = 0;
+		int indice = 0;
+
+		String[] line_split = null;
+		String result = null;
+
+		line_split = profil.split(",");
+
+		for (i = 0; i < line_split.length; i++) {
+			if (i == 0) {
+				if (line_split[0].equals("Aucun")) {
+					result = "0.0";
+					for (j = 1; j < maladies.size(); j++) {
+						result += ",0.0";
+					}
+				} else {
+					if (maladies.get(0).equals(line_split[0])) {
+						result = "1.0";
+					} else {
+						result = "0.0";
+					}
+					for (j = 1; j < maladies.size(); j++) {
+						if (maladies.get(j).equals(line_split[0])) {
+							result += ",1.0";
+						} else {
+							result += ",0.0";
+						}
+					}
+				}
+			} else if (i == 1) {
+				if (line_split[1].equals("Aucun")) {
+					for (j = 0; j < allergies.size(); j++) {
+						result += ",0.0";
+					}
+				} else {
+					for (j = 0; j < allergies.size(); j++) {
+						if (allergies.get(j).equals(line_split[1])) {
+							result += ",1.0";
+						} else {
+							result += ",0.0";
+						}
+					}
+				}
+			} else if (i == 2) {
+				if (line_split[2].equals("Aucun")) {
+					for (j = 0; j < regimes.size(); j++) {
+						result += ",0.0";
+					}
+				} else {
+					for (j = 0; j < regimes.size(); j++) {
+						if (regimes.get(j).equals(line_split[2])) {
+							result += ",1.0";
+						} else {
+							result += ",0.0";
+						}
+					}
+				}
+			} else if (i == 3) {
+				if (line_split[3].equals("Aucun")) {
+					for (j = 0; j < niveaux_acts.size(); j++) {
+						result += ",0.0";
+					}
+				} else {
+					for (j = 0; j < niveaux_acts.size(); j++) {
+						if (niveaux_acts.get(j).equals(line_split[3])) {
+							result += ",1.0";
+						} else {
+							result += ",0.0";
+						}
+					}
+				}
+			}
+		}
+
+		return result;
 	}
 
 	public List<String> removeRecettesNonRegimeAlimentaire(Repository repo, User user, String login,
@@ -964,8 +1221,22 @@ public class IA {
 		return result;
 	}
 
+	// public void processOffline(Repository repo, String
+	// fichier_profils_nettoyes, String fichier_resultat_cluster)
+	// throws Exception {
+	// MachineLearning ml = new MachineLearning();
+	// User user = new User();
+	// System.out.println("Récupération des logins avec leurs profils");
+	// List<String> all_profils = getAllProfils(repo, user);
+	// System.out.println("Nettoyages des profils");
+	// cleanProfils(repo, all_profils, fichier_profils_nettoyes);
+	// System.out.println("Lancement du cluster");
+	// ml.processKMean(fichier_profils_nettoyes, fichier_resultat_cluster);
+	// }
+
 	public void processOffline(Repository repo, String fichier_profils_nettoyes, String fichier_resultat_cluster)
 			throws Exception {
+		System.out.println(System.currentTimeMillis());
 		MachineLearning ml = new MachineLearning();
 		User user = new User();
 		System.out.println("Récupération des logins");
@@ -976,6 +1247,7 @@ public class IA {
 		cleanProfils(repo, all_profils, fichier_profils_nettoyes);
 		System.out.println("Lancement du cluster");
 		ml.processKMean(fichier_profils_nettoyes, fichier_resultat_cluster);
+		System.out.println(System.currentTimeMillis());
 	}
 
 	public List<String> processOnline(Repository repo, String fichier_profils_nettoyes, String fichier_resultat_cluster,
@@ -983,12 +1255,21 @@ public class IA {
 		MachineLearning ml = new MachineLearning();
 		User user = new User();
 		String user_profil = generateUserProfil(repo, user, login);
+		user_profil = cleanProfil(repo, user_profil);
+		System.out.println("Récupération des profils similaires");
 		List<String> cluster_user = ml.find_cluster_user(fichier_resultat_cluster, user_profil);
+		System.out.println("Récuparation des logins");
 		List<String> users_id = ml.id_user(fichier_profils_nettoyes, cluster_user);
-		List<String> recettes_retournees = tableDeVote(repo, users_id);
+		System.out.println("Récuparation des recettes aimées");
+		List<String> recettes_retournees = getRecettesATrier(repo, users_id);
+		System.out.println("Suppression des recettes régime alimentaire");
 		recettes_retournees = removeRecettesNonRegimeAlimentaire(repo, user, login, recettes_retournees);
+		System.out.println("Suppression des recettes allergie");
 		recettes_retournees = removeRecettesAllergie(repo, user, login, recettes_retournees);
+		System.out.println("Suppression des recettes non aimées");
 		recettes_retournees = removeRecettesNonAimees(repo, user, login, recettes_retournees);
+		System.out.println("Table de vote");
+		recettes_retournees = tableDeVote(repo, users_id, recettes_retournees);
 
 		return recettes_retournees;
 	}

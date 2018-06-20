@@ -1144,6 +1144,37 @@ public class Recette {
 			repo.shutDown();
 		}
 
+		System.out.println(liste.size());
+		return liste;
+	}
+	
+	public List<String> getAllCategories(Repository repo) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?cat \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri wcd:a_pour_categorie ?cat. \n";
+			queryString += "}";
+
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					if(!liste.contains(solution.getValue("cat").stringValue()))
+						liste.add(solution.getValue("cat").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
 		return liste;
 	}
 
