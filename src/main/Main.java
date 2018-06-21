@@ -38,7 +38,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		// Initialisation des variables propre à la base RDF
-		File dataDir = new File("./db_demo/"); // db_test_ia_01  / db_demo
+		File dataDir = new File("./db/"); // db_test_ia_01  / db_demo
 		NativeStore ns = new NativeStore(dataDir);
 		Repository repo = new SailRepository(ns);
 		ValueFactory vf = SimpleValueFactory.getInstance();
@@ -57,7 +57,7 @@ public class Main {
 		//////////////////////////
 		
 //		aliment.addAll(repo, vf, model, wcd, "./fichiers_test/aliments/donnees_nutritionnelles.csv");
-		recette.processInsertion(repo, vf, model, wcd, "./fichiers/recettes_decoupe_02_00000001/"); // recettes_decoupe_01 fait
+//		recette.processInsertion(repo, vf, model, wcd, "./fichiers/recettes_decoupe_02_00000001/"); // recettes_decoupe_01 fait
 //		user.insertAllDataMaladieIntoDB(repo, vf, model, wcd, "./fichiers_test/users/maladies.txt");
 //		user.insertAllDataRegimeAlimentaireIntoDB(repo, vf, model, wcd, "./fichiers_test/users/regimes.txt");
 //		user.insertAllDataGenreIntoDB(repo, vf, model, wcd);
@@ -152,9 +152,11 @@ public class Main {
 		// "fichiers_test/ia/resultat_cluster.txt",
 		// "56.0,137.4507296494346,1.5666020829090357,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0");
 		
+//		String result = user.getUserNiveauActivite(repo, "jorisa");
+//		int result = user.getUserAge(repo, "jorisa");
 //		ia.insertProfilIntoDB(repo, vf, model, wcd, "fichiers_test/ia/profils.txt");
 //		ia.processOffline(repo, "fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt");
-//		List<String> result = ia.processOnline(repo, "fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt", "user78");
+//		List<String> result = ia.processOnline(repo, "fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt", "mallauriep");
 //		System.out.println(result);
 	}
 

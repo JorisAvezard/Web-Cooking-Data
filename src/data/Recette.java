@@ -29,6 +29,39 @@ public class Recette {
 	public Recette() {
 
 	}
+	
+	public List<String> getAliments(Repository repo, String key) {
+		repo.initialize();
+		List<String> liste = new ArrayList<String>();
+
+		try (RepositoryConnection conn = repo.getConnection()) {
+			String queryString = "PREFIX wcd: <http://m2bigcookingdata.org/> \n";
+			queryString += "PREFIX rdf: <" + RDF.NAMESPACE + "> \n";
+			queryString += "PREFIX foaf: <" + FOAF.NAMESPACE + "> \n";
+			queryString += "SELECT ?aliment_name \n";
+			queryString += "WHERE { \n";
+			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
+			queryString += "    ?recette_iri foaf:name \"" + key + "\". \n";
+			queryString += "    ?recette_iri wcd:a_pour_ingredient ?ingredient_iri. \n";
+			queryString += "    ?ingredient_iri rdf:type wcd:Ingredient. \n";
+			queryString += "    ?ingredient_iri wcd:aliment_respectif ?aliment_resource. \n";
+			queryString += "    ?aliment_resource rdf:type wcd:Aliment. \n";
+			queryString += "    ?aliment_resource foaf:name ?aliment_name. \n";
+			queryString += "}";
+
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			try (TupleQueryResult result = query.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();
+					liste.add(solution.getValue("aliment_name").stringValue());
+				}
+			}
+		} finally {
+			repo.shutDown();
+		}
+
+		return liste;
+}
 
 	public String getNameFromFile(String fichier) {
 		String result = null;
@@ -989,6 +1022,7 @@ public class Recette {
 	public List<String> getNamesRecettesByNote(Repository repo, double note) {
 		repo.initialize();
 		List<String> liste = new ArrayList<String>();
+		int indice = 0;
 
 		try (RepositoryConnection conn = repo.getConnection()) {
 
@@ -1000,15 +1034,18 @@ public class Recette {
 			queryString += "    ?recette_iri rdf:type wcd:Recette. \n";
 			queryString += "    ?recette_iri foaf:name ?recette_nom. \n";
 			queryString += "    ?recette_iri wcd:a_pour_note ?note. \n";
-			queryString += "   FILTER (?note >= " + note + ") \n";
+			queryString += "   FILTER (xsd:double(?note) >= " + note + ") \n";
 			queryString += "}";
-			queryString += "ORDER BY DESC(?note)";
+			queryString += "ORDER BY DESC(xsd:double(?note))";
 
 			TupleQuery query = conn.prepareTupleQuery(queryString);
 			try (TupleQueryResult result = query.evaluate()) {
 				while (result.hasNext()) {
 					BindingSet solution = result.next();
-					liste.add(solution.getValue("recette_nom").stringValue());
+					if(liste.size()<51)
+						liste.add(solution.getValue("recette_nom").stringValue());
+					else
+						break;
 				}
 			}
 		} finally {

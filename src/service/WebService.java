@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -28,6 +27,7 @@ import org.eclipse.rdf4j.sail.nativerdf.NativeStore;
 import data.Reponse;
 import data.Aliment;
 import data.AlimentWS;
+import data.AlimentsAvecValeursNutritionelles;
 import data.CoucouObj;
 import data.GardeManger;
 import data.ListeRecette;
@@ -35,6 +35,7 @@ import data.Recette;
 import data.RecetteCuisine;
 import data.User;
 import engine.ClientGardeManger;
+import ia.IA;
 
 @Path("/service")
 public class WebService {
@@ -52,6 +53,7 @@ public class WebService {
 	ValueFactory vf = SimpleValueFactory.getInstance();
 	Model model = new TreeModel();
 	String wcd = "http://m2bigcookingdata.org/";
+	IA ia = new IA();
 	
 	@GET
 	@Path("/coucou/{name}")
@@ -170,12 +172,12 @@ public class WebService {
 	@Path("/recetteParNote/{expr}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListeRecette rechercheRecetteParNote(@PathParam(value="expr") String expression) {
-		float note = Float.parseFloat(expression);
+		double note = Double.parseDouble(expression);
 		List<String> result = new ArrayList<String>();
 		result = recette.getNamesRecettesByNote(repo, note);
 		ListeRecette listRecette = new ListeRecette();
 		listRecette.setRecettes(result);
-		System.out.println("[RECHERCHE RECETTE PAR NOTE]");
+		System.out.println("[RECHERCHE RECETTE PAR NOTE] " + result);
 		return listRecette;
 	}
 	
@@ -187,7 +189,7 @@ public class WebService {
 		result = recette.getNamesRecettesByCategory(repo, expression);
 		ListeRecette listRecette = new ListeRecette();
 		listRecette.setRecettes(result);
-		System.out.println("[RECHERCHE RECETTE PAR CATEGORIE]");
+		System.out.println("[RECHERCHE RECETTE PAR CATEGORIE] " + result);
 		return listRecette;
 	}
 	
@@ -208,7 +210,7 @@ public class WebService {
 		}
 		ListeRecette listRecette = new ListeRecette();
 		listRecette.setRecettes(recettes);
-		System.out.println("[RECHERCHE RECETTE PAR CONTENU]");
+		System.out.println("[RECHERCHE RECETTE PAR CONTENU] " + recettes);
 		return listRecette;
 	}
 	
@@ -237,7 +239,9 @@ public class WebService {
 		System.out.println("[USTENSILES] " + ustensiles);
 		String image = recette.getImage(repo, nomRecette);
 		System.out.println("Recette :" + nomRecette);
-		RecetteCuisine recetteCuisine = new RecetteCuisine(nomRecette, ingredients, personnes, etapes, auteur, tempsTotal, tempsCuisson, tempsPreparation, ustensiles, image);
+		double note = recette.getNote(repo, nomRecette);
+		System.out.println("[NOTE] " + note);
+		RecetteCuisine recetteCuisine = new RecetteCuisine(nomRecette, ingredients, personnes, etapes, auteur, tempsTotal, tempsCuisson, tempsPreparation, ustensiles, image, note);
 		System.out.println("[RECUPERATION DONNEES RECETTE] ("+ nomRecette +")");
 		return recetteCuisine;
 
@@ -314,13 +318,14 @@ public class WebService {
 		if(!maladie.equals("Aucun"))
 			reponse.setMaladie(maladie);
 		else
-			reponse.setMaladie("Aucune");
+			reponse.setMaladie("Aucun");
 		
 		return reponse;
 	}
 	
 	@GET
 	@Path("/addFavori/{login}/{recette}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public void addFavori(@PathParam(value="login") String login, @PathParam(value="recette") String nameRecette) {
 		List<String> favoris = user.getFavoriRecette(repo, login);
 		boolean trouve = false;
@@ -331,12 +336,14 @@ public class WebService {
 			}
 		}
 		if(trouve == false) {
+			System.out.println("[addFavori]");
 			user.addFavoriRecette(repo, vf, model, wcd, login, nameRecette);
 		}
 	}
 	
 	@GET
 	@Path("/addNonAimeRecette/{login}/{recette}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public void addNonAimeRecette(@PathParam(value="login") String login, @PathParam(value="recette") String nameRecette) {
 		List<String> nonAime = user.getPasAimeRecette(repo, login);
 		boolean trouve = false;
@@ -347,12 +354,14 @@ public class WebService {
 			}
 		}
 		if(trouve == false) {
+			System.out.println("[addNonAimeRecette]");
 			user.addPasAimeRecette(repo, vf, model, wcd, login, nameRecette);
 		}
 	}
 	
 	@GET
 	@Path("/addAimeRecette/{login}/{recette}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public void addAimeRecette(@PathParam(value="login") String login, @PathParam(value="recette") String nameRecette) {
 		List<String> aime = user.getAimeRecette(repo, login);
 		boolean trouve = false;
@@ -363,21 +372,25 @@ public class WebService {
 			}
 		}
 		if(trouve == false) {
+			System.out.println("[addAimeRecette]");
 			user.addAimeRecette(repo, vf, model, wcd, login, nameRecette);
 		}
 	}
 	
 	@GET
 	@Path("/getFavori/{login}/")
+	@Produces(MediaType.APPLICATION_JSON)
 	public ListeRecette getFavori(@PathParam(value="login") String login) {
 		List<String> favoris = user.getFavoriRecette(repo, login);
 		ListeRecette listeRecette = new ListeRecette();
 		listeRecette.setRecettes(favoris);
+		System.out.println("[getFavori] " + favoris);
 		return listeRecette;
 	}
 	
 	@GET
 	@Path("/addRecetteConsulte/{login}/{recette}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public void addRecetteConsulte(@PathParam(value="login") String login, @PathParam(value="recette") String nameRecette) {
 		List<String> consultes = user.getConsulteRecette(repo, login);
 		boolean trouve = false;
@@ -388,16 +401,19 @@ public class WebService {
 			}
 		}
 		if(trouve == false) {
+			System.out.println("[addConsulteRecette]");
 			user.addConsulteRecette(repo, vf, model, wcd, login, nameRecette);
 		}
 	}
 	
 	@GET
 	@Path("/getRecetteConsulte/{login}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public ListeRecette getRecetteConsulte(@PathParam(value="login") String login) {
 		List<String> consultes = user.getConsulteRecette(repo, login);
 		ListeRecette listeRecette = new ListeRecette();
 		listeRecette.setRecettes(consultes);
+		System.out.println("[getRecetteConsulte]");
 		return listeRecette;
 	}
 	
@@ -455,11 +471,89 @@ public class WebService {
 	
 	@GET
 	@Path("deleteAlimentBase/{aliment}/{login}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public void deleteAlimentBase(@PathParam(value="aliment") String aliment, @PathParam(value="login") String login) {
 		user.removeAlimentInNonCapteurGardeManger(repo, vf, model, wcd, login, aliment);
 		System.out.println("[deleteAlimentBase ("+ aliment + " de" + login +")]");
 	}
 	
+	@GET
+	@Path("getValeursRecettes/{nameRecette}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public AlimentsAvecValeursNutritionelles getValeursRecettes(@PathParam(value="nameRecette") String nameRecette) {
+		nameRecette = nameRecette.replaceAll("_", " ");
+		List<List<String>> valeurs = new ArrayList<List<String>>();
+		List<String> aliments = recette.getAliments(repo, nameRecette);
+		for(int i=0; i<aliments.size(); i++) {
+			List<String> result = aliment.getAlimentFicheNutritionnelle(repo, aliments.get(i));
+			valeurs.add(result);
+		}
+		AlimentsAvecValeursNutritionelles aavn = new AlimentsAvecValeursNutritionelles(aliments, valeurs);
+		return aavn;
+	}
+	
+	@GET
+	@Path("suggestionProfil/{login}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListeRecette suggestionProfil(@PathParam(value="login") String login) {
+		List<String> suggestions = new ArrayList<String>();
+		try {
+			suggestions = ia.processOnline(repo, directory + "/fichiers_test/ia/profils_nettoyes.txt", directory + "/fichiers_test/ia/resultat_cluster.txt", login);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ListeRecette listeRecette = new ListeRecette();
+		listeRecette.setRecettes(suggestions);
+		System.out.println("[suggestionProfil ("+  suggestions +")]");
+		return listeRecette;
+	}
+	
+	@GET
+	@Path("suggestionGM/{login}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ListeRecette suggestionGM(@PathParam(value="login") String login) {
+		List<String> suggestions = new ArrayList<String>();
+		List<String> contenus = new ArrayList<String>();
+		System.out.println("[suggestionGM ("+  login +")]");
+		List<String> contenu = user.getAllAlimentsFromGardeManger(repo, login);
+		int size_contenu = contenu.size();
+		
+		if(size_contenu > 1) {
+			for(int i=0; i<size_contenu; i++) {
+				List<String> recettes = recette.getNamesRecettesByAliments(repo, contenu.get(i));
+				for(int j=0; j<recettes.size(); j++) {
+					contenus.add(recettes.get(j));
+				}
+			}
+			
+			while(size_contenu != 1) {
+				List<String> recettes_passees = new ArrayList<String>();
+				for(int i=0; i<contenus.size(); i++) {
+					String recette = contenus.get(i);
+					if(!recettes_passees.contains(recette)) {
+						int time = 1;
+						for(int j=i+1; j<contenus.size(); j++) {
+							if(contenus.get(j).equals(recette)) {
+								time++;
+							}
+						}
+						if(time == size_contenu && suggestions.size() < 11) {
+							suggestions.add(recette);
+						}
+					}
+				}
+				size_contenu--;
+			}
+		}
+		else if(size_contenu == 1) {
+			suggestions = recette.getNamesRecettesByAliments(repo, contenu.get(0));
+		}
+		
+		ListeRecette listeRecette = new ListeRecette();
+		listeRecette.setRecettes(suggestions);
+		System.out.println("[suggestionGM ("+  suggestions +")]");
+		return listeRecette;
+	}
 	
 	@GET
 	@Path("/contenuGardeManger/{login}")
@@ -470,10 +564,9 @@ public class WebService {
 		String fileName = directory + "/fichiers_test/aliments/mesures.txt";
 		String line = null;
 		
-		for(int i=0; i<contenu.size(); i++) {
+		for(int i=0; i<contenu.size(); i+=2) {
 			String aliment = contenu.get(i);
-			i = i+1;
-			float quantite_fl = Float.parseFloat(contenu.get(i));
+			float quantite_fl = Float.parseFloat(contenu.get(i+1));
 			int quantite = (int) quantite_fl;
 			
 			try {
@@ -483,9 +576,9 @@ public class WebService {
 					String[] fields = line.split(";");
 					if(aliment.equals(fields[0])) {
 						if(fields[1].equals("entites")) {
-							contenu.set(i, quantite + "");
+							contenu.set(i+1, quantite + "");
 						} else {
-							contenu.set(i, quantite + fields[1]);
+							contenu.set(i+1, quantite + fields[1]);
 						}
 					}
 				}

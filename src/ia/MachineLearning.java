@@ -156,7 +156,7 @@ public class MachineLearning {
 		Dataset data0 = FileHandler.loadDataset(new File(fichier_profils_nettoyes), ";");
 		Dataset data = remove_id(data0);
 
-		Clusterer km = new KMeans(15);
+		Clusterer km = new KMeans(31);
 		Dataset[] clusters = km.cluster(data);
 		ClusterEvaluation sse = new SumOfSquaredErrors();
 		score = sse.score(clusters);
@@ -241,6 +241,7 @@ public class MachineLearning {
 		FileReader fr = new FileReader(fichier_resultat_cluster);
 		BufferedReader br = new BufferedReader(fr);
 		String users = null;
+		int indice = 0;
 		for (String line = br.readLine(); line != null; line = br.readLine()) {
 			resul = line.split(";");
 			result.add(resul);
@@ -252,10 +253,16 @@ public class MachineLearning {
 				users = arr[0];
 			}
 		}
+		
 		for (String[] arr : result) {
-			if (arr[0].equals(users)) {
-				String p = arr[1].replaceAll(",", ";");
-				all_user.add(p);
+			if(indice<1000){
+				if (arr[0].equals(users)) {
+//					String p = arr[1].replaceAll(",", ";");
+					all_user.add(arr[1]);
+					indice++;
+				}
+			}else{
+				break;
 			}
 		}
 
@@ -294,28 +301,42 @@ public class MachineLearning {
 		BufferedReader br = new BufferedReader(fr);
 		String profil = null;
 		int i = 0;
+		int indice = 0;
 		for (String line = br.readLine(); line != null; line = br.readLine()) {
 			String[] resul2 = new String[2];
 			resul = line.split(";");
 
 			profil = resul[1];
+			
+//			System.out.println(cluster_user.get(0));
 
-			for (i = 2; i < resul.length; i++) {
-				profil += ";" + resul[i];
-			}
+//			for (i = 2; i < resul.length; i++) {
+//				profil += ";" + resul[i];
+//			}
 
 			resul2[0] = resul[0];
 			resul2[1] = profil;
+			
+//			System.out.println("resul2[0] : " + resul2[0]);
+//			System.out.println("resul2[1] : " + resul2[1]);
 
 			result.add(resul2);
+//			System.out.println("result : " + result.get(0));
 		}
 		br.close();
 		fr.close();
 
 		for (int p = 0; p < cluster_user.size(); p++) {
 			for (String[] arr : result) {
-				if (cluster_user.get(p).equals(arr[1])) {
-					all_id.add(arr[0]);
+				if(indice<1000){
+					if (cluster_user.get(p).equals(arr[1])) {
+//						System.out.println("cluster_user : " + cluster_user.get(p));
+//						System.out.println("arr[1] : " + arr[1]);
+						all_id.add(arr[0]);
+						indice++;
+					}
+				}else{
+					break;
 				}
 			}
 		}

@@ -1,9 +1,6 @@
 package data;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.rdf4j.repository.Repository;
 
 public class RecetteCuisine {
 
@@ -17,6 +14,7 @@ public class RecetteCuisine {
 	public List<String> tempsPreparation;
 	public List<String> ustensiles;
 	public String image;
+	public double note;
 	
 	public RecetteCuisine() {
 		
@@ -24,7 +22,7 @@ public class RecetteCuisine {
 	}
 	
 	public RecetteCuisine(String nom, List<String> ingredients, int personnes, List<String> etapes, List<String> auteur, 
-			List<String> tempsTotal, List<String> tempsCuisson, List<String> tempsPreparation, List<String> ustensiles, String image) {
+			List<String> tempsTotal, List<String> tempsCuisson, List<String> tempsPreparation, List<String> ustensiles, String image, double note) {
 		
 		this.nom = nom;
 		this.ingredients = ingredients;
@@ -36,6 +34,7 @@ public class RecetteCuisine {
 		this.tempsPreparation = tempsPreparation;
 		this.ustensiles = ustensiles;
 		this.image = image;
+		this.note = note;
 		
 	}
 
@@ -74,6 +73,10 @@ public class RecetteCuisine {
 	public List<String> getUstensiles() {
 		return ustensiles;
 	}
+	
+	public double getNote() {
+		return note;
+	}
 
 	public void setNom(String nom) {
 		this.nom = nom;
@@ -109,5 +112,9 @@ public class RecetteCuisine {
 
 	public void setUstensiles(List<String> ustensiles) {
 		this.ustensiles = ustensiles;
+	}
+	
+	public void setNote(double note) {
+		this.note = note;
 	}
 }

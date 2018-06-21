@@ -1048,19 +1048,17 @@ public class User {
 		List<String> final_liste = getAlimentFromCapteurOneGardeManger(repo, login);
 		List<String> cap2 = getAlimentFromCapteurTwoGardeManger(repo, login);
 
-		for (i = 0; i < cap2.size(); i+=2) {
+		for (i = 0; i < cap2.size(); i++) {
 			if (!final_liste.contains(cap2.get(i))) {
 				final_liste.add(cap2.get(i));
-				final_liste.add(cap2.get(i+1));
 			}
 		}
 
-		List<String> no_cap = getAlimentsWithQuantityFromNonCapteurGardeManger(repo, login);
+		List<String> no_cap = getAlimentFromNonCapteurGardeManger(repo, login);
 
-		for (i = 0; i < no_cap.size(); i+=2) {
+		for (i = 0; i < no_cap.size(); i++) {
 			if (!final_liste.contains(no_cap.get(i))) {
 				final_liste.add(no_cap.get(i));
-				final_liste.add(no_cap.get(i+1));
 			}
 		}
 
@@ -1074,17 +1072,19 @@ public class User {
 		List<String> final_liste = getAlimentWithQuantityFromCapteurOneGardeManger(repo, login);
 		List<String> cap2 = getAlimentWithQuantityFromCapteurTwoGardeManger(repo, login);
 
-		for (i = 0; i < cap2.size(); i++) {
+		for (i = 0; i < cap2.size(); i+=2) {
 			if (!final_liste.contains(cap2.get(i))) {
 				final_liste.add(cap2.get(i));
+				final_liste.add(cap2.get(i+1));
 			}
 		}
 
-		List<String> no_cap = getAlimentFromNonCapteurGardeManger(repo, login);
+		List<String> no_cap = getAlimentsWithQuantityFromNonCapteurGardeManger(repo, login);
 
-		for (i = 0; i < no_cap.size(); i++) {
+		for (i = 0; i < no_cap.size(); i+=2) {
 			if (!final_liste.contains(no_cap.get(i))) {
 				final_liste.add(no_cap.get(i));
+				final_liste.add(no_cap.get(i+1));
 			}
 		}
 
