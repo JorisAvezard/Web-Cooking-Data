@@ -84,6 +84,20 @@ public class FoodActivityOnline extends AppCompatActivity
         MyAsynTask myAsynTask = new MyAsynTask();
         myAsynTask.execute();
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String aliment = spinner.getSelectedItem().toString();
+                MyAsynTaskQuantityFood myAsynTaskQuantityFood = new MyAsynTaskQuantityFood();
+                myAsynTaskQuantityFood.execute(aliment);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         MyAsynTaskUpdateFood myAsynTaskUpdateFood = new MyAsynTaskUpdateFood();
         myAsynTaskUpdateFood.execute(login);
 
@@ -126,20 +140,6 @@ public class FoodActivityOnline extends AppCompatActivity
             }
         }
     });
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String aliment = spinner.getSelectedItem().toString();
-                MyAsynTaskQuantityFood myAsynTaskQuantityFood = new MyAsynTaskQuantityFood();
-                myAsynTaskQuantityFood.execute(aliment);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
 }
 
@@ -311,6 +311,8 @@ public class FoodActivityOnline extends AppCompatActivity
                 textView.setTextColor(Color.parseColor("#FFFFFF"));
                 layoutOfDynamicContent.addView(textView, layoutParam);
             }
+            TextView tw_foods = findViewById(R.id.tw_foods);
+            tw_foods.setText("Mes provisions");
         }
     }
 
