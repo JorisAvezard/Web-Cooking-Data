@@ -1,0 +1,214 @@
+user39868;Baby-muffins au foie gras et aux figues (37ème rencontre marmiton)
+user39868;Filets de cabillaud aux petits lardons de haddock
+user39869;Gratin de pommes de terre aux anchois
+user39869;Garbure landaise
+user39869;Gratin de fusilli au thon
+user39870;Gratin riz-courgettes au boeuf haché
+user39870;Endives braisées au miel et au porto
+user39871;Biscuits soufflés au nutella
+user39871;Cake aux lardons et fromage de chèvre
+user39873;Brick de thon (light)
+user39873;Gratin de pommes
+user39873;Gratin de pommes diététique
+user39874;Katleti, boulettes russes (boeuf haché à l'aneth)
+user39874;Lapin rôti au four à la moutarde
+user39874;Chou rouge à la flamande
+user39875;Confiture de fraises au basilic frais
+user39879;Bruschetta
+user39879;Gigot de sept heures
+user39881;Charlotte poire-caramel facile
+user39881;Brochettes de poulet à la menthe
+user39882;Cookies aux flocons d'avoine sans oeufs
+user39882;Carpaccio de courgettes
+user39882;Crème de bananes
+user39883;Filet mignon de porc sauce barbecue (et épis de maïs)
+user39883;Dinde à l'ancienne
+user39883;Gaufres à la pomme de terre
+user39885;Médaillons de porc à l'orange
+user39886;Brick chorizo & mozzarella
+user39887;Cake citron, rhum, graines de lin
+user39888;Farfalle sauce épinards et gorgonzola
+user39888;Andouillette de troyes sauce chaource
+user39892;Baguette viennoise
+user39892;Blanquette aux 2 poissons et fruits de mer
+user39893;Gâteau aux abricots au micro-onde
+user39893;Céleri d'orient aux épices
+user39893;Baguettes façon tarte flambée
+user39894;Gratiné de gnocchi et jambon cru
+user39894;Feuilletés au chorizo
+user39894;Curry de porc et d'agneau
+user39895;Dos de bar en crumble de chorizo
+user39897;Lasagne aux brocolis et au jambon
+user39898;Confit de canard au calvados à la mode rony
+user39898;Lentilles à la moutarde à l'ancienne
+user39899;Matouille ou tome des bauges chaude (savoie)
+user39899;Cake léger au thé matcha et framboises
+user39900;Compote épicée
+user39900;Aiguillettes de canard aux figues et au porto
+user39900;Beignets de saucisses
+user39901;Crème frite
+user39901;"dauphinois" aux champignons des bois
+user39901;Cargolade (catalogne)
+user39902;Gratin de pieds de porc et pommes de terre au comté
+user39902;Ganache au chocolat
+user39903;Gratin de figues au miel
+user39904;Glaçons fruités
+user39904;Fougasse au chorizo au thermomix
+user39905;Gâteau ardéchois
+user39906;Cheesecake au lemon curd
+user39906;Kanelbullar (pains suédois à la cannelle)
+user39907;Chausson léger au saint marcellin, vinaigrette au miel
+user39907;Filets de poulet à la crème de poivron facile
+user39908;Clafoutis chou-fleur, tomate, roquefort
+user39909;Crumble aux framboises
+user39909;Flan de courgette et son coulis de tomate
+user39909;Délice aux pommes, sésame et fleur d'oranger
+user39910;Filet mignon à la pancetta et mozzarella
+user39910;Biscuits cocottes (graines & pépites)
+user39910;Gratin de reste de rôti de porc
+user39911;Boulettes de viande à la catalane
+user39911;Cuisse de dinde aux herbes
+user39912;Aiguillette de canard au céleri, sauce soja au miel
+user39912;Gratin de pomme de terre à la compote de tomate
+user39912;Chou-fleur rôti au four
+user39913;Chou farci en cocotte
+user39913;Bananes flambées simples et très rapides
+user39915;Curry de potiron aux marrons
+user39915;Fameux cake de ma vieille voisine
+user39915;Diplomate au caramel salé de tatie lolo
+user39917;Douce verrine au riz au lait
+user39918;Brioche tressée pour le petit déjeuner (map)
+user39918;Cheesecake oréo sans cuisson
+user39919;Frichti végétarien complet et savoureux aux lentilles, pommes de terre et poireaux
+user39919;Lemon curd glacée
+user39919;Côte d'opale
+user39920;Carpaccio de truite
+user39920;La salade du midi : tomate mozza olive
+user39922;Madeleines choco-mandarine
+user39922;Crumble aux pommes et aux noix
+user39922;Gâteau au yaourt ananas banane
+user39923;Gâteau moelleux à la lavande
+user39924;Compote d'abricot
+user39924;Flan aux girolles et lardons
+user39925;Gâteau de riz (salé, au jambon)
+user39925;Curry de lotte flambé au cognac
+user39925;Biscuits aux dattes
+user39927;Langue de boeuf beurre d'escargot
+user39927;Agneau de pâques (osterlammele)
+user39927;Carottes à la marocaine
+user39928;Confiture d'oranges au pinot noir
+user39928;Cookies aux chocolats et noisettes de tania
+user39929;Chaussons au poulet
+user39929;Lapin à la paysanne
+user39929;Cookies à la française
+user39930;Crêpes au foie gras et confiture de figues
+user39930;Brochette de crevettes grillées aux herbes
+user39930;Axoa d’espelette ( 22ème rencontre )
+user39931;Cake aux raisins et aux fruits confits
+user39933;Bricks légères au curry
+user39933;Chamarambar
+user39933;Cookies forts en chocolat à la purée d'amandes
+user39935;Bars grillés au pastis et fenouil
+user39938;Gelée de coings simplissime
+user39938;Cabillaud aux framboises
+user39939;Cake aux olives et boursin
+user39941;Gâteau roulé aux fraises
+user39941;Brioche au goût de coco (machine à pain)
+user39941;Crème aux speculoos
+user39942;Filet mignon de porc au lait
+user39943;Flan au poisson
+user39943;Bouchées à la reine aux knacks alsaciennes
+user39943;Cromequis chocolat
+user39944;Gâteau basque
+user39944;Clémentines confites
+user39944;Framboise pistache banana bread balls
+user39945;Bûche à la patate douce
+user39945;Darnes de saumon à la crème de basilic
+user39946;Gâteau des anges léger
+user39946;Crumble fondant au chocolat blanc
+user39946;Curry de chou fleur aux pois chiches
+user39948;Backehoff de poissons
+user39948;Boulets sauce lapin (liège)
+user39948;Gambas au curry rouge
+user39949;Cake aux courgettes et au thon
+user39950;Le catigot du pêcheur aux gambas
+user39950;Crème de whisky
+user39951;Camembert frit pané
+user39952;Bricks au thon faciles
+user39952;Flan de courgettes et surimi
+user39952;Aubergines farcies à la bolognaise
+user39953;Gateau ananas coco au micro-ondes
+user39954;Chou michèle
+user39954;Gaufres au jambon
+user39955;Makotch (pologn)
+user39955;Brioche aux lardons
+user39956;Cake au thon, tomate et olive
+user39956;Coquilles st jacques gratinées
+user39957;Boulettes de ma grand-mère
+user39957;Bricks de chèvre aux oignons caramélisés, poires et mâche
+user39958;Coquilles saint jacques aux girolles
+user39958;Cuisses de grenouille au beurre aillé et persillé
+user39958;Donauwellen (gâteau allemand signifiant 'vagues du danube')
+user39959;Crème de butternut
+user39961;Barquettes à la fraise
+user39961;Mazurek pour pâques
+user39961;Chausson sablé à la myrtille
+user39962;Confit de foie de porc
+user39962;Gratin de cougettes à la farce
+user39964;Bourguignon à la bière blonde
+user39964;Canard en cocotte au vin rouge
+user39965;Blanquette d'agneau à la menthe
+user39965;Brandade de harengs
+user39965;Farandole de poivrons confits
+user39966;Filets de sardines marinés
+user39966;Emincés de poulet à la bretonne
+user39966;Champignons farcis au chèvre frais
+user39967;Blinis à la russe
+user39967;Aumonière de chèvre sur lit de tomates
+user39967;Chouquettes au chocolat
+user39968;Cake aux courgettes et chèvre frais
+user39968;Langue de porc sauce tomate et cornichons
+user39968;Fenouil au micro-onde
+user39969;Gourmandise au chocolat sans cuisson
+user39969;Cannellonis farcis aux crevettes et cabillaud
+user39970;Curry d'agneau ou de porc
+user39970;Gateau au nutella
+user39970;Brownie
+user39973;4 heures : chamalows chocolat
+user39973;Fudge brownies
+user39973;Biscuit roulé au chocolat blanc et à la noix de coco
+user39975;Confiture de coings orangée
+user39975;Crêpes de sarrasin aux pommes
+user39975;Calamars au lait de coco
+user39976;Flan aux poivrons rapide
+user39977;Bouillie de flocon d'avoine (porridge) coco, banane, pomme
+user39978;Brioche à la saucisse
+user39978;Crème dessert façon danette au nutella
+user39979;Marbré fondant au chocolat et à la vanille
+user39979;Bûche chocolat crème de marrons
+user39980;Filet mignon aux baies roses
+user39983;Bouchées étoilées
+user39985;Gâteau moelleux choco coco
+user39985;Méguina de poulet
+user39985;Fonds d'artichaut et mousse de boudins blancs
+user39987;Chou-fleur à la flamande
+user39988;Lapin fondant
+user39988;Crabes farcis
+user39988;Lapin au vinaigre balsamique et miel
+user39989;Fondue de camembert
+user39989;Lapin aux poivrons
+user39989;Duo de choux en gratin
+user39990;Courgettes en gratin menthe-ricotta
+user39990;Bouchées de crêpes au saumon et au fromage frais
+user39991;Feuilletés au foie gras
+user39991;Flan aux nectarines
+user39991;Biftek marchand de vin
+user39992;Les crêpes de gervaise la sirène
+user39992;Brochettes de crevettes épicées au barbecue
+user39993;Gâteau fondant banane chocolat
+user39995;Gâteau aux chataignes et chocolat
+user39995;Cocktail d'été très simple
+user39997;Croque jura
+user39997;Crêpes mille trous faciles et rapides
+user39997;Fromagé de verteuil sur charente
+user39999;Citrons confits marocains

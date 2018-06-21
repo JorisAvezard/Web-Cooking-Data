@@ -1,0 +1,127 @@
+hello
+le tauxe erreur pour 2  cluster est de: 13057.867035834846
+
+--------------------------------------
+le tauxe erreur pour 3  cluster est de: 12028.597464842385
+
+--------------------------------------
+le tauxe erreur pour 4  cluster est de: 11185.767466977713
+
+--------------------------------------
+le tauxe erreur pour 5  cluster est de: 10609.429615222332
+
+--------------------------------------
+le tauxe erreur pour 6  cluster est de: 9439.997163792843
+
+--------------------------------------
+le tauxe erreur pour 7  cluster est de: 8167.699858778264
+
+--------------------------------------
+le tauxe erreur pour 8  cluster est de: 9211.0177817882
+
+--------------------------------------
+le tauxe erreur pour 9  cluster est de: 8460.442047351196
+
+--------------------------------------
+le tauxe erreur pour 10  cluster est de: 7492.845863889282
+
+--------------------------------------
+le tauxe erreur pour 11  cluster est de: 8608.712872481616
+
+--------------------------------------
+le tauxe erreur pour 12  cluster est de: 7019.90673510059
+
+--------------------------------------
+le tauxe erreur pour 13  cluster est de: 7453.947890949805
+
+--------------------------------------
+le tauxe erreur pour 14  cluster est de: 5343.256079681034
+
+--------------------------------------
+le tauxe erreur pour 15  cluster est de: 6287.0489653924
+
+--------------------------------------
+le tauxe erreur pour 16  cluster est de: 5525.102225942703
+
+--------------------------------------
+le tauxe erreur pour 17  cluster est de: 7705.449933215481
+
+--------------------------------------
+le tauxe erreur pour 18  cluster est de: 6135.859141233117
+
+--------------------------------------
+le tauxe erreur pour 19  cluster est de: 5041.4125249637345
+
+--------------------------------------
+le tauxe erreur pour 20  cluster est de: 4419.853778119769
+
+--------------------------------------
+le tauxe erreur pour 21  cluster est de: 5580.552365131697
+
+--------------------------------------
+le tauxe erreur pour 22  cluster est de: 5641.336355202311
+
+--------------------------------------
+le tauxe erreur pour 23  cluster est de: 4887.928150512754
+
+--------------------------------------
+le tauxe erreur pour 24  cluster est de: 5002.935243243021
+
+--------------------------------------
+le tauxe erreur pour 25  cluster est de: 4084.9222601086985
+
+--------------------------------------
+le tauxe erreur pour 26  cluster est de: 4682.632621645577
+
+--------------------------------------
+le tauxe erreur pour 27  cluster est de: 4424.269721273675
+
+--------------------------------------
+le tauxe erreur pour 28  cluster est de: 5621.836422620301
+
+--------------------------------------
+le tauxe erreur pour 29  cluster est de: 4832.746548080469
+
+--------------------------------------
+le tauxe erreur pour 30  cluster est de: 5828.808711150242
+
+--------------------------------------
+le tauxe erreur pour 31  cluster est de: 4308.747587019141
+
+--------------------------------------
+le tauxe erreur pour 32  cluster est de: 4731.726284920828
+
+--------------------------------------
+le tauxe erreur pour 33  cluster est de: 4467.327336488965
+
+--------------------------------------
+le tauxe erreur pour 34  cluster est de: 5661.422843467499
+
+--------------------------------------
+le tauxe erreur pour 35  cluster est de: 4496.24771755726
+
+--------------------------------------
+le tauxe erreur pour 36  cluster est de: 4878.107385586174
+
+--------------------------------------
+le tauxe erreur pour 37  cluster est de: 4057.5021082862427
+
+--------------------------------------
+le tauxe erreur pour 38  cluster est de: 4472.560414882146
+
+--------------------------------------
+le tauxe erreur pour 39  cluster est de: 6524.680611163337
+
+--------------------------------------
+le tauxe erreur pour 40  cluster est de: 5058.818257783046
+
+--------------------------------------
+le tauxe erreur pour 41  cluster est de: 4678.05318714737
+
+--------------------------------------
+le tauxe erreur pour 42  cluster est de: 4713.041488639082
+
+--------------------------------------
+le tauxe erreur pour 43  cluster est de: 3673.180000754335
+
+--------------------------------------
