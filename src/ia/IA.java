@@ -612,7 +612,7 @@ public class IA {
 
 			for (i = 0; i < 40000; i++) {
 				// nombre_user_recettes = (int) (Math.random() * (11));
-				nombre_user_recettes = (int) (Math.random() * (2));
+				nombre_user_recettes = (int) (Math.random() * (4));
 
 				if (nombre_user_recettes > 0) {
 					current_user = "user" + String.valueOf(i);
@@ -670,7 +670,7 @@ public class IA {
 	public void insertUserAimeRecetteIntoDB(Repository repo, ValueFactory vf, Model model, String wcd) {
 		Engine engine = new Engine();
 		User user = new User();
-		String fileName = "./fichiers_test/ia/recettes_aimees.txt"; //
+		String fileName = "./fichiers_test/ia/recettes_aimees12.txt"; // recettes_aimees11
 
 		String line = null;
 		try {
@@ -700,12 +700,13 @@ public class IA {
 		int i = 0;
 		int j = 0;
 
-		for (i = 0; i < users.size(); i++) {
+//		System.out.println(users.size());
+		for (i = 0; i < 100; i++) {
 			user_recettes = us.getAimeRecette(repo, users.get(i));
 
 			for (j = 0; j < user_recettes.size(); j++) {
 				if (!recettes_aimees.contains(user_recettes.get(j))) {
-					System.out.println(user_recettes.get(j));
+//					System.out.println(user_recettes.get(j));
 					recettes_aimees.add(user_recettes.get(j));
 				}
 			}
@@ -724,6 +725,7 @@ public class IA {
 		int i = 0;
 		int j = 0;
 		int indice_recette_aimee = -1;
+		int indice = 0;
 
 		for (i = 0; i < votes.length; i++) {
 			votes[i] = 0;
@@ -746,11 +748,19 @@ public class IA {
 			moyenne = moyenne + votes[i];
 		}
 
-		moyenne = ((int) moyenne / votes.length) + 1;
+//		moyenne = ((int) moyenne / votes.length) + 1;
+		moyenne = ((int) moyenne / votes.length);
 
 		for (i = 0; i < recettes.size(); i++) {
-			if (votes[i] >= moyenne) {
-				recettes_finales.add(recettes.get(i));
+//			System.out.println("moyenne : "+ moyenne);
+//			System.out.println("vote : "+ votes[i]);
+			if(indice<10){
+				if (votes[i] >= moyenne) {
+					recettes_finales.add(recettes.get(i));
+					indice++;
+				}
+			} else{
+				break;
 			}
 		}
 
@@ -1000,57 +1010,63 @@ public class IA {
 						bw.write(line_split[0]);
 					} else if (i == 1) {
 						if (line_split[1].equals("Aucun")) {
-							for (j = 0; j < maladies.size(); j++) {
-								bw.write(";0.0");
+							bw.write(";0.0");
+							for (j = 1; j < maladies.size(); j++) {
+								bw.write(",0.0");
 							}
 						} else {
-							for (j = 0; j < maladies.size(); j++) {
+							if(maladies.get(0).equals(line_split[1])){
+								bw.write(";1.0");
+							} else{
+								bw.write(";0.0");
+							}
+							for (j = 1; j < maladies.size(); j++) {
 								if (maladies.get(j).equals(line_split[1])) {
-									bw.write(";1.0");
+									bw.write(",1.0");
 								} else {
-									bw.write(";0.0");
+									bw.write(",0.0");
 								}
 							}
 						}
 					} else if (i == 2) {
 						if (line_split[2].equals("Aucun")) {
 							for (j = 0; j < allergies.size(); j++) {
-								bw.write(";0.0");
+								bw.write(",0.0");
 							}
 						} else {
 							for (j = 0; j < allergies.size(); j++) {
 								if (allergies.get(j).equals(line_split[2])) {
-									bw.write(";1.0");
+									bw.write(",1.0");
 								} else {
-									bw.write(";0.0");
+									bw.write(",0.0");
 								}
 							}
 						}
 					} else if (i == 3) {
 						if (line_split[3].equals("Aucun")) {
 							for (j = 0; j < regimes.size(); j++) {
-								bw.write(";0.0");
+								bw.write(",0.0");
 							}
 						} else {
 							for (j = 0; j < regimes.size(); j++) {
 								if (regimes.get(j).equals(line_split[3])) {
-									bw.write(";1.0");
+									bw.write(",1.0");
 								} else {
-									bw.write(";0.0");
+									bw.write(",0.0");
 								}
 							}
 						}
 					} else if (i == 4) {
 						if (line_split[4].equals("Aucun")) {
 							for (j = 0; j < niveaux_acts.size(); j++) {
-								bw.write(";0.0");
+								bw.write(",0.0");
 							}
 						} else {
 							for (j = 0; j < niveaux_acts.size(); j++) {
 								if (niveaux_acts.get(j).equals(line_split[4])) {
-									bw.write(";1.0");
+									bw.write(",1.0");
 								} else {
-									bw.write(";0.0");
+									bw.write(",0.0");
 								}
 							}
 						}
@@ -1258,18 +1274,25 @@ public class IA {
 		user_profil = cleanProfil(repo, user_profil);
 		System.out.println("Récupération des profils similaires");
 		List<String> cluster_user = ml.find_cluster_user(fichier_resultat_cluster, user_profil);
+		System.out.println("cluster_user : " + cluster_user.size());
 		System.out.println("Récuparation des logins");
 		List<String> users_id = ml.id_user(fichier_profils_nettoyes, cluster_user);
+		System.out.println("users_id : " + users_id.size());
 		System.out.println("Récuparation des recettes aimées");
 		List<String> recettes_retournees = getRecettesATrier(repo, users_id);
+		System.out.println(recettes_retournees.size());
 		System.out.println("Suppression des recettes régime alimentaire");
 		recettes_retournees = removeRecettesNonRegimeAlimentaire(repo, user, login, recettes_retournees);
+		System.out.println(recettes_retournees.size());
 		System.out.println("Suppression des recettes allergie");
 		recettes_retournees = removeRecettesAllergie(repo, user, login, recettes_retournees);
+		System.out.println(recettes_retournees.size());
 		System.out.println("Suppression des recettes non aimées");
 		recettes_retournees = removeRecettesNonAimees(repo, user, login, recettes_retournees);
+		System.out.println(recettes_retournees.size());
 		System.out.println("Table de vote");
 		recettes_retournees = tableDeVote(repo, users_id, recettes_retournees);
+		System.out.println(recettes_retournees.size());
 
 		return recettes_retournees;
 	}

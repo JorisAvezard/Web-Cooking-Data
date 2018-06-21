@@ -38,7 +38,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		// Initialisation des variables propre à la base RDF
-		File dataDir = new File("./db_test_ia_03/"); // db_test_ia_03 / db_demo
+		File dataDir = new File("./db_test_ia_02_donnees_aimees_inserees/"); // db_test_ia_02_donnees_aimees_inserees / db_demo
 														// / db_demo copy
 		NativeStore ns = new NativeStore(dataDir);
 		Repository repo = new SailRepository(ns);
@@ -125,7 +125,8 @@ public class Main {
 		// List<String> result = user.getUserAllergie(repo, "user1");
 		// user.addAge(repo, vf, model, wcd, "mallauriep", 23);
 		// user.removeAge(repo, vf, model, wcd, "user1");
-		// int result = user.getUserAge(repo, "user1");
+//		 int result = user.getUserAge(repo, "user39999");
+//		double result = user.getUserTaille(repo, "user39999");
 		// user.addGenre(repo, vf, model, wcd, "mallauriep", "Femme");
 		// user.removeGenre(repo, vf, model, wcd, "user1");
 		// List<String> result = user.getUserGenre(repo, "user1");
@@ -150,14 +151,20 @@ public class Main {
 //		String result = user.getUserRegimeAlimentaire(repo, "user8");
 //		List<String> result = user.getAimeRecette(repo, "user8");
 //		List<String> result = aliment.getAlimentFicheNutritionnelle(repo, "Boudin blanc");
+//		List<String> result1 = recette.getIngredients(repo, "Gratin pommes de terre et chorizo");
+//		System.out.println(result1);
+//		List<String> result = recette.getAliments(repo, "Gratin pommes de terre et chorizo"); //Gratin pommes de terre et chorizo, Entrecôte au poivre vert
 //		System.out.println(result);
+		
+//		user.addPasAimeRecette(repo, vf, model, wcd, "user125", "Gâteau caramélisé à l'ananas");
+//		user.addPasAimeRecette(repo, vf, model, wcd, "user125", "Flamiche au maroilles");
 
 //		 ia.createProfilsAleatoire(repo);
 //		 ia.insertProfilIntoDB(repo, vf, model, wcd);
 //		ia.creerDonneesUserAimeRecette(repo, vf, model, wcd, recette, user);
-		ia.insertUserAimeRecetteIntoDB(repo, vf, model, wcd);
+//		ia.insertUserAimeRecetteIntoDB(repo, vf, model, wcd);
 //		 ia.processOffline(repo, "fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt");
-//		 List<String> result = ia.processOnline(repo, "fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt", "user1000");
+//		 List<String> result = ia.processOnline(repo, "fichiers_test/ia/profils_nettoyes.txt", "fichiers_test/ia/resultat_cluster.txt", "user106"); //user125;56;95.49964875565806;209;Femme;Aucun;Moutarde;Végétarien;Aucun
 //		 System.out.println(result);
 	}
 

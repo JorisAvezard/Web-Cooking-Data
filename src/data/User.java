@@ -2100,6 +2100,7 @@ public class User {
 		} finally {
 			repo.shutDown();
 		}
+//		System.out.println(liste.size());
 		return liste;
 	}
 	
