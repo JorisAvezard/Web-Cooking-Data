@@ -120,10 +120,12 @@ public class WebService {
 			user.addGenre(repo, vf, model, wcd, login, genre);
 			user.addTaille(repo, vf, model, wcd, login, taille);
 			user.addPoids(repo, vf, model, wcd, login, poids);
-			user.addRegimeAlimentaire(repo, vf, model, wcd, login, regime);
-			if(!maladie.equals("Aucune"))
+			if(!regime.equals("Aucun"))
+				user.addRegimeAlimentaire(repo, vf, model, wcd, login, regime);
+			if(!maladie.equals("Aucun"))
 				user.addMaladie(repo, vf, model, wcd, login, maladie);
-			user.addNiveauActivite(repo, vf, model, wcd, login, activite);
+			if(!activite.equals("Aucun"))
+				user.addNiveauActivite(repo, vf, model, wcd, login, activite);
 		}
 		if(response.equals(""))
 			response = "no";
@@ -309,16 +311,15 @@ public class WebService {
 		reponse.setPoids(poids);
 		reponse.setActivite(activite);
 		reponse.setBesoin(besoin);
+		
 		if(!allergie.equals("Aucun"))
 			reponse.setAllergie(allergie);
 		else
 			reponse.setAllergie("Aucune");
+		
 		reponse.setRegime(regime);
 		
-		if(!maladie.equals("Aucun"))
-			reponse.setMaladie(maladie);
-		else
-			reponse.setMaladie("Aucun");
+		reponse.setMaladie(maladie);
 		
 		return reponse;
 	}

@@ -702,7 +702,11 @@ public class IA {
 
 //		System.out.println(users.size());
 		for (i = 0; i < 100; i++) {
-			user_recettes = us.getAimeRecette(repo, users.get(i));
+			try {
+				user_recettes = us.getAimeRecette(repo, users.get(i));
+			} catch (Exception e) {
+				
+			}
 
 			for (j = 0; j < user_recettes.size(); j++) {
 				if (!recettes_aimees.contains(user_recettes.get(j))) {
@@ -749,7 +753,11 @@ public class IA {
 		}
 
 //		moyenne = ((int) moyenne / votes.length) + 1;
-		moyenne = ((int) moyenne / votes.length);
+		try {
+			moyenne = ((int) moyenne / votes.length);
+		} catch (Exception e) {
+			
+		}
 
 		for (i = 0; i < recettes.size(); i++) {
 //			System.out.println("moyenne : "+ moyenne);
