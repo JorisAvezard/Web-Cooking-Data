@@ -200,17 +200,7 @@
                 android:layout_height="wrap_content"
                 android:text="J'aime"
                 android:layout_gravity="center"
-                android:paddingBottom="10dp"
-                android:textColor="@color/colorPrimary"
-                />
-
-            <Button
-                android:id="@+id/bu_favour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ajouter aux favoris"
-                android:layout_gravity="center"
-                android:paddingBottom="10dp"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/colorPrimary"
                 />
 
@@ -220,7 +210,17 @@
                 android:layout_height="wrap_content"
                 android:text="Je n'aime pas"
                 android:layout_gravity="center"
-                android:paddingBottom="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/colorPrimary"
+                />
+
+            <Button
+                android:id="@+id/bu_favour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ajouter aux favoris"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/colorPrimary"
                 />
 

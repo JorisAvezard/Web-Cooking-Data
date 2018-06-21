@@ -215,6 +215,7 @@ public class InscriptionActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(Data data) {
             List<String> activites = new ArrayList<String>();
+            activites.add("Aucun");
             for(int i=0; i<data.getActivites().size(); i++) {
                 activites.add(data.getActivites().get(i));
             }
@@ -230,6 +231,7 @@ public class InscriptionActivity extends AppCompatActivity
             spinner_maladie.setAdapter(adapter_maladie);
 
             List<String> regimes = new ArrayList<String>();
+            regimes.add("Aucun");
             for(int i=0; i<data.getRegimes().size(); i++) {
                 regimes.add(data.getRegimes().get(i));
             }
