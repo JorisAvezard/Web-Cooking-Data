@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.joris.webcookingdatawcd.R;
 import com.example.joris.webcookingdatawcd.object.ListeRecette;
+import com.example.joris.webcookingdatawcd.offline.ConnectionActivity;
 import com.example.joris.webcookingdatawcd.offline.MainActivity;
 import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
 import com.google.gson.Gson;
@@ -135,7 +136,7 @@ public class ResearchActivityOnline extends AppCompatActivity
                 textView.setTextSize(18);
                 textView.setTextColor(Color.parseColor("#ffffff"));
                 textView.setClickable(true);
-                textView.setPadding(50, 50, 50, 50);
+                textView.setPadding(30, 30, 30, 30);
                 textView.setBackground(drawable);
 
                 textView.setOnClickListener(new View.OnClickListener() {
@@ -210,7 +211,7 @@ public class ResearchActivityOnline extends AppCompatActivity
             nextIntent.putExtra("login", login);
             startActivity(nextIntent);
         } else if (id == R.id.nav_deconnection) {
-            Intent nextIntent = new Intent(ResearchActivityOnline.this,MainActivity.class);
+            Intent nextIntent = new Intent(ResearchActivityOnline.this,ConnectionActivity.class);
             startActivity(nextIntent);
         }
 

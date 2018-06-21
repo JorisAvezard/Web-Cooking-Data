@@ -15,6 +15,7 @@ public class RecetteCuisine {
     public List<String> tempsPreparation = new ArrayList<String>();
     public List<String> ustensiles = new ArrayList<String>();
     public String image = "";
+    public double note;
 
     public RecetteCuisine() {
 
@@ -58,5 +59,9 @@ public class RecetteCuisine {
 
     public String getImage() {
         return image;
+    }
+
+    public double getNote() {
+        return note;
     }
 }

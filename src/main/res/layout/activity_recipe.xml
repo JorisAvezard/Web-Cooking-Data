@@ -175,6 +175,25 @@
                 android:background="@drawable/border_recipe"
                 android:padding="10dp"/>
 
+            <TextView
+                android:id="@+id/tw_nutritional"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Valeurs nutritionnelles des aliments (en chargement)"
+                android:textColor="@color/colorPrimary"
+                android:textSize="26dp"
+                android:textStyle="bold"
+                android:padding="20dp"
+                android:background="#FFFFFF" />
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:stretchColumns="0"
+                android:layout_height="wrap_content"
+                android:id="@+id/tab_valeurs">
+            </TableLayout>
+
         </LinearLayout>
     </ScrollView>
 

@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.joris.webcookingdatawcd.R;
 import com.example.joris.webcookingdatawcd.object.ListeRecette;
+import com.example.joris.webcookingdatawcd.offline.ConnectionActivity;
 import com.example.joris.webcookingdatawcd.offline.MainActivity;
 import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
 import com.google.gson.Gson;
@@ -63,6 +65,12 @@ public class MainActivityOnline extends AppCompatActivity
 
         MyAsynTaskReadFavoris myAsynTaskReadFavoris = new MyAsynTaskReadFavoris();
         myAsynTaskReadFavoris.execute(login);
+
+        MyAsynTaskReadSuggestionsGM myAsynTaskReadSuggestionsGM = new MyAsynTaskReadSuggestionsGM();
+        myAsynTaskReadSuggestionsGM.execute(login);
+
+        MyAsynTaskReadSuggestionsProfils myAsynTaskReadSuggestionsProfils = new MyAsynTaskReadSuggestionsProfils();
+        myAsynTaskReadSuggestionsProfils.execute(login);
     }
 
     /*AsyncTask pour actualiser les favoris de l'utilisateur connecté*/
@@ -89,16 +97,61 @@ public class MainActivityOnline extends AppCompatActivity
             }
             return object;
         }
+
+        @Override
+        protected void onPostExecute(ListeRecette recipes) {
+            LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout layoutOfDynamicContent = (LinearLayout) findViewById(R.id.layout_favoris);
+            layoutOfDynamicContent.removeAllViewsInLayout();
+            List<String> list = recipes.getRecettes();
+            if(list.size() > 0) {
+                TextView tw_favoris = findViewById(R.id.tw_favoris);
+                tw_favoris.setText("Vos favoris");
+                for (int i = 0; i < list.size(); i++) {
+                    final TextView textView = new TextView(getBaseContext());
+                    Drawable drawable = getResources().getDrawable(R.drawable.border_recipe);
+                    textView.setText(list.get(i));
+                    textView.setTextSize(18);
+                    textView.setTextColor(Color.parseColor("#ffffff"));
+                    textView.setClickable(true);
+                    textView.setPadding(30, 30, 30, 30);
+                    textView.setBackground(drawable);
+
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String login = getIntent().getStringExtra("login");
+                            TextView tw = (TextView) v;
+                            Intent intent = new Intent(MainActivityOnline.this, RecipeActivityOnline.class);
+                            intent.putExtra("recette", tw.getText());
+                            intent.putExtra("login", login);
+                            startActivity(intent);
+                        }
+                    });
+                    layoutOfDynamicContent.addView(textView, layoutParam);
+                }
+            } else {
+                TextView tw_favoris = findViewById(R.id.tw_favoris);
+                tw_favoris.setText("Vos favoris");
+                TextView textView = new TextView(getBaseContext());
+                textView.setText("Aucun favoris enregistré");
+                textView.setTextSize(18);
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextColor(Color.parseColor("#000000"));
+                textView.setPadding(30, 30, 30, 30);
+                layoutOfDynamicContent.addView(textView, layoutParam);
+            }
+        }
     }
 
-        /*AsyncTask pour actualiser les suggestions de l'utilisateur connecté*/
-        public class MyAsynTaskReadSuggestions extends AsyncTask<String, Integer, ListeRecette> {
+        /*AsyncTask pour actualiser les suggestions par profil de l'utilisateur connecté*/
+        public class MyAsynTaskReadSuggestionsProfils extends AsyncTask<String, Integer, ListeRecette> {
             @Override
             protected ListeRecette doInBackground(String... data) {
                 String login = data[0];
                 ListeRecette object = new ListeRecette();
                 try {
-                    URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/getSuggestions/" + URLEncoder.encode(login, "UTF-8"));
+                    URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/suggestionProfil/" + URLEncoder.encode(login, "UTF-8"));
                     InputStream inputStream = request.sendRequest(url);
                     if (inputStream != null) {
                         InputStreamReader reader = new InputStreamReader(inputStream);
@@ -119,30 +172,115 @@ public class MainActivityOnline extends AppCompatActivity
         @Override
         protected void onPostExecute(ListeRecette recipes) {
             LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            LinearLayout layoutOfDynamicContent = (LinearLayout) findViewById(R.id.layout_suggestions);
+            LinearLayout layoutOfDynamicContent = (LinearLayout) findViewById(R.id.layout_suggestions_profil);
             layoutOfDynamicContent.removeAllViewsInLayout();
             List<String> list = recipes.getRecettes();
-            for (int i = 0; i < list.size(); i++) {
-                final TextView textView = new TextView(getBaseContext());
-                Drawable drawable = getResources().getDrawable(R.drawable.border_recipe);
-                textView.setText(list.get(i));
-                textView.setTextSize(18);
-                textView.setTextColor(Color.parseColor("#ffffff"));
-                textView.setClickable(true);
-                textView.setPadding(50, 50, 50, 50);
-                textView.setBackground(drawable);
+            if(list.size() > 0) {
+                TextView tw_suggestions = findViewById(R.id.tw_suggestions);
+                tw_suggestions.setText("Suggestions proposées");
+                for (int i = 0; i < list.size(); i++) {
+                    final TextView textView = new TextView(getBaseContext());
+                    Drawable drawable = getResources().getDrawable(R.drawable.border_recipe);
+                    textView.setText(list.get(i));
+                    textView.setTextSize(18);
+                    textView.setTextColor(Color.parseColor("#ffffff"));
+                    textView.setClickable(true);
+                    textView.setPadding(30, 30, 30, 30);
+                    textView.setBackground(drawable);
 
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String login = getIntent().getStringExtra("login");
-                        TextView tw = (TextView) v;
-                        Intent intent = new Intent(MainActivityOnline.this, RecipeActivityOnline.class);
-                        intent.putExtra("recette", tw.getText());
-                        intent.putExtra("login", login);
-                        startActivity(intent);
-                    }
-                });
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String login = getIntent().getStringExtra("login");
+                            TextView tw = (TextView) v;
+                            Intent intent = new Intent(MainActivityOnline.this, RecipeActivityOnline.class);
+                            intent.putExtra("recette", tw.getText());
+                            intent.putExtra("login", login);
+                            startActivity(intent);
+                        }
+                    });
+                    layoutOfDynamicContent.addView(textView, layoutParam);
+                }
+            } else {
+                TextView tw_suggestions = findViewById(R.id.tw_suggestions);
+                tw_suggestions.setText("Suggestions proposées");
+                TextView textView = new TextView(getBaseContext());
+                textView.setText("Aucune suggestion");
+                textView.setTextSize(18);
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextColor(Color.parseColor("#000000"));
+                textView.setPadding(30, 30, 30, 30);
+                layoutOfDynamicContent.addView(textView, layoutParam);
+            }
+        }
+    }
+
+    /*AsyncTask pour actualiser les suggestions par profil de l'utilisateur connecté*/
+    public class MyAsynTaskReadSuggestionsGM extends AsyncTask<String, Integer, ListeRecette> {
+        @Override
+        protected ListeRecette doInBackground(String... data) {
+            String login = data[0];
+            ListeRecette object = new ListeRecette();
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/suggestionGM/" + URLEncoder.encode(login, "UTF-8"));
+                InputStream inputStream = request.sendRequest(url);
+                if (inputStream != null) {
+                    InputStreamReader reader = new InputStreamReader(inputStream);
+                    object = gson.fromJson(reader, ListeRecette.class);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        protected void onPostExecute(ListeRecette recipes) {
+            LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout layoutOfDynamicContent = (LinearLayout) findViewById(R.id.layout_suggestions_GM);
+            layoutOfDynamicContent.removeAllViewsInLayout();
+            List<String> list = recipes.getRecettes();
+            if(list.size() > 0) {
+                TextView tw_suggestions_GM = findViewById(R.id.tw_suggestions_GM);
+                tw_suggestions_GM.setText("Suggestions selon le contenu du GM");
+                for (int i = 0; i < list.size(); i++) {
+                    final TextView textView = new TextView(getBaseContext());
+                    Drawable drawable = getResources().getDrawable(R.drawable.border_recipe);
+                    textView.setText(list.get(i));
+                    textView.setTextSize(18);
+                    textView.setTextColor(Color.parseColor("#ffffff"));
+                    textView.setClickable(true);
+                    textView.setPadding(30, 30, 30, 30);
+                    textView.setBackground(drawable);
+
+                    textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String login = getIntent().getStringExtra("login");
+                            TextView tw = (TextView) v;
+                            Intent intent = new Intent(MainActivityOnline.this, RecipeActivityOnline.class);
+                            intent.putExtra("recette", tw.getText());
+                            intent.putExtra("login", login);
+                            startActivity(intent);
+                        }
+                    });
+                    layoutOfDynamicContent.addView(textView, layoutParam);
+                }
+            } else {
+                TextView tw_suggestions_GM = findViewById(R.id.tw_suggestions_GM);
+                tw_suggestions_GM.setText("Suggestions selon le contenu du GM");
+                TextView textView = new TextView(getBaseContext());
+                textView.setText("Garde-manger vide");
+                textView.setTextSize(18);
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextColor(Color.parseColor("#000000"));
+                textView.setPadding(30, 30, 30, 30);
                 layoutOfDynamicContent.addView(textView, layoutParam);
             }
         }
@@ -204,7 +342,7 @@ public class MainActivityOnline extends AppCompatActivity
             nextIntent.putExtra("login", login);
             startActivity(nextIntent);
         } else if (id == R.id.nav_deconnection) {
-            Intent nextIntent = new Intent(MainActivityOnline.this,MainActivity.class);
+            Intent nextIntent = new Intent(MainActivityOnline.this,ConnectionActivity.class);
             startActivity(nextIntent);
         }
 

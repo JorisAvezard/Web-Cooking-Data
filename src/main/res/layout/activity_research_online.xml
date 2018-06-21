@@ -54,7 +54,6 @@
                 android:padding="5px"
                 android:id="@+id/rb_byName"
                 android:text="Par nom"
-                android:onClick="clicked_NC"
                 android:checked="true"
                 android:buttonTint="@color/colorPrimary"/>
             <RadioButton
@@ -63,32 +62,28 @@
                 android:padding="5px"
                 android:id="@+id/rb_byType"
                 android:text="Par type"
-                android:buttonTint="@color/colorPrimary"
-                android:onClick="clicked_NC"/>
+                android:buttonTint="@color/colorPrimary"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5px"
                 android:id="@+id/rb_byNote"
                 android:text="Par note"
-                android:buttonTint="@color/colorPrimary"
-                android:onClick="clicked_NC"/>
+                android:buttonTint="@color/colorPrimary"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5px"
                 android:id="@+id/rb_byDifficulty"
                 android:text="Par difficulté"
-                android:buttonTint="@color/colorPrimary"
-                android:onClick="clicked_NC"/>
+                android:buttonTint="@color/colorPrimary"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5px"
                 android:id="@+id/rb_byContentFood"
                 android:text="Selon ses provisions"
-                android:buttonTint="@color/colorPrimary"
-                android:onClick="clicked_NC"/>
+                android:buttonTint="@color/colorPrimary"/>
 
         </RadioGroup>
 

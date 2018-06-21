@@ -285,8 +285,6 @@ public class InscriptionActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.nav_receipe) {
             startActivity(new Intent(InscriptionActivity.this,ResearchActivity.class));
-        } else if (id == R.id.nav_home) {
-            startActivity(new Intent(InscriptionActivity.this,MainActivity.class));
         } else if (id == R.id.nav_connection) {
             startActivity(new Intent(InscriptionActivity.this,ConnectionActivity.class));
         }

@@ -1,6 +1,8 @@
 package com.example.joris.webcookingdatawcd.online;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,16 +11,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.joris.webcookingdatawcd.R;
+import com.example.joris.webcookingdatawcd.object.AlimentsAvecValeursNutritionelles;
 import com.example.joris.webcookingdatawcd.object.Data;
 import com.example.joris.webcookingdatawcd.object.ListeRecette;
 import com.example.joris.webcookingdatawcd.object.RecetteCuisine;
+import com.example.joris.webcookingdatawcd.offline.ConnectionActivity;
 import com.example.joris.webcookingdatawcd.offline.MainActivity;
 import com.example.joris.webcookingdatawcd.offline.RecipeActivity;
 import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
@@ -72,6 +79,9 @@ public class RecipeActivityOnline extends AppCompatActivity
         MyAsynTaskAddConsulteRecette myAsynTaskConsulteRecette = new MyAsynTaskAddConsulteRecette();
         myAsynTaskConsulteRecette.execute(login, recette);
 
+        MyAsynTaskValue myAsynTaskValue = new MyAsynTaskValue();
+        myAsynTaskValue.execute(recette);
+
         Button bu_like = (Button) findViewById(R.id.bu_like);
         bu_like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +95,7 @@ public class RecipeActivityOnline extends AppCompatActivity
         });
 
         Button bu_favour = (Button) findViewById(R.id.bu_favour);
-        bu_like.setOnClickListener(new View.OnClickListener() {
+        bu_favour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
@@ -97,7 +107,7 @@ public class RecipeActivityOnline extends AppCompatActivity
         });
 
         Button bu_dislike = (Button) findViewById(R.id.bu_dislike);
-        bu_like.setOnClickListener(new View.OnClickListener() {
+        bu_dislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
@@ -172,7 +182,7 @@ public class RecipeActivityOnline extends AppCompatActivity
             }
 
             TextView tw_note = (TextView) findViewById(R.id.tw_note);
-            String note = "";
+            String note = String.valueOf(recipe.getNote());
             if(!note.equals("")) {
                 tw_note.setText("Note : " + note + "/5");
             }
@@ -262,7 +272,7 @@ public class RecipeActivityOnline extends AppCompatActivity
             String login = data[0];
             String recette = data[1].replaceAll(" ", "_");
             try {
-                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addRecetteConsulte/" + login + "/" + recette);
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addRecetteConsulte/" + URLEncoder.encode(login, "UTF-8") + "/" + URLEncoder.encode(recette, "UTF-8"));
                 InputStream inputStream = request.sendRequest(url);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -289,7 +299,7 @@ public class RecipeActivityOnline extends AppCompatActivity
             String login = data[0];
             String recette = data[1].replaceAll(" ", "_");
             try {
-                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addFavori/" + login + "/" + recette);
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addFavori/" + URLEncoder.encode(login, "UTF-8") + "/" + URLEncoder.encode(recette, "UTF-8"));
                 InputStream inputStream = request.sendRequest(url);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -316,7 +326,7 @@ public class RecipeActivityOnline extends AppCompatActivity
             String login = data[0];
             String recette = data[1].replaceAll(" ", "_");
             try {
-                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addNonAimeRecette/" + login + "/" + recette);
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addNonAimeRecette/" + URLEncoder.encode(login, "UTF-8") + "/" + URLEncoder.encode(recette, "UTF-8"));
                 InputStream inputStream = request.sendRequest(url);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -343,7 +353,7 @@ public class RecipeActivityOnline extends AppCompatActivity
             String login = data[0];
             String recette = data[1].replaceAll(" ", "_");
             try {
-                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addAimeRecette/" + login + "/" + recette);
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/addAimeRecette/" + URLEncoder.encode(login, "UTF-8") + "/" + URLEncoder.encode(recette, "UTF-8"));
                 InputStream inputStream = request.sendRequest(url);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -360,6 +370,109 @@ public class RecipeActivityOnline extends AppCompatActivity
         @Override
         protected void onPostExecute(Void data) {
 
+        }
+    }
+
+    public class MyAsynTaskValue extends AsyncTask<String, Integer, AlimentsAvecValeursNutritionelles> {
+
+        @Override
+        protected AlimentsAvecValeursNutritionelles doInBackground(String... data) {
+            String recette = data[0].replaceAll(" ", "_");
+            AlimentsAvecValeursNutritionelles object = null;
+            try {
+                URL url = new URL("http://192.168.137.1:8080/BigCookingData/service/getValeursRecettes/" + URLEncoder.encode(recette, "UTF-8"));
+                InputStream inputStream = request.sendRequest(url);
+                if (inputStream != null) {
+                    InputStreamReader reader = new InputStreamReader(inputStream);
+                    object = gson.fromJson(reader, AlimentsAvecValeursNutritionelles.class);
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        protected void onPostExecute(AlimentsAvecValeursNutritionelles data) {
+            if(data != null) {
+                TextView tw_nutritional = findViewById(R.id.tw_nutritional);
+                tw_nutritional.setText("Valeurs nutritionnelles des aliments");
+                TableLayout table = (TableLayout) findViewById(R.id.tab_valeurs);
+                for(int i=0; i<data.getAliments().size(); i++) {
+                    TableRow row = new TableRow(getBaseContext());
+                    TextView tw = new TextView(getBaseContext());
+                    tw.setText(data.getAliments().get(i));
+                    tw.setTextColor(Color.parseColor("#009688"));
+                    tw.setTextSize(22);
+                    tw.setPadding(10, 10, 10, 10);
+                    tw.setTypeface(null, Typeface.BOLD);
+                    tw.setGravity(Gravity.CENTER);
+                    tw.setLayoutParams(new TableRow.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                    row.addView(tw);
+                    table.addView(row);
+                    for(int j=0; j<data.getIntitules().size(); j+=3) {
+                        TableRow row1 = new TableRow(getBaseContext());
+                        if(j<data.getIntitules().size()) {
+                            TextView tw1 = new TextView(getBaseContext());
+                            tw1.setText(data.getIntitules().get(j));
+                            tw1.setTextColor(Color.parseColor("#009688"));
+                            tw1.setGravity(Gravity.CENTER);
+                            tw1.setLayoutParams(new TableRow.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                            row1.addView(tw1);
+                        }
+                        if(j+1<data.getIntitules().size()) {
+                            TextView tw2 = new TextView(getBaseContext());
+                            tw2.setText(data.getIntitules().get(j+1));
+                            tw2.setTextColor(Color.parseColor("#009688"));
+                            tw2.setGravity(Gravity.CENTER);
+                            tw2.setLayoutParams(new TableRow.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                            row1.addView(tw2);
+                        }
+                        if(j+2<data.getIntitules().size()) {
+                            TextView tw3 = new TextView(getBaseContext());
+                            tw3.setText(data.getIntitules().get(j+2));
+                            tw3.setTextColor(Color.parseColor("#009688"));
+                            tw3.setGravity(Gravity.CENTER);
+                            tw3.setLayoutParams(new TableRow.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                            row1.addView(tw3);
+                        }
+                        table.addView(row1);
+
+                        //
+
+                        TableRow row2 = new TableRow(getBaseContext());
+                        if(j<data.getIntitules().size()) {
+                            TextView tw4 = new TextView(getBaseContext());
+                            tw4.setText(data.getValeurs().get(i).get(j));
+                            tw4.setTextColor(Color.parseColor("#009688"));
+                            tw4.setGravity(Gravity.CENTER);
+                            tw4.setLayoutParams(new TableRow.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                            row2.addView(tw4);
+                        }
+                        if(j+1<data.getIntitules().size()) {
+                            TextView tw5 = new TextView(getBaseContext());
+                            tw5.setText(data.getValeurs().get(i).get(j+1));
+                            tw5.setTextColor(Color.parseColor("#009688"));
+                            tw5.setGravity(Gravity.CENTER);
+                            tw5.setLayoutParams(new TableRow.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                            row2.addView(tw5);
+                        }
+                        if(j+2<data.getIntitules().size()) {
+                            TextView tw6 = new TextView(getBaseContext());
+                            tw6.setText(data.getValeurs().get(i).get(j+2));
+                            tw6.setTextColor(Color.parseColor("#009688"));
+                            tw6.setGravity(Gravity.CENTER);
+                            tw6.setLayoutParams(new TableRow.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                            row2.addView(tw6);
+                        }
+                        table.addView(row2);
+                    }
+                }
+            } else {
+                TextView tw_nutritional = findViewById(R.id.tw_nutritional);
+                tw_nutritional.setText("Valeurs nutritionnelles des aliments");
+            }
         }
     }
 
@@ -419,7 +532,7 @@ public class RecipeActivityOnline extends AppCompatActivity
             nextIntent.putExtra("login", login);
             startActivity(nextIntent);
         } else if (id == R.id.nav_deconnection) {
-            Intent nextIntent = new Intent(RecipeActivityOnline.this,MainActivity.class);
+            Intent nextIntent = new Intent(RecipeActivityOnline.this,ConnectionActivity.class);
             startActivity(nextIntent);
         }
 

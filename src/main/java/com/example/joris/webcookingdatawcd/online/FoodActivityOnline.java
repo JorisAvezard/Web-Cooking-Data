@@ -28,6 +28,7 @@ import com.example.joris.webcookingdatawcd.R;
 import com.example.joris.webcookingdatawcd.object.AlimentWS;
 import com.example.joris.webcookingdatawcd.object.Data;
 import com.example.joris.webcookingdatawcd.object.GardeManger;
+import com.example.joris.webcookingdatawcd.offline.ConnectionActivity;
 import com.example.joris.webcookingdatawcd.offline.MainActivity;
 import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
 import com.google.gson.Gson;
@@ -519,7 +520,7 @@ public boolean onNavigationItemSelected(MenuItem item) {
             nextIntent.putExtra("login", login);
             startActivity(nextIntent);
         } else if (id == R.id.nav_deconnection) {
-        Intent nextIntent = new Intent(FoodActivityOnline.this,MainActivity.class);
+        Intent nextIntent = new Intent(FoodActivityOnline.this, ConnectionActivity.class);
         startActivity(nextIntent);
         }
 

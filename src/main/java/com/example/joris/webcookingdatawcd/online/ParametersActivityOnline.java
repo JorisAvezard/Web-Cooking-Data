@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.joris.webcookingdatawcd.R;
 import com.example.joris.webcookingdatawcd.object.Data;
+import com.example.joris.webcookingdatawcd.offline.ConnectionActivity;
 import com.example.joris.webcookingdatawcd.offline.MainActivity;
 import com.example.joris.webcookingdatawcd.sendRequest.SendRequest;
 import com.google.gson.Gson;
@@ -106,7 +107,9 @@ public class ParametersActivityOnline extends AppCompatActivity
                 tw_age_valeur.setText(data.getAge());
             }
             if(!data.getTaille().equals("")) {
-                tw_taille_valeur.setText(data.getTaille());
+                String[] bs = data.getTaille().split("\\.");
+                String taille = bs[0];
+                tw_taille_valeur.setText(taille);
             }
             if(!data.getPoids().equals("")) {
                 tw_poids_valeur.setText(data.getPoids());
@@ -125,7 +128,9 @@ public class ParametersActivityOnline extends AppCompatActivity
             }
 
             if(!data.getBesoin().equals("")) {
-                tw_besoins_valeur.setText(data.getBesoin());
+                String[] bs = data.getBesoin().split("\\.");
+                String besoin = bs[0];
+                tw_besoins_valeur.setText(besoin);
             }
         }
     }
@@ -186,7 +191,7 @@ public class ParametersActivityOnline extends AppCompatActivity
             nextIntent.putExtra("login", login);
             startActivity(nextIntent);
         } else if (id == R.id.nav_deconnection) {
-            Intent nextIntent = new Intent(ParametersActivityOnline.this,MainActivity.class);
+            Intent nextIntent = new Intent(ParametersActivityOnline.this,ConnectionActivity.class);
             startActivity(nextIntent);
         }
 

@@ -13,71 +13,110 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:isScrollContainer="true"
+        android:overScrollMode="always"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbars="vertical"
         android:paddingTop="70dp"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:orientation="vertical">
+        android:paddingRight="5dp">
 
-        <TextView
-            android:id="@+id/tw_favoris"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Favoris"
-            android:textColor="@color/colorPrimary"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:gravity="center"/>
+            android:orientation="vertical">
 
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:isScrollContainer="true"
-            android:overScrollMode="always"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarStyle="outsideInset"
-            android:scrollbars="vertical">
-
-            <LinearLayout
-                android:id="@+id/layout_favoris"
+            <TextView
+                android:id="@+id/tw_favoris"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:text="Vos favoris (en chargement)"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:gravity="center"/>
 
-        </ScrollView>
-
-        <TextView
-            android:id="@+id/tw_suggestions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Des suggestions"
-            android:textColor="@color/colorPrimary"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:isScrollContainer="true"
-            android:overScrollMode="always"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarStyle="outsideInset"
-            android:scrollbars="vertical">
-
-            <LinearLayout
-                android:id="@+id/layout_suggestions"
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:isScrollContainer="true"
+                android:overScrollMode="always"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbars="vertical">
 
-        </ScrollView>
+                <LinearLayout
+                    android:id="@+id/layout_favoris"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
 
-    </LinearLayout>
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/tw_suggestions_GM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Suggestions selon le contenu du GM (en chargement)"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:isScrollContainer="true"
+                android:overScrollMode="always"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout_suggestions_GM"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
+
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/tw_suggestions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Suggestions proposés (en chargement)"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:isScrollContainer="true"
+                android:overScrollMode="always"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout_suggestions_profil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
+
+            </ScrollView>
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

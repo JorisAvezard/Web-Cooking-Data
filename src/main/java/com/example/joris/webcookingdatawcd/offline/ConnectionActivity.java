@@ -168,8 +168,6 @@ public class ConnectionActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.nav_receipe) {
             startActivity(new Intent(ConnectionActivity.this,ResearchActivity.class));
-        } else if (id == R.id.nav_home) {
-            startActivity(new Intent(ConnectionActivity.this,MainActivity.class));
         } else if (id == R.id.nav_connection) {
             startActivity(new Intent(ConnectionActivity.this,ConnectionActivity.class));
         }

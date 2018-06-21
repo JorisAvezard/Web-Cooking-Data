@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".offline.MainActivity"
+            android:name=".offline.ConnectionActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
@@ -26,8 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".offline.ConnectionActivity"
-            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".offline.InscriptionActivity"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".offline.ResearchActivity"

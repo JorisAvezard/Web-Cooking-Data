@@ -214,7 +214,7 @@
                 android:id="@+id/tw_besoins"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Besoins nutritionnels"
+                android:text="Besoins nutritionnels (kcal)"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="20dp"

@@ -153,7 +153,7 @@ public class ResearchActivity extends AppCompatActivity
                 textView.setTextSize(18);
                 textView.setTextColor(Color.parseColor("#ffffff"));
                 textView.setClickable(true);
-                textView.setPadding(50, 50, 50, 50);
+                textView.setPadding(30, 30, 30, 30);
                 textView.setBackground(drawable);
 
                 textView.setOnClickListener(new View.OnClickListener() {
@@ -209,8 +209,6 @@ public class ResearchActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.nav_receipe) {
             startActivity(new Intent(ResearchActivity.this,ResearchActivity.class));
-        } else if (id == R.id.nav_home) {
-            startActivity(new Intent(ResearchActivity.this,MainActivity.class));
         } else if (id == R.id.nav_connection) {
             startActivity(new Intent(ResearchActivity.this,ConnectionActivity.class));
         }
